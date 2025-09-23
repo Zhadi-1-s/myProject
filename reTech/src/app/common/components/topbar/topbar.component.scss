@@ -1,0 +1,22 @@
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0; // need to remove in future 
+  height: 60px;
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+
+    .language-switcher button,
+    .profile button {
+      font-size: 14px;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+  }
+}

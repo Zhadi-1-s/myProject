@@ -1,0 +1,8 @@
+.content {
+  margin-left: 0;
+  padding: 20px;
+
+  &.with-sidebar {
+    margin-left: 250px; // ширина navbar
+  }
+}

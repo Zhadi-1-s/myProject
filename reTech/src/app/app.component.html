@@ -1,0 +1,5 @@
+<app-navbar *ngIf="!isAuthPage()"></app-navbar>
+<app-topbar *ngIf="!isAuthPage()"></app-topbar>
+<div class="content" [class.with-sidebar]="!isAuthPage()">
+  <router-outlet></router-outlet>
+</div>

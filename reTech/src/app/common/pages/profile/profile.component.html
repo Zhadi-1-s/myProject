@@ -1,0 +1,29 @@
+<div class="container-fluid mt-3">
+  <div class="row justify-content-center">
+    <!-- Верхний блок (30%) -->
+    <div class="profile-header d-flex align-items-center p-3 mb-3">
+      <!-- Аватар -->
+      <img [src]="user?.avatarUrl || 'https://via.placeholder.com/80'"
+           alt="avatar"
+           class="rounded-circle me-3"
+           width="80"
+           height="80" />
+      <!-- Имя и почта -->
+      <div class="flex-grow-1">
+        <h5 class="mb-1">{{ user?.name || 'User Name' }}</h5>
+        <p class="text-muted mb-0 small">{{ user?.email }}</p>
+      </div>
+
+      <!-- Кнопки -->
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-primary btn-sm">Edit</button>
+        <button class="btn btn-outline-secondary btn-sm">Settings</button>
+      </div>
+    </div>
+
+    <!-- Нижний блок (70%) -->
+    <div class="profile-content p-4">
+      <!-- пока пусто -->
+    </div>
+  </div>
+</div>

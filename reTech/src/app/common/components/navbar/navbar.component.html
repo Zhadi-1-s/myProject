@@ -1,0 +1,25 @@
+<div class="sidebar">
+  <div class="logo">
+    <!-- <img src="assets/logo.png" alt="TechLombard Logo" /> -->
+    <span>TechLombard</span>
+  </div>
+
+  <div class="search-box">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" placeholder="      Search" 
+        [(ngModel)]="searchTerm"
+         (input)="onSearchChange()"/>
+  </div>
+
+  <hr>
+
+  <nav class="menu">
+    <a *ngFor="let item of filteredItems"
+     [routerLink]="item.route"
+     routerLinkActive="active">
+    <i [class]="item.icon"></i>
+    {{ item.label }}
+    <span *ngIf="item.badge" class="badge">{{ item.badge }}</span>
+  </a>
+  </nav>
+</div>
