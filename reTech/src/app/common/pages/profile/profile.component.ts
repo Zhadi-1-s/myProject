@@ -15,6 +15,10 @@ export class ProfileComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
+  myProducts:string[];
+
+  currentTime: Date = new Date();
+
   constructor(private authService: AuthService,private router:Router) {}
 
   ngOnInit(): void {
@@ -29,5 +33,9 @@ export class ProfileComponent implements OnInit {
         this.loading = false;
       }
     });
+
+    setInterval(() => {
+      this.currentTime = new Date();
+    }, 60000);// раз в 60 секунд 
   }
 }

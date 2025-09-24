@@ -16,9 +16,9 @@ export class NavbarComponent implements OnInit {
 
   navItems: NavItem[] = [
     { label: 'Dashboard', icon: 'fa-solid fa-house', route: '/dashboard' },
-    { label: 'Courses', icon: 'fa-solid fa-th-large', route: '/courses' },
-    { label: 'Assignment', icon: 'fa-solid fa-file-lines', route: '/assignments'},
-    { label: 'Calendar', icon: 'fa-solid fa-calendar-days', route: '/calendar' }
+    { label: 'Lombards', icon: 'fa-solid fa-th-large', route: '/courses' },
+    { label: 'Assistent', icon: 'fa-solid fa-file-lines', route: '/assignments'},
+    { label: 'Help', icon: 'fa-solid fa-calendar-days', route: '/calendar' }
   ];
 
   constructor() { }

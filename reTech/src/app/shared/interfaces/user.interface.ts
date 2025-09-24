@@ -1,3 +1,5 @@
+import { Product } from "./product.interface";
+
 export interface User{
     _id?: string; // из MongoDB
     name:string;

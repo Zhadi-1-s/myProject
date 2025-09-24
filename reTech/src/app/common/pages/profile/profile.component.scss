@@ -1,9 +1,9 @@
 .profile-header {
   background: #fff;
-  border: 1px solid #e0e0e0;   // тонкая рамка
+  // border: 1px solid #e0e0e0;  
   border-radius: 10px;
 
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  // box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   min-height: 200px; // примерно 30%
   width: 100%;
 }
@@ -15,4 +15,12 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   min-height: 400px; // примерно 70%
   width: 100%;
+}
+
+.small-block {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  min-height: 190px;
 }

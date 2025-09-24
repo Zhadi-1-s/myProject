@@ -9,7 +9,10 @@ export const routes: Routes = [
         path: 'profile',loadComponent: () => import('./common/pages/profile/profile.component').then((m) => m.ProfileComponent),canActivate: [AuthGuard],
     },
     {
-        path: '', redirectTo: 'login', pathMatch: 'full'
+        path:'dashboard',loadComponent: () => import('./common/pages/dashboard/dashboard.component').then((m) => m.DashboardComponent)
+    },
+    {
+        path: '', redirectTo: 'dashboard', pathMatch: 'full'
     },
     {
         path:'register', loadComponent: () => import('./common/pages/register/register.component').then(m => m.RegisterComponent)
