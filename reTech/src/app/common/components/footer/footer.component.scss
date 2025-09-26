@@ -1,0 +1,16 @@
+footer {
+  background-color: #575252; // черный
+  color: #fff; // белый текст
+  
+
+  a {
+    color: #fff;
+    &:hover {
+      color: #ccc;
+    }
+  }
+
+  &.with-sidebar{
+    margin-left: 250px;
+  }
+}
