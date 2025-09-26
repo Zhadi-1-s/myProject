@@ -1,6 +1,5 @@
 footer {
-  background-color: #575252; // черный
-  color: #fff; // белый текст
+  background-color: #ffffff; //белый фон
   
 
   a {
@@ -13,4 +12,12 @@ footer {
   &.with-sidebar{
     margin-left: 250px;
   }
+}
+.footer-content .container {
+  max-width: 1140px; /* или 960px */
+  margin: 0 auto;
+}
+.footer-content ul {
+  display: inline-block;
+  text-align: left;
 }
