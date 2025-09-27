@@ -21,3 +21,10 @@ footer {
   display: inline-block;
   text-align: left;
 }
+.footer-content ul li {
+  margin-bottom: 0.5rem; /* 8px */
+}
+
+.footer-content ul li:last-child {
+  margin-bottom: 0; /* чтобы последний не "толкал" вниз */
+}
