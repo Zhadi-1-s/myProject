@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cossette+Titre:wght@400;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 .sidebar {
-  width: 250px;
+  width: 290px;
   height: 100vh;
   background: #fff;
   border-right: 1px solid #eee;
@@ -27,20 +27,6 @@
       height: 28px;
     }
   }
-
-  .search-box {
-    margin-bottom: 20px;
-
-    input {
-        width: 100%;
-        padding: 8px 8px 8px 32px; /* отступ слева для иконки */
-        border: none;
-        border-radius: 6px;
-        border: solid 1px #ccc;
-        outline: none;
-    }
-  }
-
   .menu {
     display: flex;
     flex-direction: column;
@@ -61,7 +47,7 @@
       i {
         width: 18px;
         text-align: center;
-        color: #9aa0a6; // мягкий серый
+        
         font-size: 16px;
       }
 
@@ -81,21 +67,62 @@
     }
   }
 }
-.search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-  color: black;
-}
-
-.search-box i {
-  position: absolute;
-  left: 10px;
-  color: #888;
-}
-
 .sidebar hr {
   border: none;
   border-top: 1px solid #646464;
   margin: 10px 0;
+}
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px; /* можно 70px если хочешь пониже */
+  padding: 0 10px;
+
+  border-radius: 12px;
+  // box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+.user-info {
+  flex: 1;
+  margin-left: 15px;
+}
+
+.user-name {
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+
+}
+
+
+
+.user-email {
+  font-size: 11px;
+  color: #666;
+  font-weight: 500;
+}
+
+.logout-icon {
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s;
+  margin-left: 10px;
+}
+
+.logout-icon:hover {
+  color: #e74c3c;
 }

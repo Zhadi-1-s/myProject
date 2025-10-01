@@ -15,10 +15,10 @@ import { FormsModule } from '@angular/forms';
 export class NavbarComponent implements OnInit {
 
   navItems: NavItem[] = [
-    { label: 'Dashboard', icon: 'fa-solid fa-house', route: '/dashboard' },
-    { label: 'Lombards', icon: 'fa-solid fa-th-large', route: '/courses' },
-    { label: 'Assistent', icon: 'fa-solid fa-file-lines', route: '/assignments'},
-    { label: 'Help', icon: 'fa-solid fa-calendar-days', route: '/calendar' }
+    { label: 'Dashboard', icon: 'fa-regular fa-house', route: '/dashboard' },
+    { label: 'Lombards', icon: 'fa-regular fa-building', route: '/courses' },
+    { label: 'Assistent', icon: 'bi bi-robot', route: '/assignments'},
+    { label: 'Help', icon: 'fa-solid fa-circle-question', route: '/calendar' }
   ];
 
   constructor() { }

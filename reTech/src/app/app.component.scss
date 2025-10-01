@@ -3,7 +3,7 @@
   padding: 20px;
 
   &.with-sidebar {
-    margin-left: 250px; // ширина navbar
+    margin-left: 290px; // ширина navbar
   }
 }
 .app-layout {
@@ -11,7 +11,7 @@
 
   &.with-sidebar {
     .main {
-      margin-left: 250px; // ширина sidebar
+      margin-left: 290px; // ширина sidebar
       width: calc(100% - 250px);
     }
   }

@@ -4,11 +4,15 @@
     <span>TechLombard</span>
   </div>
 
-  <div class="search-box">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <input type="text" placeholder="      Search" 
-        [(ngModel)]="searchTerm"
-         (input)="onSearchChange()"/>
+  <div class="profile-header">
+    <img src="assets/png/avatar.jpg" alt="Avatar" class="avatar"/>
+
+    <div class="user-info">
+      <div class="user-name" routerLink="/profile">Zhadiger</div>
+      <div class="user-email">john.doe&#64;example.com</div>
+    </div>
+
+    <i class="fa-solid fa-right-from-bracket logout-icon"></i>
   </div>
 
   <hr>
