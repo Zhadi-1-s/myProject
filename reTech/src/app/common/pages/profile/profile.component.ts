@@ -28,7 +28,7 @@ export class ProfileComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.router.navigate(['/login'])
+        // this.router.navigate(['/login'])
         this.error = 'Не удалось загрузить профиль';
         this.loading = false;
       }

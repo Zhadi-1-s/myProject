@@ -18,6 +18,9 @@ export class RegisterComponent {
   submitted = false;
   registerForm: FormGroup;
 
+  selectedFile: File | null = null;
+  avatarPreview: string | ArrayBuffer | null = null;
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -50,6 +53,18 @@ export class RegisterComponent {
         console.error('Registration error:', err);
       }
     });
+  }
+
+   onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+
+      // превью для отображения
+      const reader = new FileReader();
+      reader.onload = e => this.avatarPreview = reader.result;
+      reader.readAsDataURL(file);
+    }
   }
 
   loginWithGoogle(): void {

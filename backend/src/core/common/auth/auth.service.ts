@@ -30,6 +30,7 @@ export class AuthService {
       password: hashedPassword,
       role: dto.role,
       name: dto.name,
+      avatarUrl: dto.avatarUrl
     });
 
     const { password: _, ...result } = user.toObject();

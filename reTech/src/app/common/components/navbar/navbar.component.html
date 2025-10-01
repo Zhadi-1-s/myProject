@@ -4,16 +4,27 @@
     <span>TechLombard</span>
   </div>
 
-  <div class="profile-header">
-    <img src="assets/png/avatar.jpg" alt="Avatar" class="avatar"/>
+  <div>
 
-    <div class="user-info">
-      <div class="user-name" routerLink="/profile">Zhadiger</div>
-      <div class="user-email">john.doe&#64;example.com</div>
+    <div class="">
+
     </div>
 
-    <i class="fa-solid fa-right-from-bracket logout-icon"></i>
-  </div>
+    <div class="profile-header">
+      <img [src]="user?.avatarUrl || 'assets/png/default-avatar.jpg'"
+               alt="avatar"
+               class="avatar"
+               width="190"
+               height="190" />
+  
+      <div class="user-info">
+        <div class="user-name" routerLink="/profile">{{user.name}}</div>
+        <div class="user-email">{{user.email}}</div>
+      </div>
+  
+      <i class="fa-solid fa-right-from-bracket logout-icon"></i>
+    </div>
+    </div>
 
   <hr>
 

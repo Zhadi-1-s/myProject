@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(): boolean | UrlTree {
     if (isPlatformBrowser(this.platformId)) {
-      const token = localStorage.getItem('loginToken');
+      const token = localStorage.getItem('access_token');
       if (token) {
         return true;
       }

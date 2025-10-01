@@ -8,6 +8,13 @@ import { ApiTags,ApiBody,ApiBearerAuth } from '@nestjs/swagger';
 import { ForgotPasswordDto } from './dto/forgot-password';
 
 import { ResetPasswordDto } from './dto/reset-password';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UseInterceptors } from '@nestjs/common';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+
+import { UploadedFile } from '@nestjs/common';
+import { Express } from 'express';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -16,13 +23,30 @@ export class AuthController {
 
 
 
+  @UseInterceptors(FileInterceptor('avatar', {
+    storage: diskStorage({
+      destination: './uploads/avatars',
+      filename: (req, file, callback) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        callback(null, uniqueSuffix + extname(file.originalname));
+      }
+    })
+  }))
   // Регистрация
   @Post('register')
   @ApiBody({ type: RegisterDto })
   async register(
-    @Body() dto:RegisterDto) {
-        console.log('BODY:', dto);
-        return this.authService.register(dto);
+    @Body() dto: RegisterDto,
+    @UploadedFile() file?: Express.Multer.File   // 👈 вот этого не хватает
+  ) {
+    console.log('BODY:', dto);
+    console.log('FILE:', file);
+
+    const avatarUrl = file
+      ? `/uploads/avatars/${file.filename}`
+      : '/assets/png/avatart-default.jpg';  // 👈 если файла нет — ставим дефолт
+
+    return this.authService.register({ ...dto, avatarUrl });
   }
 
   @Post('request-reset')

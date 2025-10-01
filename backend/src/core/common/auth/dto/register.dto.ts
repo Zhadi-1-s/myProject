@@ -34,4 +34,8 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @ApiProperty({ example: '/uploads/avatars/default.png' })
+  @IsOptional()
+  avatarUrl?: string;
 }

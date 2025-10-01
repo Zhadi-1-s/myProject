@@ -3,6 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, tap } from "rxjs";
 import { LoginDto, LoginResponse, RegisterDto, RegisterResponse } from "../interfaces/auth.interface";
 
+import { BehaviorSubject } from "rxjs";
+
 import { User } from "../interfaces/user.interface";
 
 @Injectable({
@@ -12,12 +14,24 @@ export class AuthService{
 
     private apiUrl = 'http://localhost:3000/auth';
 
-    constructor(private http: HttpClient) {}
+    private currentUserSubject = new BehaviorSubject<User | null>(null);
+    currentUser$ = this.currentUserSubject.asObservable();
+
+    constructor(private http: HttpClient) {
+        if (this.getToken()) {
+            this.getUserProfile().subscribe(user => {
+                this.currentUserSubject.next(user);
+            });
+        }
+    }
 
     login(dto: LoginDto): Observable<LoginResponse> {
         return this.http.post<LoginResponse>(`${this.apiUrl}/login`, dto).pipe(
         tap((response: LoginResponse) => {
-            localStorage.setItem('access_token', response.access_token);
+           if( typeof localStorage !== 'undefined'){
+                    localStorage.setItem('access_token', response.access_token)
+                }
+            this.getUserProfile().subscribe(user => this.currentUserSubject.next(user));
         })
         );
     }
@@ -25,7 +39,9 @@ export class AuthService{
     register(dto:RegisterDto):Observable<RegisterResponse>{
         return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, dto).pipe(
             tap((response:RegisterResponse) => {
-                localStorage.setItem('access_token', response.access_token)
+                if( typeof localStorage !== 'undefined'){
+                    localStorage.setItem('access_token', response.access_token)
+                }
             })
         )
     }
@@ -43,11 +59,14 @@ export class AuthService{
     }
 
     logout(): void {
-        localStorage.removeItem('loginToken');
+        localStorage.removeItem('access_token');
     }
 
     getToken(): string | null {
-        return localStorage.getItem('loginToken');
+        if(typeof localStorage !=='undefined'){
+            return localStorage.getItem('access_token');
+        }
+        return null;
     }
 
     isAuthenticated(): boolean {
