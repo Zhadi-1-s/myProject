@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <!-- Верхний блок (30%) -->
     <div class="col-12">
-      <div class="profile-header d-flex align-items-center p-3 mb-3">
+      <div class="profile-header d-flex align-items-center p-3 mb-3" *ngIf="user; else notLoggedIn">
         <!-- Аватар -->
         <div class="avatar-img">
           <img [src]="user?.avatarUrl || 'assets/png/default-avatar.jpg'"
@@ -27,10 +27,19 @@
 
         <!-- Кнопки -->
         <div class="d-flex gap-2 align-self-end">
-          <button class="btn btn-outline-primary btn-sm">Edit</button>
+          <button class="btn btn-outline-primary btn-sm" (click)="openEditModal()">Edit</button>
           <button class="btn btn-outline-secondary btn-sm">Create stuff</button>
         </div>
       </div>
+      <ng-template #notLoggedIn>
+        <div class="alert alert-warning d-flex align-items-center p-4 mb-3" role="alert">
+          <i class="fa-solid fa-user-lock me-3 fs-4"></i>
+          <div>
+            <h5 class="mb-1 fw-bold">You are not logged in</h5>
+            <p class="mb-0">Please <a routerLink="/login" class="text-primary text-decoration-none fw-semibold" style="cursor: pointer;">log in</a> or <a routerLink="/register" class="text-primary text-decoration-none fw-semibold" style="cursor: pointer;">register</a> to access your profile.</p>
+          </div>
+        </div>
+      </ng-template>
     </div>
 
     <!-- Нижний ряд -->
@@ -40,10 +49,10 @@
         <div class="col-md-8">
           <div class="profile-content p-3 mb-3">
             <h3 class="mb-3">Мои объявления</h3>
-
+<!-- 
             <div *ngIf="myProducts.length > 0; else noProducts">
-              <!-- список объявлений -->
-            </div>
+              
+            </div> -->
 
             <ng-template #noProducts>
               <p class="text-muted">Вы еще не добавили ни одного объявления.</p>

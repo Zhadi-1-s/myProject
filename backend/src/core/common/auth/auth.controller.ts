@@ -43,8 +43,8 @@ export class AuthController {
     console.log('FILE:', file);
 
     const avatarUrl = file
-      ? `/uploads/avatars/${file.filename}`
-      : '/assets/png/avatart-default.jpg';  // 👈 если файла нет — ставим дефолт
+      ? `/assets/png/default-avatar.jpg/${file.filename}`
+      : '/assets/png/default-avatar.jpg';  // 👈 если файла нет — ставим дефолт
 
     return this.authService.register({ ...dto, avatarUrl });
   }
