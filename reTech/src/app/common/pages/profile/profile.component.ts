@@ -5,11 +5,13 @@ import { User } from '../../../shared/interfaces/user.interface';
 import { Router, RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditModalComponent } from '../../components/modals/edit-modal/edit-modal.component';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule,RouterModule,TranslateModule],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'] 
 })
@@ -22,28 +24,36 @@ export class ProfileComponent implements OnInit {
 
   currentTime: Date = new Date();
 
-
-
-  constructor(private authService: AuthService,private router:Router,private modalService: NgbModal) {}
+  constructor(
+              private authService: AuthService, 
+              private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
-    this.authService.getUserProfile().subscribe({
-      next: (profile) => {
-        this.user = profile;
-        this.loading = false;
-        console.log(this.user);
-      },
-      error: (err) => {
-        // this.router.navigate(['/login'])
-        this.error = 'Не удалось загрузить профиль';
+    this.loading = true;
+
+    // подписываемся на BehaviorSubject — он обновится, когда профиль придет
+    this.authService.currentUser$.subscribe({
+      next: (user) => {
+        this.user = user;
         this.loading = false;
       }
     });
 
-    setInterval(() => {
-      this.currentTime = new Date();
-    }, 60000);// раз в 60 секунд 
+    // если пользователь ещё не загружен — подтянем его
+    if (!this.user) {
+      this.authService.getUserProfile().subscribe({
+        next: (profile) => (this.user = profile),
+        error: () => {
+          this.error = 'Не удалось загрузить профиль';
+          this.loading = false;
+        },
+      });
+    }
+
+    setInterval(() => (this.currentTime = new Date()), 60000);
   }
+
 
   openEditModal(){
     const modalRef = this.modalService.open(EditModalComponent, { size: 'lg', centered: true });

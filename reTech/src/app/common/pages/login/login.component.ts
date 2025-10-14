@@ -9,10 +9,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ResetPasswordComponent } from '../../components/modals/reset-password/reset-password.component';
 
+import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,TranslateModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -26,13 +27,18 @@ export class LoginComponent {
     private modalService:NgbModal,
       private router: Router,
       private fb: FormBuilder,
-      private authService: AuthService) 
+      private authService: AuthService)
       {
       this.loginForm = this.fb.group({
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]]
       });
   }
+
+  // switchLang(lang: string) {
+  //   this.translate.use(lang);
+  //   localStorage.setItem('lang', lang);
+  // }
 
   onSubmit(): void {
     if (this.loginForm.valid) {

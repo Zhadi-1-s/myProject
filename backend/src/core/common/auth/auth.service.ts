@@ -43,6 +43,11 @@ export class AuthService {
     };
   }
 
+  updateUser(userId:string,UserData: Partial<any>):Promise<any>{
+    this.userService.findOneAndUpdate({_id:userId}, UserData);
+    return this.getProfile(userId);
+  }
+
   async getProfile(userId: string) {
     const user = await this.userService.findOne({ _id: userId });
     if (!user) {

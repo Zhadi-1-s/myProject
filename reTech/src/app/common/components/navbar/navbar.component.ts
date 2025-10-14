@@ -7,10 +7,14 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { User } from '../../../shared/interfaces/user.interface';
 
+import { TranslateModule } from '@ngx-translate/core';
+
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule,RouterModule,FormsModule],
+  imports: [CommonModule,RouterModule,FormsModule,TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
@@ -27,7 +31,7 @@ export class NavbarComponent implements OnInit {
     { label: 'Help', icon: 'fa-solid fa-circle-question', route: '/calendar' }
   ];
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   searchTerm: string = '';
   filteredItems: NavItem[] = [];
@@ -46,5 +50,9 @@ export class NavbarComponent implements OnInit {
     );
   }
 
+  logout() {
+    localStorage.removeItem('loginToken');
+    this.router.navigate(['/login']);
+  }
   
 }

@@ -6,11 +6,12 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterDto } from '../../../shared/interfaces/auth.interface';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule,CommonModule,ReactiveFormsModule],
+  imports: [FormsModule,CommonModule,ReactiveFormsModule,TranslateModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })

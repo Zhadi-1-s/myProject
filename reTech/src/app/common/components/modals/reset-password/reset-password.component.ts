@@ -5,10 +5,12 @@ import { ReactiveFormsModule,FormBuilder, FormGroup, Validators } from '@angular
 import { AuthService } from '../../../../shared/services/auth.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,TranslateModule],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'
 })
@@ -44,7 +46,5 @@ export class ResetPasswordComponent {
   close(){
     this.activeModal.dismiss();
   }
-
-  
 
 }

@@ -5,10 +5,13 @@ import { User } from '../../../../shared/interfaces/user.interface';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
+import { AuthService } from '../../../../shared/services/auth.service';
+import { TranslateModule } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-edit-modal',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule,FormsModule,TranslateModule],
   templateUrl: './edit-modal.component.html',
   styleUrl: './edit-modal.component.scss'
 })
@@ -17,7 +20,7 @@ export class EditModalComponent {
   @Input() user: User; // получаем данные из родительского компонента
   editedUser: User;
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal, private authService: AuthService) {}
 
   ngOnInit(): void {
     // копируем данные, чтобы не редактировать оригинальный объект
@@ -26,7 +29,10 @@ export class EditModalComponent {
 
   saveChanges(): void {
     // можно добавить валидацию перед закрытием
-    this.activeModal.close(this.editedUser);
+    this.authService.updateUser(this.editedUser).subscribe(updatedUser => {
+        this.editedUser = updatedUser;
+        this.activeModal.close(this.editedUser);
+    });
   }
 
   cancel(): void {

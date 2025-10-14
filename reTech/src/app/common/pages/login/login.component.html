@@ -7,8 +7,8 @@
   <div class="login-left d-flex flex-column justify-content-center p-5 ml-3">
     <div class="login-box mx-auto" style="max-width: 360px; width: 100%;">
       <!-- Заголовок -->
-      <h3 class="fw-bold mb-2">Welcome back</h3>
-      <p class="text-muted mb-4">Please enter your details</p>
+      <h3 class="fw-bold mb-2">{{'Welcome back' | translate}}</h3>
+      <p class="text-muted mb-4">{{'Please enter your details' | translate}}</p>
 
       <!-- Google login -->
       <button type="button"
@@ -18,13 +18,13 @@
              alt="Google"
              width="20"
              class="me-2" />
-        Sign in with Google
+        {{'Sign in with Google' | translate}}
       </button>
 
       <!-- Разделитель -->
       <div class="d-flex align-items-center my-3">
         <hr class="flex-grow-1" />
-        <span class="px-2 text-muted">or</span>
+        <span class="px-2 text-muted">{{'or' | translate}}</span>
         <hr class="flex-grow-1" />
       </div>
 
@@ -32,22 +32,22 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
         <!-- Email -->
         <div class="mb-3">
-          <label for="email" class="form-label">Email address</label>
+          <label for="email" class="form-label">{{'Email address' | translate}}</label>
           <input type="email"
                  id="email"
                  formControlName="email"
                  class="form-control"
                  placeholder="Enter your email" />
           <div *ngIf="submitted && loginForm.controls['email'].errors" class="text-danger small">
-            <div *ngIf="loginForm.controls['email'].errors['required']">Email is required</div>
-            <div *ngIf="loginForm.controls['email'].errors['email']">Invalid email</div>
+            <div *ngIf="loginForm.controls['email'].errors['required']">{{'Email is required' | translate}}</div>
+            <div *ngIf="loginForm.controls['email'].errors['email']">{{'Invalid email' | translate}}</div>
           </div>
         </div>
 
         <!-- Password -->
         <div class="mb-3 d-flex justify-content-between align-items-center">
-          <label for="password" class="form-label mb-0">Password</label>
-          <a class="small text-decoration-none" (click)="forgotPassword()">Forgot password?</a>
+          <label for="password" class="form-label mb-0">{{'Password' | translate}}</label>
+          <a class="small text-decoration-none" (click)="forgotPassword()">{{'Forgot password?' | translate}}</a>
         </div>
         <input type="password"
                id="password"
@@ -55,12 +55,12 @@
                class="form-control mb-3"
                placeholder="Enter your password" />
         <div *ngIf="submitted && loginForm.controls['password'].errors" class="text-danger small">
-          <div *ngIf="loginForm.controls['password'].errors['required']">Password is required</div>
-          <div *ngIf="loginForm.controls['password'].errors['minlength']">Password must be at least 6 characters</div>
+          <div *ngIf="loginForm.controls['password'].errors['required']">{{'Password is required' | translate}}</div>
+          <div *ngIf="loginForm.controls['password'].errors['minlength']">{{'Password must be at least 6 characters' | translate}}</div>
         </div>
 
         <!-- Submit -->
-        <button type="submit" class="btn btn-dark w-100 mb-3">Sign in</button>
+        <button type="submit" class="btn btn-dark w-100 mb-3">{{'Sign in' | translate}}</button>
 
       </form>
 
@@ -71,8 +71,8 @@
 
       <!-- Sign up -->
       <p class="text-center text-muted">
-        Don’t have an account?
-        <a  class="text-decoration-none" (click)="register()">Sign up</a>
+        {{'Don’t have an account?' | translate}}
+        <a  class="text-decoration-none" (click)="register()">{{'Sign up' | translate}}</a>
       </p>
     </div>
   </div>

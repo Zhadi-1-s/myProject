@@ -6,9 +6,13 @@
          {{ currentLang.toUpperCase() }}
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" (click)="changeLang('en')">English</a></li>
-        <li><a class="dropdown-item" (click)="changeLang('ru')">Русский</a></li>
-        <li><a class="dropdown-item" (click)="changeLang('kk')">Қазақша</a></li>
+        <li>
+          <a class="dropdown-item"  [class.active]="currentLang === 'en'" (click)="changeLang('en')">
+            English</a></li>
+        <li>
+          <a class="dropdown-item"  [class.active]="currentLang === 'ru'" (click)="changeLang('ru')">
+            Русский</a></li>
+        <!-- <li><a class="dropdown-item" (click)="changeLang('kk')">Қазақша</a></li> -->
       </ul>
     </div>
 

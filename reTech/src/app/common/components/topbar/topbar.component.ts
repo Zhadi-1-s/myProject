@@ -1,6 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,PLATFORM_ID} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../../shared/services/auth.service';
+import { TranslateService } from '@ngx-translate/core';
+import { isPlatformBrowser } from '@angular/common';
+
+import { inject } from '@angular/core';
+
+
+
+
+
+
+
+
+
 
 @Component({
   selector: 'app-topbar',
@@ -9,27 +21,51 @@ import { AuthService } from '../../../shared/services/auth.service';
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss'
 })
-export class TopbarComponent implements OnInit{
+export class TopbarComponent implements OnInit {
 
   currentLang = 'en';
-  user:string; // можно брать из AuthService после логина
+  user: string;
 
-  constructor(private router: Router) {
+  private platformId = inject(PLATFORM_ID);
 
-  }
+  constructor(
+    private router: Router, 
+    private translate: TranslateService,
+
+    ) {
+      if(isPlatformBrowser(this.platformId)) {
+        const savedLang = localStorage.getItem('lang') || 'en';
+        this.translate.use(savedLang);
+        this.currentLang = savedLang;
+      }
+    }
 
   ngOnInit(): void {
-    
+    // Проверяем, есть ли язык в localStorage
+    // if(typeof localStorage !== 'undefined') {
+    //   const savedLang = localStorage.getItem('lang');
+    //   if (savedLang) {
+    //     this.currentLang = savedLang;
+    //     this.translate.use(savedLang);
+    //   } else {
+    //     // иначе используем дефолтный
+    //     this.translate.setDefaultLang('en');
+    //     this.translate.use('en');
+    //   }
+    // }
   }
 
+  
   changeLang(lang: string) {
-    this.currentLang = lang;
-    // здесь можно интегрировать ngx-translate
-  }
+      this.translate.use(lang);
+      localStorage.setItem('lang', lang);
+      this.currentLang = lang;
+    }
 
   logout() {
-    localStorage.removeItem('loginToken');
-    this.router.navigate(['/login']);
+    // if(typeof localStorage !== 'undefined'){
+    //   localStorage.removeItem('loginToken');
+    //   this.router.navigate(['/login']);
+    // }
   }
-
 }

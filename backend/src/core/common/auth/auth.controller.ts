@@ -1,5 +1,5 @@
 // src/core/auth/auth.controller.ts
-import { Controller, Post, Body, UseGuards, Request,Get,Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request,Get,Req, Put } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -71,6 +71,13 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   async login(@Body() loginDto: any) {
     return this.authService.login(loginDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('update')
+  @ApiBearerAuth()
+  async updateUser(@Req() req, @Body() userData: Partial<any> | FormData) {
+    return this.authService.updateUser(req.user.userId, userData); // достаём ID юзера из токена
   }
 
   // Пример защищённого эндпоинта

@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable, tap } from "rxjs";
 import { LoginDto, LoginResponse, RegisterDto, RegisterResponse } from "../interfaces/auth.interface";
 
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject,catchError,of } from "rxjs";
 
 import { User } from "../interfaces/user.interface";
 
@@ -46,6 +46,19 @@ export class AuthService{
         )
     }
 
+    updateUser(userData: Partial<User> | FormData): Observable<User> {
+    const headers = this.getToken()
+        ? { Authorization: `Bearer ${this.getToken()}` }
+        : {};
+
+    return this.http.put<User>(`${this.apiUrl}/update`, userData, { headers }).pipe(
+        tap((updatedUser) => {
+        // Обновляем текущего пользователя в BehaviorSubject
+        this.currentUserSubject.next(updatedUser);
+        })
+    );
+    }
+
     getUserProfile(): Observable<User> {
         return this.http.get<User>(`${this.apiUrl}/profile`);
     }
@@ -72,4 +85,47 @@ export class AuthService{
     isAuthenticated(): boolean {
         return !!this.getToken();
     }
+
+
+    // initializeAuth(): Promise<void> {
+    // return new Promise((resolve) => {
+    //     const token = this.getToken();
+    //     if (!token) {
+    //     resolve();
+    //     return;
+    //     }
+
+    //     this.getUserProfile().subscribe({
+    //     next: (user) => {
+    //         this.currentUserSubject.next(user);
+    //         resolve();
+    //     },
+    //     error: () => {
+    //         this.logout();
+    //         resolve();
+    //     },
+    //     });
+    // });
+    // }
+
+    // loadUserOnInit(): Promise<void> {
+    // return new Promise((resolve) => {
+    //     const token = this.getToken();
+    //     if (!token) {
+    //     resolve();
+    //     return;
+    //     }
+
+    //     // Загружаем профиль в фоне, но не блокируем запуск приложения
+    //     this.getUserProfile().subscribe({
+    //     next: (user) => this.currentUserSubject.next(user),
+    //     error: () => this.logout(),
+    //     });
+
+    //     resolve(); // приложение продолжает загружаться
+    // });
+    // }
+
+
+
 }
