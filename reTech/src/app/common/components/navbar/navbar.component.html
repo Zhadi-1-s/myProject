@@ -6,27 +6,38 @@
 
   <div>
 
-    <div class="">
-
-    </div>
-
     <div class="profile-header">
-      <img
-        routerLink="/profile"
-        [src]="user?.avatarUrl || 'assets/png/default-avatar.jpg'"
-               alt="avatar"
-               class="avatar"
-               width="190"
-               height="190" />
-  
-      <div class="user-info">
-        <div class="user-name" routerLink="/profile">{{user?.name}}</div>
-        <div class="user-email">{{user?.email}}</div>
-      </div>
-  
-      <i class="fa-solid fa-right-from-bracket logout-icon" (click)="logout()"></i>
+      <!-- Если пользователь есть -->
+      <ng-container *ngIf="user; else loginBlock">
+        <img
+          routerLink="/profile"
+          [src]="user.avatarUrl || 'assets/png/default-avatar.jpg'"
+          alt="avatar"
+          class="avatar"
+          width="190"
+          height="190"
+        />
+
+        <div class="user-info">
+          <div class="user-name" routerLink="/profile">{{ user.name }}</div>
+          <div class="user-email">{{ user.email }}</div>
+        </div>
+
+        <i
+          class="fa-solid fa-right-from-bracket logout-icon"
+          (click)="logout()"
+        ></i>
+      </ng-container>
+
+      <!-- Если пользователя нет -->
+      <ng-template #loginBlock>
+        <button class="login-button" (click)="goToLogin()">
+          <i class="fa-solid fa-right-to-bracket mr-1"></i>
+          {{ 'Login' | translate }}
+        </button>
+      </ng-template>
     </div>
-    </div>
+
 
   <hr>
 

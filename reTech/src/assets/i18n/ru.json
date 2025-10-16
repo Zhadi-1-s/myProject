@@ -38,9 +38,7 @@
     "Save": "Сохранить",
     "Cancel": "Отмена",
     "Send Reset Link":"Отправить ссылку для сброса",
-
     "Please enter your new password": "Пожалуйста, введите новый пароль",
-
     "Enter your password": "Введите ваш пароль",
     "Confirm Password": "Подтвердите пароль",
     "Repeat your password": "Повторите пароль",
@@ -48,5 +46,15 @@
     "Passwords do not match": "Пароли не совпадают",
     "Update": "Обновить",
     "Navigate to login?": "Перейти ко входу?",
+    "LombardHub — sell or buy electronics profitably": "LombardHub — продай или купи технику выгодно",
+    "We connect users and pawnshops in one app.": "Мы объединяем пользователей и сеть ломбардов в одном приложении.",
+    "Get offers from different pawnshops, find the best prices, and make safe deals.": "Получай предложения от разных ломбардов, находи лучшие цены и делай безопасные сделки.",
+    "Transparency": "Прозрачность",
+    "Ratings and reviews help you choose a trusted and honest partner.": "Рейтинги и отзывы помогут выбрать проверенного и честного партнёра.",
+    "Reliability": "Надёжность",
+    "All transactions are confirmed offline. No hidden conditions.": "Все сделки происходят офлайн с подтверждением. Никаких скрытых условий.",
+    "Fast deal": "Быстрая сделка",
+    "Post an ad in just a few clicks and get the first offers the same day.": "В пару кликов размести объявление и получи первые предложения в тот же день.",
+    "Find a gadget or device": "Найти гаджет или технику"
 
 }
