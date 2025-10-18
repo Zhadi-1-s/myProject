@@ -10,6 +10,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ResetPasswordComponent } from '../../components/modals/reset-password/reset-password.component';
 
 import { TranslateModule } from '@ngx-translate/core';
+
+import { JwtPayload } from '../../../shared/interfaces/jwt-payload.interface';
+import { jwtDecode } from 'jwt-decode';
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -43,11 +47,26 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       console.log('Login data:', this.loginForm.value);
-    
+
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Login successful, token:', response.access_token);
-          this.router.navigate(['/profile']);
+          console.log('Login successful:', response);
+          const token = response.access_token
+          // Сохраняем токен
+          localStorage.setItem('access_token', response.access_token);
+
+          const decoded: JwtPayload = jwtDecode(token);
+          console.log('Decoded token:', decoded);
+
+          const userRole = decoded.role;
+         
+          if (userRole === 'pawnshop') {
+            this.router.navigate(['/lombard-profile']); 
+          // } else if (userRole === 'admin') {
+          //   this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/profile']); 
+          }
         },
         error: (error) => {
           console.error('Login failed:', error);
@@ -57,11 +76,11 @@ export class LoginComponent {
           } else {
             this.serverError = 'Invalid credentials or account does not exist';
           }
-
         }
-      })
+      });
     }
   }
+
 
   register(): void {
     this.router.navigate(['/register']);

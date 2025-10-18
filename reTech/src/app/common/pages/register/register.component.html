@@ -71,6 +71,20 @@
           </div>
         </div>
 
+        <div class="mb-3">
+          <label for="role" class="form-label">{{ 'Account type' | translate }}</label>
+          <select id="role"
+                  formControlName="role"
+                  class="form-select">
+            <option value="user">{{ 'Regular user' | translate }}</option>
+            <option value="pawnshop">{{ 'Pawnshop' | translate }}</option>
+          </select>
+
+          <div *ngIf="submitted && registerForm.controls['role'].errors" class="text-danger small">
+            <div *ngIf="registerForm.controls['role'].errors['required']">{{ 'Role is required' | translate }}</div>
+          </div>
+        </div>
+
         <!-- Submit -->
         <button type="submit" class="btn btn-dark w-100 mb-3">{{'Sign Up' | translate}}</button>
       </form>

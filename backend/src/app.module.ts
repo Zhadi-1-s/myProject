@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './core/common/auth/auth.module';
 import { UserModule } from './core/common/user/user.module';
 import { ServiceModule } from './core/common/services/services.module';
+import { PawnshopModule } from './core/common/pawnshop/pawnshop.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { ServiceModule } from './core/common/services/services.module';
     }),
     AuthModule,
     UserModule,
-    ServiceModule
+    ServiceModule,
+    PawnshopModule
   ],
   controllers: [AppController],
   providers: [AppService],

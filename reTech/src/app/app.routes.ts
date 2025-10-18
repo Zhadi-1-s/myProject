@@ -22,5 +22,8 @@ export const routes: Routes = [
     },
     {
         path:'reset-password',loadComponent : () => import('./common/pages/create-password/create-password.component').then(m => m.CreatePasswordComponent)
+    },
+    {
+        path:'lombard-profile',loadComponent : () => import('./common/pages/lombard-profile/lombard-profile.component').then(m => m.LombardProfileComponent)
     }
 ];

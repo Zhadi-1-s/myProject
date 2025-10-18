@@ -1,0 +1,99 @@
+<div class="container-fluid mt-3">
+  <div class="row justify-content-center">
+    <!-- Top Section -->
+    <div class="col-12">
+      <div class="profile-header d-flex align-items-center p-3 mb-3" *ngIf="profile; else notLoggedIn">
+        <!-- Pawnshop Logo -->
+        <div class="avatar-img">
+          <img [src]="profile?.logoUrl || 'assets/png/default-pawnshop.jpg'"
+               alt="pawnshop-logo"
+               class="rounded-circle me-3"
+               width="190"
+               height="190" />
+        </div>
+
+        <!-- Pawnshop Info -->
+        <div class="flex-grow-1 ms-5">
+          <h3 class="mb-1">{{ profile?.name || 'Pawnshop name' }}</h3>
+          <p class="text-muted mb-2">{{ profile?.description || 'Pawnshop description' }}</p>
+          <div class="d-flex gap-3 mt-3">
+            <p class="text-muted mb-1 small fw-semibold">
+              <i class="fa-regular fa-clock me-1"></i> {{ currentTime | date:'shortTime' }}
+            </p>
+            <!-- <p class="text-muted mb-0 small fw-semibold">
+              <i class="fa-regular fa-envelope"></i> {{ profile?.email }}
+            </p> -->
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-2 align-self-end">
+          <button class="btn btn-outline-primary btn-sm" (click)="openEditModal()">
+            <i class="fa-regular fa-pen-to-square me-1"></i> {{ 'Edit profile' | translate }}
+          </button>
+          <button class="btn btn-success btn-sm" (click)="openAddOfferModal()">
+            <i class="fa-solid fa-plus me-1"></i> {{ 'Add offer' | translate }}
+          </button>
+        </div>
+      </div>
+
+      <ng-template #notLoggedIn>
+        <div class="alert alert-warning d-flex align-items-center p-4 mb-3" role="alert">
+          <i class="fa-solid fa-profile-lock me-3 fs-4"></i>
+          <div>
+            <h5 class="mb-1 fw-bold">{{ 'You are not logged in' | translate }}</h5>
+            <p class="mb-0">
+              {{ 'Please' | translate }}
+              <a routerLink="/login" class="text-primary fw-semibold">{{ 'log in' | translate }}</a>
+              {{ 'or' | translate }}
+              <a routerLink="/register" class="text-primary fw-semibold">{{ 'register' | translate }}</a>.
+            </p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="col-12">
+      <div class="row">
+        <!-- Main Content -->
+        <div class="col-md-8">
+          <div class="profile-content p-3 mb-3">
+            <h3 class="mb-3">{{ "Active gudjets" | translate }}</h3>
+
+            <div *ngIf="pawnshopOffers?.length > 0; else noOffers">
+              <div class="row g-3">
+                <div class="col-md-6" *ngFor="let offer of pawnshopOffers">
+                  <div class="card h-100 shadow-sm">
+                    <img [src]="offer.imageUrl || 'assets/png/default-product.jpg'" class="card-img-top" alt="offer">
+                    <div class="card-body">
+                      <h5 class="card-title">{{ offer.title }}</h5>
+                      <p class="card-text text-muted">{{ offer.price | currency:'KZT' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noOffers>
+              <p class="text-muted">{{ 'You have not added any gudjets' | translate }}</p>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-4 d-flex flex-column">
+          <div class="small-block p-3 mb-3 shadow-sm">
+            <h6 class="fw-bold mb-2">{{ 'Rating and reviews' | translate }}</h6>
+            <p class="text-muted mb-0">{{ 'No reviews yet' | translate }}</p>
+          </div>
+          <div class="small-block p-3 shadow-sm">
+            <h6 class="fw-bold mb-2">{{ 'Statistics' | translate }}</h6>
+            <p class="text-muted small mb-1">{{ 'Total offers:' | translate }} {{ pawnshopOffers?.length || 0 }}</p>
+            <p class="text-muted small mb-0">{{ 'Active deals: 0' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
