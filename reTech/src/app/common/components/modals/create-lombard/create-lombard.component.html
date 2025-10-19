@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <h5 class="modal-title">Создать ломбард</h5>
+  <button type="button" class="btn-close" (click)="cancel()" aria-label="Close"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="lombardForm" (ngSubmit)="submit()">
+    <div class="mb-3">
+      <label class="form-label">Название</label>
+      <input formControlName="name" class="form-control" placeholder="Введите название">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Адрес</label>
+      <input formControlName="address" class="form-control" placeholder="Введите адрес">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Телефон</label>
+      <input formControlName="phone" class="form-control" placeholder="+77001234567">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">{{ 'График работы' | translate }}</label>
+        <div class="d-flex align-items-center gap-2">
+            <input
+            type="time"
+            class="form-control"
+            formControlName="openTime"
+            />
+            <span>–</span>
+            <input
+            type="time"
+            class="form-control"
+            formControlName="closeTime"
+            />
+        </div>
+        <small class="text-muted">
+            {{ 'Укажите время открытия и закрытия, например 09:00 – 18:00' | translate }}
+        </small>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Описание</label>
+      <textarea formControlName="description" class="form-control" rows="3" placeholder="Краткое описание"></textarea>
+    </div>
+
+    <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+
+    <div class="modal-footer mt-3">
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Отмена</button>
+      <button type="submit" class="btn btn-primary" [disabled]="loading || lombardForm.invalid">
+        {{ loading ? 'Создание...' : 'Создать' }}
+      </button>
+    </div>
+  </form>
+</div>

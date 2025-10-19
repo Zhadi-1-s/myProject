@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LombardService {
 
-  private apiUrl = 'http://localhost:3000/pawnshop';
+  private apiUrl = 'http://localhost:3000/pawnshops';
 
   constructor(private http:HttpClient) { }
 

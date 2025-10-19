@@ -36,11 +36,16 @@ export class NavbarComponent implements OnInit {
   searchTerm: string = '';
   filteredItems: NavItem[] = [];
 
+  isPawnShop:boolean = false;
+
   ngOnInit() {
     this.filteredItems = this.navItems; // изначально все пункты
     this.isLoggedIn = this.authService.isAuthenticated();
     this.authService.currentUser$.subscribe(user => {
       this.user = user;
+      if (user && user.role === 'pawnshop') {
+        this.isPawnShop = true;
+      }
     });
   }
 

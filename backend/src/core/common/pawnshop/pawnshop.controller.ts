@@ -18,6 +18,10 @@ export class PawnshopController {
     return this.pawnshopService.findAll();
   }
 
+  @Get('user/:userId')
+  findByUserId(@Param('userId') userId: string) {
+    return this.pawnshopService.findByUserId(userId);
+  }
  
   @Get(':id')
   findOne(@Param('id') id: string) {

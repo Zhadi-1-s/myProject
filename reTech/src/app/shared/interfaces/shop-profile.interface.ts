@@ -5,7 +5,9 @@ export interface PawnshopProfile {
   address: string;
   phone: string;
   logoUrl?: string;
-  schedule: string;
+  openTime: string;  //  "09:00"
+  closeTime: string; //  "18:00"
+  scheduleDays?: string[]; //  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
   rating?: number;
   description?: string;
   photos?: string[];

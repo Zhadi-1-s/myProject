@@ -27,10 +27,20 @@ export class CreatePawnshopDto {
   @IsString()
   logoUrl?: string;
 
-  @ApiProperty({example:'10:00 - 20:00'})
+  @ApiProperty({example:'9:00'})
   @IsOptional()
   @IsString()
-  schedule?: string;
+  openTime?: string;
+
+  @ApiProperty({example:'19:00'})
+  @IsOptional()
+  @IsString()
+  closeTime?: string;
+
+  @ApiProperty({example:'[Monda,Tue,Wed,Thu,Fri]'})
+  @IsOptional()
+  @IsArray()
+  workingDays?: string[];
 
   @ApiProperty({example:'4.8'})
   @IsOptional()

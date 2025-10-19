@@ -1,5 +1,5 @@
 {
-    "My ads":"My Ads",
+    "My ads":"My slots",
     "Edit": "Edit",
     "Create stuff": "Create stuff",
     "You are not logged in": "You are not logged in",
@@ -8,7 +8,8 @@
     "register": "register",
     "Вы еще не добавили ни одного объявления.": "You haven't added any ads yet.",
     "Избранные магазины": "Favorite stores",
-    "Избранные товары": "Favorite products",
+    "Избранные товары": "Favorite slots",
+    "Edit profile":"Edit profile",
     "User Name": "User Name",
     "Welcome back": "Welcome back",
     "Please enter your details": "Please enter your details",
@@ -65,6 +66,8 @@
     "Account type":"Account type",
     "Regular user":"Regular user",
     "Pawnshop":"Pawnshop",
-    "Role is required":"Role is required"
+    "Role is required":"Role is required",
+    "Add slot" : "Add slot",
+    "Edit details of shop":"Edit details of shop"
     
 }

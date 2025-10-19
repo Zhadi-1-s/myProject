@@ -15,8 +15,21 @@
         <!-- Pawnshop Info -->
         <div class="flex-grow-1 ms-5">
           <h3 class="mb-1">{{ profile?.name || 'Pawnshop name' }}</h3>
-          <p class="text-muted mb-2">{{ profile?.description || 'Pawnshop description' }}</p>
+          <!-- <p class="text-muted mb-2">{{ profile?.description || 'Pawnshop description' }}</p> -->
           <div class="d-flex gap-3 mt-3">
+            <p class="text-muted mb-1 small fw-semibold">
+              <i class="fa-regular fa-clock me-1"></i>
+              {{ profile?.openTime }} – {{ profile?.closeTime }}
+              <span
+                [ngClass]="{
+                  'text-success': isOpenNow,
+                  'text-danger': !isOpenNow
+                }"
+                class="ms-2 fw-bold"
+              >
+                {{ isOpenNow ? 'Открыто' : 'Закрыто' }}
+              </span>
+            </p>
             <p class="text-muted mb-1 small fw-semibold">
               <i class="fa-regular fa-clock me-1"></i> {{ currentTime | date:'shortTime' }}
             </p>
@@ -28,6 +41,9 @@
 
         <!-- Buttons -->
         <div class="d-flex gap-2 align-self-end">
+          <button class="btn btn-lombard-edit" (click)="openEditLombard()">
+            <i class="fa-solid fa-building me-2"></i>{{ 'Edit details of shop' | translate }}
+          </button>
           <button class="btn btn-outline-primary btn-sm" (click)="openEditModal()">
             <i class="fa-regular fa-pen-to-square me-1"></i> {{ 'Edit profile' | translate }}
           </button>
@@ -59,7 +75,7 @@
         <!-- Main Content -->
         <div class="col-md-8">
           <div class="profile-content p-3 mb-3">
-            <h3 class="mb-3">{{ "Active gudjets" | translate }}</h3>
+            <h3 class="mb-3">{{ "Active slots" | translate }}</h3>
 
             <div *ngIf="pawnshopOffers?.length > 0; else noOffers">
               <div class="row g-3">

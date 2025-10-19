@@ -4,13 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { isPlatformBrowser } from '@angular/common';
 
 import { inject } from '@angular/core';
-
-
-
-
-
-
-
+import { AuthService } from '../../../shared/services/auth.service';
+import { User } from '../../../shared/interfaces/user.interface';
 
 
 
@@ -24,14 +19,16 @@ import { inject } from '@angular/core';
 export class TopbarComponent implements OnInit {
 
   currentLang = 'en';
-  user: string;
+  user: User;
+
+  isPawnShop:boolean = false;
 
   private platformId = inject(PLATFORM_ID);
 
   constructor(
     private router: Router, 
     private translate: TranslateService,
-
+    private authService:AuthService,
     ) {
       if(isPlatformBrowser(this.platformId)) {
         const savedLang = localStorage.getItem('lang') || 'en';
@@ -53,6 +50,12 @@ export class TopbarComponent implements OnInit {
     //     this.translate.use('en');
     //   }
     // }
+    this.authService.currentUser$.subscribe(user => {
+      this.user = user;
+      if (user && user.role === 'pawnshop') {
+        this.isPawnShop = true;
+      }
+    });
   }
 
   

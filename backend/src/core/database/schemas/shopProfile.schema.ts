@@ -21,8 +21,15 @@ export class PawnshopProfile {
   @Prop()
   logoUrl?: string;
 
-  @Prop()
-  schedule: string;
+   @Prop({ required: true, default: '09:00' })
+  openTime: string;
+
+  @Prop({ required: true, default: '18:00' })
+  closeTime: string;
+
+  // 📅 Дни работы (например, только будни)
+  @Prop({ type: [String], default: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'] })
+  workingDays: string[];
 
   @Prop()
   rating?: number;

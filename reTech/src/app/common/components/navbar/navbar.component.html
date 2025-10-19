@@ -10,7 +10,7 @@
       <!-- Если пользователь есть -->
       <ng-container *ngIf="user; else loginBlock">
         <img
-          routerLink="/profile"
+          [routerLink]="isPawnShop ? '/lombard-profile' : '/profile'"
           [src]="user.avatarUrl || 'assets/png/default-avatar.jpg'"
           alt="avatar"
           class="avatar"
@@ -19,7 +19,7 @@
         />
 
         <div class="user-info">
-          <div class="user-name" routerLink="/profile">{{ user.name }}</div>
+          <div class="user-name" [routerLink]="isPawnShop ? '/lombard-profile' : '/profile'">{{ user.name }}</div>
           <div class="user-email">{{ user.email }}</div>
         </div>
 
