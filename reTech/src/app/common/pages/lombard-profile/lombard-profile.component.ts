@@ -7,6 +7,7 @@ import { LombardService } from '../../../shared/services/lombard.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditLombardComponent } from '../../components/modals/edit-lombard/edit-lombard.component';
+import { Product } from '../../../shared/interfaces/product.interface';
 
 @Component({
   selector: 'app-lombard-profile',
@@ -19,13 +20,15 @@ export class LombardProfileComponent implements OnInit{
 
   profile: PawnshopProfile | null = null;
 
+  items:Product[];
+
   user:User;
 
   currentTime: Date = new Date();
 
   constructor(private lombardService:LombardService,private authService:AuthService,private modalService: NgbModal){}
 
-  pawnshopOffers: any[] = [];
+  
 
   ngOnInit(){
     this.authService.currentUser$.subscribe(user => {

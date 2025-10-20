@@ -26,3 +26,138 @@
     box-shadow: 0 2px 5px rgba(0, 123, 255, 0.3);
   }
 }
+.profile-sections {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap; /* чтобы блоки переходили на новую строку на маленьких экранах */
+}
+
+/* Блок описания */
+.description-content {
+  flex: 1 1 30%;
+  min-width: 280px;
+  border: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  border-radius: 1rem;
+  height: 300px; /* фиксированная высота */
+  overflow-y: auto;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  position: relative;
+
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  h4 {
+    color: #0d6efd;
+  }
+
+  .description-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #343a40;
+    white-space: pre-wrap;
+  }
+}
+
+/* Блок товаров */
+.items-content {
+  flex: 1 1 35%;
+  min-width: 300px;
+  background: #fff;
+  border-radius: 1rem;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  height: 300px; /* фиксированная высота */
+  overflow-y: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), 0 -2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+  }
+
+}
+
+
+.extra-content {
+  flex: 1 1 25%;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+.small-block {
+  flex: 0 0 calc(50% - 10px);
+  max-width: 340px;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  padding: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+  }
+
+  h6 {
+    color: #212529;
+    font-size: 1rem;
+  }
+
+  p {
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+}
+.edit-icon {
+  position: absolute; 
+  top: 10px;
+  right: 10px;
+  color: #0d6efd;
+  background: transparent;
+  border: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+  cursor: pointer;
+
+  i {
+    font-size: 1.2rem;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    color: #0b5ed7;
+  }
+}
+
+
+@media (max-width: 992px) {
+  .profile-sections {
+    flex-direction: column;
+  }
+
+  .description-content,
+  .items-content,
+  .extra-content {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .small-block {
+    padding: 12px 10px;
+  }
+}

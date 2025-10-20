@@ -68,6 +68,10 @@
     "Pawnshop":"Pawnshop",
     "Role is required":"Role is required",
     "Add slot" : "Add slot",
-    "Edit details of shop":"Edit details of shop"
+    "Edit details of shop":"Edit details of shop",
+    "Description":"Description",
+    "Available items":"Available items",
+    "You have not added any gadgets":"You have not added any gadgets",
+    "List of pawnshops":"List of pawnshops"
     
 }

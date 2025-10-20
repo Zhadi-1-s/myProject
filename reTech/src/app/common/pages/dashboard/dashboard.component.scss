@@ -10,7 +10,7 @@ input:focus{
 }
 .form-control:focus {
   box-shadow: none !important;
-  border-color: #ccc !important; // можешь поставить любой цвет или убрать строку
+  border-color: #ccc !important; 
 }
 .welcome{
     
@@ -30,7 +30,7 @@ input:focus{
     position: relative;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
-    border: 1px solid #e0e0e0; /* лёгкая серая граница */
+    border: 1px solid #e0e0e0; 
     transition: all 0.3s ease;
     padding: 20px;
 }
@@ -38,9 +38,9 @@ input:focus{
 .key-card:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-4px);
-  border-color: #d0d0d0; /* чуть темнее при ховере */
+  border-color: #d0d0d0; 
 }
-/* Градиентная полоска снизу */
+
 .key-card::after {
   content: "";
   position: absolute;
@@ -49,13 +49,49 @@ input:focus{
   width: 100%;
   height: 4px;
   border-radius: 2px;
-  background-image: linear-gradient(90deg, #ff6a00, #ee0979); /* оранжево-розовый градиент */
+  background-image: linear-gradient(90deg, #ff6a00, #ee0979); 
   transition: all 0.3s ease;
   opacity: 0.8;
 }
 
-/* При ховере градиент становится ярче */
+
 .key-card:hover::after {
   opacity: 1;
-  height: 6px; /* слегка увеличивается */
+  height: 6px; 
+}
+.lombard-list {
+  background: #f8f9fa;
+
+  h2 {
+    color: #212529;
+  }
+
+  .lombard-card {
+    border-radius: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    background: #ffffff;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+      object-fit: cover;
+    }
+
+    .rating i {
+      font-size: 0.9rem;
+    }
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #007bff, #00a8ff);
+    border: none;
+    font-weight: 500;
+
+    &:hover {
+      background: linear-gradient(135deg, #0062cc, #0090e0);
+    }
+  }
 }

@@ -69,5 +69,55 @@
   </div>
 </section>
 
+<section class="lombard-list py-5 bg-light">
+  <div class="container">
+    <h2 class="fw-bold text-center mb-5">{{ 'List of pawnshops' | translate }}</h2>
+
+    <div class="row g-4">
+      <div 
+        class="col-12 col-sm-6 col-md-4 col-lg-3"
+        *ngFor="let lombard of lombardList | slice:0:8"
+      >
+        <div class="card h-100 shadow-sm border-0 lombard-card">
+          <div class="card-body text-center p-4">
+            <div class="mb-3">
+              <img
+                [src]="lombard.logoUrl || 'assets/png/default-logo.png'"
+                alt="{{ lombard.name }}"
+                class="rounded-circle border"
+                width="80"
+                height="80"
+              />
+            </div>
+
+            <h5 class="fw-semibold mb-1">{{ lombard.name }}</h5>
+            <p class="text-muted small mb-2">{{ lombard.address }}</p>
+
+            <div class="rating mb-2">
+              <i class="fa-solid fa-star text-warning me-1" *ngFor="let star of [1,2,3,4,5]; let i = index" 
+                [ngClass]="{'opacity-25': (lombard.rating || 0) <= i}">
+              </i>
+              <span class="small text-muted">({{ lombard.rating || 0 }}/5)</span>
+            </div>
+
+            <p class="text-muted small mb-0">
+              <i class="fa-regular fa-clock me-1"></i>
+              {{ lombard.openTime }} - {{ lombard.closeTime }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Кнопка "Посмотреть все" -->
+    <div class="text-center mt-5">
+      <button class="btn btn-primary px-4 py-2 rounded-pill">
+        {{ 'View all pawnshops' | translate }}
+      </button>
+    </div>
+  </div>
+</section>
+
+
 
 </div>
