@@ -1,123 +1,140 @@
-<div class="min-h-screen bg-gray-50 flex flex-col">
+<div class="d-flex flex-column min-vh-100 bg-light">
   <!-- Hero Section -->
-<section class="flex-grow flex items-center justify-center px-6 py-20 bg-white text-gray-900 welcome">
-  <div class="container text-center welcome-content">
-    <h1 class="display-4 fw-bold mb-4 main-text">
-      {{'LombardHub — sell or buy electronics profitably'|translate}}
-    </h1>
-    <p class="lead text-muted mb-5">
-      {{'We connect users and pawnshops in one app.' | translate}}
-      {{'Get offers from different pawnshops, find the best prices, and make safe deals.'|translate}}
-    </p>
+  <section class="py-5 text-center text-dark">
+    <div class="container py-5">
+      <h1 class="display-4 fw-bold mb-4">
+        {{ 'LombardHub — sell or buy electronics profitably' | translate }}
+      </h1>
+      <p class="lead text-muted mb-4 mx-auto" style="max-width: 720px;">
+        {{ 'We connect users and pawnshops in one app.' | translate }}
+        {{ 'Get offers from different pawnshops, find the best prices, and make safe deals.' | translate }}
+      </p>
 
-    <!-- Блок преимуществ -->
-    <div class="row mt-5">
-      <div class="col-md-4 mb-4">
-        <div class="p-4 h-100 key-card">
-          <h3 class="h5 fw-semibold mb-3">{{'Transparency' | translate}}<i class="fa-regular fa-eye"></i></h3>
-          <p class="text-muted small">
-            {{'Ratings and reviews help you choose a trusted and honest partner.'|translate}}
-          </p>
-        </div>
-      </div>
+      <!-- CTA Button -->
+      <a href="#" class="btn btn-info btn-lg rounded-pill px-5 py-3 mb-5 text-white fw-semibold shadow">
+        {{ 'Start now' | translate }}
+      </a>
 
-      <div class="col-md-4 mb-4">
-        <div class="p-4 h-100 key-card">
-          <h3 class="h5 fw-semibold mb-3">{{'Reliability' | translate}}<i class="fa-solid fa-lock"></i></h3>
-          <p class="text-muted small">
-            {{'All transactions are confirmed offline. No hidden conditions.' | translate}}
-          </p>
-        </div>
-      </div>
-
-      <div class="col-md-4 mb-4">
-        <div class="p-4 h-100 key-card">
-          <h3 class="h5 fw-semibold mb-3">{{'Fast deal'|translate}}<i class="fa-solid fa-bolt"></i></h3>
-          <p class="text-muted small">
-            {{'Post an ad in just a few clicks and get the first offers the same day.'|translate}}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-  <section class="py-5  search-input">
-  <div class="container">
-    <div class="row align-items-center">
-      <!-- Поиск (40%) -->
-      <div class="col-md-5 mb-4 mb-md-0 d-flex align-self-start">
-        <div class="position-relative w-100">
-          <i class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
-          <input 
-            type="text" 
-            class="form-control form-control-lg ps-5 shadow-sm" 
-            placeholder="{{'   Find a gadget or device' | translate}}"
-          />
-        </div>
-      </div>
-      <!-- Картинка (60%) -->
-      <div class="col-md-7">
-        <img 
-          src="assets/png/home.jpg" 
-          alt="Демонстрация LombardHub" 
-          class="img-fluid rounded shadow"
-        />
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="lombard-list py-5 bg-light">
-  <div class="container">
-    <h2 class="fw-bold text-center mb-5">{{ 'List of pawnshops' | translate }}</h2>
-
-    <div class="row g-4">
-      <div 
-        class="col-12 col-sm-6 col-md-4 col-lg-3"
-        *ngFor="let lombard of lombardList | slice:0:8"
-      >
-        <div class="card h-100 shadow-sm border-0 lombard-card">
-          <div class="card-body text-center p-4">
-            <div class="mb-3">
-              <img
-                [src]="lombard.logoUrl || 'assets/png/default-logo.png'"
-                alt="{{ lombard.name }}"
-                class="rounded-circle border"
-                width="80"
-                height="80"
-              />
+      <!-- Advantages -->
+      <div class="row justify-content-center mt-4">
+        <div class="col-md-4 mb-4">
+          <div class="card border-0 shadow-sm h-100 p-4" style="border-radius: 20px;">
+            <div class="card-body text-center">
+              <i class="fa-regular fa-eye fs-2 mb-3 text-info"></i>
+              <h5 class="fw-semibold mb-2 text-info">{{ 'Transparency' | translate }}</h5>
+              <p class="text-muted small">
+                {{ 'Ratings and reviews help you choose a trusted and honest partner.' | translate }}
+              </p>
             </div>
+          </div>
+        </div>
 
-            <h5 class="fw-semibold mb-1">{{ lombard.name }}</h5>
-            <p class="text-muted small mb-2">{{ lombard.address }}</p>
-
-            <div class="rating mb-2">
-              <i class="fa-solid fa-star text-warning me-1" *ngFor="let star of [1,2,3,4,5]; let i = index" 
-                [ngClass]="{'opacity-25': (lombard.rating || 0) <= i}">
-              </i>
-              <span class="small text-muted">({{ lombard.rating || 0 }}/5)</span>
+        <div class="col-md-4 mb-4">
+          <div class="card border-0 shadow-sm h-100 p-4" style="border-radius: 20px;">
+            <div class="card-body text-center">
+              <i class="fa-solid fa-lock fs-2 mb-3 text-info"></i>
+              <h5 class="fw-semibold mb-2 text-info">{{ 'Reliability' | translate }}</h5>
+              <p class="text-muted small">
+                {{ 'All transactions are confirmed offline. No hidden conditions.' | translate }}
+              </p>
             </div>
+          </div>
+        </div>
 
-            <p class="text-muted small mb-0">
-              <i class="fa-regular fa-clock me-1"></i>
-              {{ lombard.openTime }} - {{ lombard.closeTime }}
-            </p>
+        <div class="col-md-4 mb-4">
+          <div class="card border-0 shadow-sm h-100 p-4" style="border-radius: 20px;">
+            <div class="card-body text-center">
+              <i class="fa-solid fa-bolt fs-2 mb-3 text-warning"></i>
+              <h5 class="fw-semibold mb-2 text-info">{{ 'Fast deal' | translate }}</h5>
+              <p class="text-muted small">
+                {{ 'Post an ad in just a few clicks and get the first offers the same day.' | translate }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Кнопка "Посмотреть все" -->
-    <div class="text-center mt-5">
-      <button class="btn btn-primary px-4 py-2 rounded-pill">
-        {{ 'View all pawnshops' | translate }}
-      </button>
+  <!-- Search Section -->
+  <section class="py-5 border-top">
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Search (40%) -->
+        <div class="col-md-5 mb-4 mb-md-0">
+          <div class="position-relative">
+            <i class="fa-solid fa-magnifying-glass position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+            <input 
+              type="text" 
+              class="form-control form-control-lg ps-5 rounded-pill shadow-sm border-0" 
+              placeholder="{{ 'Find a gadget or device' | translate }}"
+              style="background-color: #ffffff;"
+            >
+          </div>
+        </div>
+
+        <!-- Image (60%) -->
+        <div class="col-md-7 text-center">
+          <img 
+            src="assets/png/home.jpg" 
+            alt="Demo LombardHub" 
+            class="img-fluid rounded-4 shadow-lg"
+            style="transition: transform 0.4s;"
+            onmouseover="this.style.transform='scale(1.03)'"
+            onmouseout="this.style.transform='scale(1)'"
+          >
+        </div>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
+  <!-- Lombard List Section -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="fw-bold text-center mb-5">{{ 'List of pawnshops' | translate }}</h2>
 
+      <div class="row g-4">
+        <div 
+          class="col-12 col-sm-6 col-md-4 col-lg-3"
+          *ngFor="let lombard of lombardList | slice:0:8"
+        >
+          <div class="card h-100 shadow-sm border-0 lombard-card">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <img
+                  [src]="lombard.logoUrl || 'assets/png/default-logo.png'"
+                  alt="{{ lombard.name }}"
+                  class="rounded-circle border"
+                  width="80"
+                  height="80"
+                />
+              </div>
 
+              <h5 class="fw-semibold mb-1">{{ lombard.name }}</h5>
+              <p class="text-muted small mb-2">{{ lombard.address }}</p>
+
+              <div class="rating mb-2">
+                <i class="fa-solid fa-star text-warning me-1" *ngFor="let star of [1,2,3,4,5]; let i = index" 
+                  [ngClass]="{'opacity-25': (lombard.rating || 0) <= i}">
+                </i>
+                <span class="small text-muted">({{ lombard.rating || 0 }}/5)</span>
+              </div>
+
+              <p class="text-muted small mb-0">
+                <i class="fa-regular fa-clock me-1"></i>
+                {{ lombard.openTime }} - {{ lombard.closeTime }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кнопка "Посмотреть все" -->
+      <div class="text-center mt-5">
+        <button class="btn btn-primary px-4 py-2 rounded-pill">
+          {{ 'View all pawnshops' | translate }}
+        </button>
+      </div>
+    </div>
+  </section>
 </div>

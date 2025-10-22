@@ -8,6 +8,9 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditLombardComponent } from '../../components/modals/edit-lombard/edit-lombard.component';
 import { Product } from '../../../shared/interfaces/product.interface';
+import { CreateProductComponent } from '../../components/modals/create-product/create-product.component';
+import { ProductService } from '../../../shared/services/product.service';
+import { ViewallComponent } from '../../components/modals/viewall/viewall.component';
 
 @Component({
   selector: 'app-lombard-profile',
@@ -17,18 +20,20 @@ import { Product } from '../../../shared/interfaces/product.interface';
   styleUrl: './lombard-profile.component.scss'
 })
 export class LombardProfileComponent implements OnInit{
-
-  profile: PawnshopProfile | null = null;
-
-  items:Product[];
-
-  user:User;
-
-  currentTime: Date = new Date();
-
-  constructor(private lombardService:LombardService,private authService:AuthService,private modalService: NgbModal){}
-
   
+  profile: PawnshopProfile | null = null;
+  items:Product[];
+  user:User;
+  currentTime: Date = new Date();
+  productslist : Product[];
+
+  constructor(
+    private lombardService:LombardService,
+    private authService:AuthService,
+    private modalService: NgbModal,
+    private productService:ProductService
+  ){}
+
 
   ngOnInit(){
     this.authService.currentUser$.subscribe(user => {
@@ -38,6 +43,15 @@ export class LombardProfileComponent implements OnInit{
         next : (pawnshop) => {
           this.profile = pawnshop;
           console.log('loading pawnshop', pawnshop)
+          this.productService.getProductsByOwner(pawnshop._id).subscribe({
+            next: (products) => {
+              this.productslist = products;
+              console.log('Загружаем продукты ломбарда',products);
+            },
+            error(err) {
+                console.error(err.message);
+            },
+          })
         },
         error(err) {
           console.error(err.message);
@@ -79,7 +93,14 @@ export class LombardProfileComponent implements OnInit{
 
   openEditModal(){}
 
-  openAddOfferModal(){}
+  openAddOfferModal(){
+    const modalRef = this.modalService.open(CreateProductComponent, {size:'lg'});
+
+    modalRef.componentInstance.ownerId = this.profile._id;
+    // modalRef.result.then((result) => {
+    //   if (result) this.loadProducts();
+    // });
+  }
 
   openEditLombard(){
     const modalRef = this.modalService.open(EditLombardComponent,{centered:true})
@@ -95,6 +116,16 @@ export class LombardProfileComponent implements OnInit{
       () => {}
     )
 
+  }
+
+  openViewAllModal(){
+    const modalRef = this.modalService.open(ViewallComponent, {
+    size: 'lg',
+    centered: true
+  });
+    modalRef.componentInstance.title = 'All Products';
+    modalRef.componentInstance.type = 'products';
+    modalRef.componentInstance.items = this.productslist;
   }
 
 }

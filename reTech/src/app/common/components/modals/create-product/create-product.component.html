@@ -1,0 +1,88 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    <i class="fa-solid fa-box me-2 text-primary"></i>
+    {{ 'Create Product' | translate }}
+  </h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="productForm" class="needs-validation">
+    <!-- Название -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">{{ 'Title' | translate }}</label>
+      <input
+        type="text"
+        formControlName="title"
+        class="form-control"
+        [class.is-invalid]="title.invalid && (title.dirty || title.touched)"
+        placeholder="{{ 'Enter product title' | translate }}"
+      />
+      <div class="invalid-feedback" *ngIf="title.errors?.['required']">
+        {{ 'Title is required' | translate }}
+      </div>
+    </div>
+
+    <!-- Категория -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">{{ 'Category' | translate }}</label>
+      <input
+        type="text"
+        formControlName="category"
+        class="form-control"
+        [class.is-invalid]="category.invalid && (category.dirty || category.touched)"
+        placeholder="{{ 'Enter product category' | translate }}"
+      />
+      <div class="invalid-feedback" *ngIf="category.errors?.['required']">
+        {{ 'Category is required' | translate }}
+      </div>
+    </div>
+
+    <!-- Описание -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">{{ 'Description' | translate }}</label>
+      <textarea
+        rows="3"
+        formControlName="description"
+        class="form-control"
+        placeholder="{{ 'Enter description (optional)' | translate }}"
+      ></textarea>
+    </div>
+
+    <!-- Фото -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">{{ 'Photos (optional)' | translate }}</label>
+      <input
+        type="text"
+        formControlName="photos"
+        class="form-control"
+        placeholder="{{ 'Enter photo URLs separated by commas' | translate }}"
+      />
+    </div>
+
+    <!-- Статус -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">{{ 'Status' | translate }}</label>
+      <select class="form-select" formControlName="status">
+        <option value="open">{{ 'Open' | translate }}</option>
+        <option value="sold">{{ 'Sold' | translate }}</option>
+        <option value="closed">{{ 'Closed' | translate }}</option>
+      </select>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="close()">
+    {{ 'Cancel' | translate }}
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="productForm.invalid"
+    (click)="saveProduct()"
+  >
+    <i class="fa-solid fa-plus me-1"></i>
+    {{ 'Create' | translate }}
+  </button>
+</div>

@@ -8,6 +8,7 @@ import { AuthModule } from './core/common/auth/auth.module';
 import { UserModule } from './core/common/user/user.module';
 import { ServiceModule } from './core/common/services/services.module';
 import { PawnshopModule } from './core/common/pawnshop/pawnshop.module';
+import { ProductModule } from './core/common/product/product.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { PawnshopModule } from './core/common/pawnshop/pawnshop.module';
     AuthModule,
     UserModule,
     ServiceModule,
-    PawnshopModule
+    PawnshopModule,
+    ProductModule
   ],
   controllers: [AppController],
   providers: [AppService],
