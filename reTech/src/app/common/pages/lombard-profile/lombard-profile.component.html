@@ -50,6 +50,9 @@
           <button class="btn btn-success btn-sm" (click)="openAddOfferModal()">
             <i class="fa-solid fa-plus me-1"></i> {{ 'Add item' | translate }}
           </button>
+          <button class="btn btn-warning btn-sm">
+            <i class="fa-solid fa-vault me-1"></i> {{ 'Create slot' | translate }}
+          </button>
         </div>
       </div>
 
@@ -97,75 +100,177 @@
         </div>
 
      
-       <div class="items-content p-4 shadow-sm bg-white position-relative">
+        <div class="pawnshop-stats p-4 shadow-sm bg-white rounded">
           <div class="d-flex align-items-center mb-3">
-            <i class="fa-solid fa-box text-success me-2 fs-5"></i>
-            <h4 class="m-0 fw-semibold">{{ "Available items" | translate }}</h4>
+            <i class="fa-solid fa-chart-simple text-success me-2 fs-5"></i>
+            <h4 class="m-0 fw-semibold">{{ "Pawnshop summary" | translate }}</h4>
           </div>
 
-          <!-- Иконка "Посмотреть все" -->
-          <button
-            class="btn btn-light btn-sm view-all-btn position-absolute"
-            (click)="openViewAllModal()"
-            title="Посмотреть все"
-          >
-            <i class="fa-solid fa-eye"></i>
-          </button>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-value">{{ profile.activeSlots?.length || 0 }}</span>
+              <span class="stat-label">{{ "Active slots" | translate }}</span>
+            </div>
 
-          <div *ngIf="productslist && productslist.length > 0; else noOffers" class="product-list">
-            <div class="item-container">
-              <div class="card shadow-sm overflow-hidden item-card" *ngFor="let item of productslist">
-                <img
-                  *ngIf="item.photos && item.photos.length"
-                  [src]="item.photos[0]"
-                  class="card-img-top"
-                  alt="{{ item.title }}"
-                />
-                <div class="card-body p-3">
-                  <h5 class="card-title mb-1">{{ item.title }}</h5>
-                  <p class="card-text text-muted small mb-2">{{ item.category }}</p>
-                  <span
-                    class="badge"
-                    [ngClass]="{
-                      'bg-success': item.status === 'open',
-                      'bg-secondary': item.status === 'closed',
-                      'bg-danger': item.status === 'sold'
-                    }"
-                  >
-                    {{ item.status | titlecase }}
-                  </span>
-                </div>
-              </div>
+            <div class="stat-item">
+              <span class="stat-value">
+                {{ (productslist)?.length || (productslist) || 0 }}
+              </span>
+              <span class="stat-label">{{ "Items for sale" | translate }}</span>
+            </div>
+
+            <div class="stat-item" (click)="scrollToTableItem()" style="cursor: pointer;">
+              <span class="stat-value">{{ productslist?.length || 0 }}</span>
+              <span class="stat-label">{{ "Total items" | translate }}</span>
+            </div>
+
+            <div class="stat-item">
+              <span class="stat-value">
+                {{ computeSlotUsagePercent(profile, productslist) }}%
+              </span>
+              <span class="stat-label">{{ "Slot usage" | translate }}</span>
             </div>
           </div>
-
-          <ng-template #noOffers>
-            <p class="text-muted fst-italic m-0">
-              {{ "You have not added any gadgets" | translate }}
-            </p>
-          </ng-template>
         </div>
-
-
 
         <!-- Правая колонка -->
         <div class="extra-content">
           <div class="small-block text-center">
             <i class="fa-solid fa-star text-warning fs-4 mb-2"></i>
-            <h6 class="fw-semibold mb-1">{{ 'Rating and reviews' | translate }}</h6>
-            <p class="text-muted small mb-0">{{ 'No reviews yet' | translate }}</p>
-          </div>
+            <h6 class="fw-semibold mb-3">{{ 'Rating and reviews' | translate }}</h6>
 
-          <div class="small-block text-center">
-            <i class="fa-solid fa-chart-line text-success fs-4 mb-2"></i>
-            <h6 class="fw-semibold mb-1">{{ 'Statistics' | translate }}</h6>
-            <p class="text-muted small mb-0">{{ 'Active deals: 0' | translate }}</p>
+            <!-- Средний рейтинг -->
+            <div class="mb-3">
+              <span class="fs-5 fw-bold text-dark">4.8</span>
+              <span class="text-muted small">/ 5.0</span>
+              <div class="stars text-warning mt-1">
+                ★★★★☆
+              </div>
+            </div>
+
+            <!-- Фейковые отзывы -->
+            <div class="reviews text-start px-3">
+              <div class="review mb-2">
+                <p class="mb-1 fw-semibold">Aruzhan K.</p>
+                <p class="text-muted small fst-italic">
+                  “Fast service and fair prices. Highly recommend!”
+                </p>
+              </div>
+
+              <div class="review mb-2">
+                <p class="mb-1 fw-semibold">Dias M.</p>
+                <p class="text-muted small fst-italic">
+                  “Staff were helpful, got a good deal for my phone.”
+                </p>
+              </div>
+
+              <div class="review">
+                <p class="mb-1 fw-semibold">Elena T.</p>
+                <p class="text-muted small fst-italic">
+                  “Clean place and trustworthy staff.”
+                </p>
+              </div>
+            </div>
           </div>
         </div>
-
-
-
+        
       </div>
     </div>
+
+    <!--Это таблица список продуктов кампании-->
+    <div  #itemsTable id="itemsTable" class="items-list mt-4 shadow-sm rounded bg-white p-3">
+      <h4 class="fw-semibold mb-3">
+        <i class="fa-solid fa-box me-2 text-primary"></i>
+        {{ 'Items list' | translate }}
+      </h4>
+
+      <div *ngIf="productslist?.length; else noItems">
+        <div class="table-responsive">
+          <table class="table align-middle table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>{{ 'Photo' | translate }}</th>
+                <th>{{ 'Title' | translate }}</th>
+                <th>{{ 'Category' | translate }}</th>
+                <th>{{ 'Price' | translate }}</th>
+                <th>{{ 'Status' | translate }}</th>
+                <th>{{ 'Created' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of productslist">
+                <td>
+                  <img
+                    [src]="item.photos?.[0] || 'assets/png/default-product.png'"
+                    alt="{{ item.title }}"
+                    class="item-photo rounded"
+                    width="60"
+                    height="60"
+                  />
+                </td>
+                <td class="fw-semibold">{{ item.title }}</td>
+                <td>{{ item.category }}</td>
+                <td class="text-success fw-bold">${{ item.price }}</td>
+                <td>
+                  <span
+                    class="badge"
+                    [ngClass]="{
+                      'bg-success': item.status === 'sold',
+                      'bg-warning text-dark': item.status === 'open',
+                      'bg-secondary': item.status === 'closed'
+                    }"
+                  >
+                    {{ item.status | titlecase }}
+                  </span>
+                </td>
+                <td>{{ item.createdAt | date: 'short' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <ng-template #noItems>
+        <div class="alert alert-info text-center m-0">
+          {{ 'No items found for this pawnshop.' | translate }}
+        </div>
+      </ng-template>
+    </div>
+
+
+    <!--Нужно создать блок с слотами после того как создадим сервис слоты и данные будут отображаться!!!-->
+
+    <!-- <div class="active-slots">
+      <h5 class="section-title">
+        <i class="fa-solid fa-clock me-2 text-primary"></i>
+        {{ 'Active Slots' | translate }}
+      </h5>
+
+      <div class="slots-table">
+        <div class="slots-header">
+          <div>Product</div>
+          <div>Loan</div>
+          <div>Dates</div>
+          <div>Status</div>
+        </div>
+
+        <div
+          class="slot-row"
+          *ngFor="let slot of profile.activeSlots"
+          [class.active]="slot.status === 'active'"
+          [class.closed]="slot.status === 'closed'"
+          [class.expired]="slot.status === 'expired'"
+        >
+          <div class="slot-product">{{ slot.product }}</div>
+          <div class="slot-loan">{{ slot.loanAmount | currency:'USD' }}</div>
+          <div class="slot-dates">
+            {{ slot.startDate | date:'shortDate' }} – {{ slot.endDate | date:'shortDate' }}
+          </div>
+          <div class="slot-status">{{ slot.status | titlecase }}</div>
+        </div>
+      </div>
+    </div> -->
+
+
   </div>
 </div>

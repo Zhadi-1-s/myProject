@@ -39,6 +39,12 @@ export class PawnshopProfile {
 
   @Prop({ type: [String], default: [] })
   photos?: string[];
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Slot' }], default: [] })
+  activeSlots: Types.ObjectId[];
+
+  @Prop({type:Number,required:true})
+  slotLimit:number
 }
 
 export const PawnshopProfileSchema = SchemaFactory.createForClass(PawnshopProfile);

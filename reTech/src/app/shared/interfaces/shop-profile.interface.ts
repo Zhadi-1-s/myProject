@@ -1,3 +1,5 @@
+import { Slot } from "./slot.interface";
+
 export interface PawnshopProfile {
   _id?: string;      // id из MongoDB
   userId: string;    // ObjectId → string
@@ -11,5 +13,7 @@ export interface PawnshopProfile {
   rating?: number;
   description?: string;
   photos?: string[];
+  activeSlots:Slot[];
+  slotLimit:number;
   createdAt?: Date;
 }

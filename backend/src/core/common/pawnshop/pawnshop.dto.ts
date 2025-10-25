@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsNumber, IsArray } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsNumber, IsArray, ArrayUnique,IsMongoId } from 'class-validator';
 
 export class CreatePawnshopDto {
 
@@ -57,6 +57,26 @@ export class CreatePawnshopDto {
   @IsOptional()
   @IsArray()
   photos?: string[];
+
+  @ApiProperty({
+    example: ['66fb0aa2a50a9d75bc3d33f2', '66fb0aa2a50a9d75bc3d33f3'],
+    required: false,
+    description: 'IDs of active slots (references to Slot documents)',
+  })
+  @IsOptional()
+  @IsArray()
+  @ArrayUnique()
+  @IsMongoId({ each: true })
+  activeSlots?: string[];
+
+  @ApiProperty({
+    example: 10,
+    description: 'Maximum number of active slots allowed for the pawnshop',
+  })
+  @IsNotEmpty()
+  @IsNumber()
+  slotLimit: number;
+
 }
 
 export class UpdatePawnshopDto extends CreatePawnshopDto {}

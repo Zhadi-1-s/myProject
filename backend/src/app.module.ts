@@ -9,6 +9,7 @@ import { UserModule } from './core/common/user/user.module';
 import { ServiceModule } from './core/common/services/services.module';
 import { PawnshopModule } from './core/common/pawnshop/pawnshop.module';
 import { ProductModule } from './core/common/product/product.module';
+import { SlotModule } from './core/common/slot/slot.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { ProductModule } from './core/common/product/product.module';
     UserModule,
     ServiceModule,
     PawnshopModule,
-    ProductModule
+    ProductModule,
+    SlotModule
   ],
   controllers: [AppController],
   providers: [AppService],

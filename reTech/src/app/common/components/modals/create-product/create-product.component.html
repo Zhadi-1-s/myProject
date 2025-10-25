@@ -69,6 +69,25 @@
         <option value="closed">{{ 'Closed' | translate }}</option>
       </select>
     </div>
+
+    <!-- Цена -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold">{{ 'Price' | translate }}</label>
+      <input
+        type="number"
+        formControlName="price"
+        class="form-control"
+        [class.is-invalid]="price.invalid && (price.dirty || price.touched)"
+        placeholder="{{ 'Enter the price of the product' | translate }}"
+      />
+      <div class="invalid-feedback" *ngIf="price.errors?.['required']">
+        {{ 'Price is required' | translate }}
+      </div>
+      <div class="invalid-feedback" *ngIf="price.errors?.['min']">
+        {{ 'Price must be greater than 0' | translate }}
+      </div>
+    </div>
+
   </form>
 </div>
 

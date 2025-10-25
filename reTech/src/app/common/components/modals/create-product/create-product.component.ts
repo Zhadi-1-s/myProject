@@ -30,6 +30,7 @@ export class CreateProductComponent {
       description: [''],
       photos: this.fb.control<string[]>([]),
       status: ['open'],
+      price: [null, [Validators.required, Validators.min(1)]],
     });
   }
 
@@ -39,6 +40,10 @@ export class CreateProductComponent {
 
   get category() {
     return this.productForm.get('category')!;
+  }
+
+  get price() {
+    return this.productForm.get('price');
   }
 
   saveProduct() {

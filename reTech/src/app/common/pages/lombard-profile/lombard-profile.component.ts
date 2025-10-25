@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { User } from '../../../shared/interfaces/user.interface';
 import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
@@ -12,6 +12,7 @@ import { CreateProductComponent } from '../../components/modals/create-product/c
 import { ProductService } from '../../../shared/services/product.service';
 import { ViewallComponent } from '../../components/modals/viewall/viewall.component';
 
+
 @Component({
   selector: 'app-lombard-profile',
   standalone: true,
@@ -22,10 +23,12 @@ import { ViewallComponent } from '../../components/modals/viewall/viewall.compon
 export class LombardProfileComponent implements OnInit{
   
   profile: PawnshopProfile | null = null;
-  items:Product[];
-  user:User;
+  items:Product[] | null;
+  user:User | null;
   currentTime: Date = new Date();
-  productslist : Product[];
+  productslist : Product[] | null;
+
+  @ViewChild('itemsTable') itemsTable!: ElementRef;
 
   constructor(
     private lombardService:LombardService,
@@ -126,6 +129,22 @@ export class LombardProfileComponent implements OnInit{
     modalRef.componentInstance.title = 'All Products';
     modalRef.componentInstance.type = 'products';
     modalRef.componentInstance.items = this.productslist;
+  }
+
+  filterOpenItems(){
+
+  }
+
+   computeSlotUsagePercent(profile?: PawnshopProfile, products?: Product[]) {
+    const active = profile?.activeSlots?.length || 0;
+    const total = (profile as any)?.totalSlots ?? Math.max(active, 1);
+    return Math.round((active / total) * 100);
+  }
+
+  toggleItemsList:boolean = false;
+
+  scrollToTableItem() {
+    this.itemsTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
 }

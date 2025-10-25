@@ -23,5 +23,9 @@ export class Product {
 
   @Prop({ required: true, enum: ['open', 'sold', 'closed'], default: 'open' })
   status: 'open' | 'sold' | 'closed';
+  
+  @Prop({ required: true, type: Number, min: 0 })
+  price: number;
+
 }
 export const ProductSchema = SchemaFactory.createForClass(Product);

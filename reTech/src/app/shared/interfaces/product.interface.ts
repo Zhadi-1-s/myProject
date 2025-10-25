@@ -6,6 +6,7 @@ export interface Product {
   category: string;
   photos: string[];
   status: 'open' | 'sold' | 'closed';
+  price: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
