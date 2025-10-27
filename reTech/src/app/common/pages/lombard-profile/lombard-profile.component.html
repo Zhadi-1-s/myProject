@@ -11,9 +11,9 @@
                width="190"
                height="190" />
                
-          <div class="avatar-overlay" [class.show]="hover" (click)="changeProfilePhoto()">
+          <!-- <div class="avatar-overlay" [class.show]="hover" (click)="changeProfilePhoto()">
             <span>Изменить фото профиля</span>
-          </div>
+          </div> -->
         </div>
 
         <!-- Pawnshop Info -->
@@ -230,11 +230,26 @@
                 </td>
                 <td>{{ item.createdAt | date: 'short' }}</td>
                 <td>
-                  <button class="btn btn-sm me-2" (click)="editProduct(item)">
+                  <button 
+                      class="btn btn-sm me-2" 
+                      (click)="editProduct(item)"
+                      ngbTooltip="{{ 'Edit product' | translate }}"
+                      container="body">
                     <i class="fa-solid fa-pen"></i>
                   </button>
-                  <button class="btn btn-sm" (click)="deleteProduct()">
+                  <button 
+                      class="btn btn-sm"
+                      (click)="deleteProduct()"
+                      ngbTooltip="{{ 'Delete product' | translate }}"
+                      container="body">
                     <i class="fa-solid fa-trash"></i>
+                  </button>
+                  <button 
+                      class="btn btn-sm" 
+                      (click)="openProductDetail(item)"
+                      ngbTooltip="{{ 'View details' | translate }}"
+                      container="body">
+                    <i class="fa-solid fa-file-lines"></i>
                   </button>
                 </td>
               </tr>

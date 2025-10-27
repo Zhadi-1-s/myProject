@@ -6,6 +6,8 @@ import { LoginDto, LoginResponse, RegisterDto, RegisterResponse } from "../inter
 import { BehaviorSubject,catchError,of } from "rxjs";
 
 import { User } from "../interfaces/user.interface";
+import { Product } from "../interfaces/product.interface";
+import { PawnshopProfile } from "../interfaces/shop-profile.interface";
 
 @Injectable({
     providedIn: 'root'
@@ -126,6 +128,9 @@ export class AuthService{
     // });
     // }
 
-
+    currentPawnshop?: PawnshopProfile | null;
+    canEdit(product:Product){
+        const user = this.currentUserSubject.value;
+    }
 
 }

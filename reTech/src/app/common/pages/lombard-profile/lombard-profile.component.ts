@@ -5,19 +5,21 @@ import { User } from '../../../shared/interfaces/user.interface';
 import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
 import { LombardService } from '../../../shared/services/lombard.service';
 import { AuthService } from '../../../shared/services/auth.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { EditLombardComponent } from '../../components/modals/edit-lombard/edit-lombard.component';
 import { Product } from '../../../shared/interfaces/product.interface';
 import { CreateProductComponent } from '../../components/modals/create-product/create-product.component';
 import { ProductService } from '../../../shared/services/product.service';
 import { ViewallComponent } from '../../components/modals/viewall/viewall.component';
 import { EditProductComponent } from '../../components/modals/edit-product/edit-product.component';
-
+import { ProductDetailComponent } from '../../components/modals/product-detail/product-detail.component';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-lombard-profile',
   standalone: true,
-  imports: [CommonModule,TranslateModule],
+  imports: [CommonModule,TranslateModule,NgbModalModule,
+    NgbTooltipModule],
   templateUrl: './lombard-profile.component.html',
   styleUrl: './lombard-profile.component.scss'
 })
@@ -113,6 +115,7 @@ export class LombardProfileComponent implements OnInit{
 
     modalRef.componentInstance.lombard = this.profile;
 
+
     modalRef.result.then(
       (updatedShop:PawnshopProfile) => {
         if(updatedShop){
@@ -132,6 +135,15 @@ export class LombardProfileComponent implements OnInit{
     modalRef.componentInstance.title = 'All Products';
     modalRef.componentInstance.type = 'products';
     modalRef.componentInstance.items = this.productslist;
+  }
+
+  openProductDetail(item: Product) {
+
+    const modalRef = this.modalService.open(ProductDetailComponent, { size: 'lg',centered:true });
+
+    modalRef.componentInstance.product = item;
+    modalRef.componentInstance.user = this.user;
+    modalRef.componentInstance.pawnshop = this.profile;
   }
 
   filterOpenItems(){

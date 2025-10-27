@@ -2,7 +2,7 @@ import { Slot } from "./slot.interface";
 
 export interface PawnshopProfile {
   _id?: string;      // id из MongoDB
-  userId: string;    // ObjectId → string
+  userId: string   // ObjectId → string
   name: string;
   address: string;
   phone: string;

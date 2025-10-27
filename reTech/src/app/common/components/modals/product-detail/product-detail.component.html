@@ -1,0 +1,78 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    <i class="fa-solid fa-box-open me-2 text-primary"></i>
+    {{ product.title }}
+  </h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+
+<div class="modal-body">
+  <!-- Фото -->
+  <div class="text-center mb-3">
+    <img
+      [src]="product.photos?.[0] || 'assets/png/default-product.png'"
+      alt="{{ product.title }}"
+      class="rounded shadow-sm"
+      width="200"
+      height="200"
+    />
+  </div>
+
+  <!-- Детали -->
+  <table class="table table-sm">
+    <tr>
+      <th>{{ 'Title' | translate }}</th>
+      <td>{{ product.title }}</td>
+    </tr>
+    <tr>
+      <th>{{ 'Category' | translate }}</th>
+      <td>{{ product.category }}</td>
+    </tr>
+    <tr>
+      <th>{{ 'Price' | translate }}</th>
+      <td class="text-success fw-semibold">${{ product.price }}</td>
+    </tr>
+    <tr>
+      <th>{{ 'Status' | translate }}</th>
+      <td>
+        <span
+          class="badge"
+          [ngClass]="{
+            'bg-success': product.status === 'sold',
+            'bg-warning text-dark': product.status === 'open',
+            'bg-secondary': product.status === 'closed'
+          }"
+        >
+          {{ product.status | titlecase }}
+        </span>
+      </td>
+    </tr>
+    <tr>
+      <th>{{ 'Created At' | translate }}</th>
+      <td>{{ product.createdAt | date: 'short' }}</td>
+    </tr>
+    <tr *ngIf="product.updatedAt">
+      <th>{{ 'Updated At' | translate }}</th>
+      <td>{{ product.updatedAt | date: 'short' }}</td>
+    </tr>
+  </table>
+
+  <div *ngIf="product.description" class="mt-3">
+    <h6>{{ 'Description' | translate }}</h6>
+    <p class="text-muted">{{ product.description }}</p>
+  </div>
+
+  <!-- Галерея -->
+ <app-image-view 
+    [photos]="product.photos" 
+    [editable]="canEdit"
+    (photoRemoved)="onPhotoRemoved($event)"
+    (photoAdded)="onPhotoAdded()"
+    ></app-image-view>
+</div>
+
+<div class="modal-footer">
+  <button class="btn btn-secondary" (click)="activeModal.dismiss()">
+    {{ 'Close' | translate }}
+  </button>
+</div>
