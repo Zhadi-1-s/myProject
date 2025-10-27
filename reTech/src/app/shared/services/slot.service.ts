@@ -21,7 +21,6 @@ export class SlotService {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   }
 
-
   getActiveSlots(): Observable<Slot[]> {
     return this.http.get<Slot[]>(`${this.apiUrl}/active`);
   }

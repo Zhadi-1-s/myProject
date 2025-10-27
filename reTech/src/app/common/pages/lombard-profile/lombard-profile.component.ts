@@ -11,6 +11,7 @@ import { Product } from '../../../shared/interfaces/product.interface';
 import { CreateProductComponent } from '../../components/modals/create-product/create-product.component';
 import { ProductService } from '../../../shared/services/product.service';
 import { ViewallComponent } from '../../components/modals/viewall/viewall.component';
+import { EditProductComponent } from '../../components/modals/edit-product/edit-product.component';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class LombardProfileComponent implements OnInit{
 
   ngOnInit(){
     this.authService.currentUser$.subscribe(user => {
+      if(!user?._id)return;
       this.user = user;
 
       this.lombardService.getLombardByUserId(user._id).subscribe({
@@ -79,20 +81,21 @@ export class LombardProfileComponent implements OnInit{
     return now >= open && now <= close;
   }
 
-  // ngOnInit() {
-  //   this.authService.currentUser$.subscribe(user => {
-  //     this.user = user;
-  //     if (user?.role === 'pawnshop') {
-  //       this.loadPawnshopOffers();
-  //     }
-  //   });
-  // }
+  editProduct(item:Product){
+    const modalRef = this.modalService.open(EditProductComponent,{size:'lg'});
 
-  loadPawnshopOffers() {
-    // this.lombardService.getMyOffers().subscribe(offers => {
-    //   this.pawnshopOffers = offers;
-    // });
+    modalRef.componentInstance.product = item;
+    modalRef.result.then(
+      (updatedProduct:Product) => {
+        if(updatedProduct){
+          // Обновляем продукт в списке после редактирования
+          this.productslist = this.productslist?.map(prod => prod._id === updatedProduct._id ? updatedProduct : prod) || null;
+        }
+      },
+      () => {}
+    )
   }
+  deleteProduct(){}
 
   openEditModal(){}
 
@@ -145,6 +148,11 @@ export class LombardProfileComponent implements OnInit{
 
   scrollToTableItem() {
     this.itemsTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  hover = false;
+  changeProfilePhoto() {
+    // Logic to change profile photo
   }
 
 }

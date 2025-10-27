@@ -10,10 +10,14 @@
                class="rounded-circle me-3"
                width="190"
                height="190" />
+               
+          <div class="avatar-overlay" [class.show]="hover" (click)="changeProfilePhoto()">
+            <span>Изменить фото профиля</span>
+          </div>
         </div>
 
         <!-- Pawnshop Info -->
-        <div class="flex-grow-1 ms-5">
+        <div class="flex-grow-1 ms-5" *ngIf="profile">
           <h3 class="mb-1">{{ profile?.name || 'Pawnshop name' }}</h3>
           <!-- <p class="text-muted mb-2">{{ profile?.description || 'Pawnshop description' }}</p> -->
           <div class="d-flex gap-3 mt-3">
@@ -73,7 +77,7 @@
     </div>
 
     <!-- Bottom Section -->
-    <div class="col-12">
+    <div class="col-12" *ngIf="profile">
       <div class="profile-section d-flex gap-3">
   
         <div class="description-content p-4 shadow-sm rounded-3 bg-light">
@@ -178,7 +182,7 @@
     </div>
 
     <!--Это таблица список продуктов кампании-->
-    <div  #itemsTable id="itemsTable" class="items-list mt-4 shadow-sm rounded bg-white p-3">
+    <div  #itemsTable id="itemsTable" class="items-list mt-4 shadow-sm rounded bg-white p-3" *ngIf="profile && productslist">
       <h4 class="fw-semibold mb-3">
         <i class="fa-solid fa-box me-2 text-primary"></i>
         {{ 'Items list' | translate }}
@@ -195,6 +199,7 @@
                 <th>{{ 'Price' | translate }}</th>
                 <th>{{ 'Status' | translate }}</th>
                 <th>{{ 'Created' | translate }}</th>
+                <th>{{ 'Action' | translate }}</th>
               </tr>
             </thead>
             <tbody>
@@ -224,6 +229,14 @@
                   </span>
                 </td>
                 <td>{{ item.createdAt | date: 'short' }}</td>
+                <td>
+                  <button class="btn btn-sm me-2" (click)="editProduct(item)">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button class="btn btn-sm" (click)="deleteProduct()">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
