@@ -54,7 +54,7 @@
           <button class="btn btn-success btn-sm" (click)="openAddOfferModal()">
             <i class="fa-solid fa-plus me-1"></i> {{ 'Add item' | translate }}
           </button>
-          <button class="btn btn-warning btn-sm">
+          <button class="btn btn-warning btn-sm" (click)="openCreateSlotModal()">
             <i class="fa-solid fa-vault me-1"></i> {{ 'Create slot' | translate }}
           </button>
         </div>
@@ -221,7 +221,7 @@
                     class="badge"
                     [ngClass]="{
                       'bg-success': item.status === 'sold',
-                      'bg-warning text-dark': item.status === 'open',
+                      'bg-warning text-dark': item.status === 'active',
                       'bg-secondary': item.status === 'closed'
                     }"
                   >
@@ -264,40 +264,6 @@
         </div>
       </ng-template>
     </div>
-
-
-    <!--Нужно создать блок с слотами после того как создадим сервис слоты и данные будут отображаться!!!-->
-
-    <!-- <div class="active-slots">
-      <h5 class="section-title">
-        <i class="fa-solid fa-clock me-2 text-primary"></i>
-        {{ 'Active Slots' | translate }}
-      </h5>
-
-      <div class="slots-table">
-        <div class="slots-header">
-          <div>Product</div>
-          <div>Loan</div>
-          <div>Dates</div>
-          <div>Status</div>
-        </div>
-
-        <div
-          class="slot-row"
-          *ngFor="let slot of profile.activeSlots"
-          [class.active]="slot.status === 'active'"
-          [class.closed]="slot.status === 'closed'"
-          [class.expired]="slot.status === 'expired'"
-        >
-          <div class="slot-product">{{ slot.product }}</div>
-          <div class="slot-loan">{{ slot.loanAmount | currency:'USD' }}</div>
-          <div class="slot-dates">
-            {{ slot.startDate | date:'shortDate' }} – {{ slot.endDate | date:'shortDate' }}
-          </div>
-          <div class="slot-status">{{ slot.status | titlecase }}</div>
-        </div>
-      </div>
-    </div> -->
 
 
   </div>

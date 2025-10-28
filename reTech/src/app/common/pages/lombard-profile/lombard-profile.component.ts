@@ -14,6 +14,7 @@ import { ViewallComponent } from '../../components/modals/viewall/viewall.compon
 import { EditProductComponent } from '../../components/modals/edit-product/edit-product.component';
 import { ProductDetailComponent } from '../../components/modals/product-detail/product-detail.component';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { CreateSlotComponent } from '../../components/modals/create-slot/create-slot.component';
 
 @Component({
   selector: 'app-lombard-profile',
@@ -144,6 +145,13 @@ export class LombardProfileComponent implements OnInit{
     modalRef.componentInstance.product = item;
     modalRef.componentInstance.user = this.user;
     modalRef.componentInstance.pawnshop = this.profile;
+  }
+
+  openCreateSlotModal(){
+    const modalRef = this.modalService.open(CreateSlotComponent, {size:'lg'});
+
+    modalRef.componentInstance.pawnshop = this.profile;
+    modalRef.componentInstance.user = this.user;
   }
 
   filterOpenItems(){

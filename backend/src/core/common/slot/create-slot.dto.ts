@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsNumber, IsDateString, IsEnum } from 'class-validator';
+import { Status } from '../enums/status.enum';
 
 export class CreateSlotDto {
   @ApiProperty({
@@ -65,6 +66,6 @@ export class CreateSlotDto {
     default: 'active',
   })
   @IsNotEmpty()
-  @IsEnum(['active', 'closed', 'expired'])
-  status: 'active' | 'closed' | 'expired';
+  @IsEnum(Status)
+  status: Status;
 }

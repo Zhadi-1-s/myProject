@@ -13,6 +13,7 @@
       [src]="product.photos?.[0] || 'assets/png/default-product.png'"
       alt="{{ product.title }}"
       class="rounded shadow-sm"
+      style="object-fit: cover;"
       width="200"
       height="200"
     />
@@ -39,7 +40,7 @@
           class="badge"
           [ngClass]="{
             'bg-success': product.status === 'sold',
-            'bg-warning text-dark': product.status === 'open',
+            'bg-warning text-dark': product.status === 'active',
             'bg-secondary': product.status === 'closed'
           }"
         >

@@ -7,7 +7,7 @@ import { Slot } from '../interfaces/slot.interface';
   providedIn: 'root'
 })
 export class SlotService {
-  private apiUrl = 'http://localhost:3000/slot';
+  private apiUrl = 'http://localhost:3000/slots';
 
   constructor(private http: HttpClient) {}
 
@@ -15,7 +15,6 @@ export class SlotService {
   createSlot(slotData: Partial<Slot>): Observable<Slot> {
     return this.http.post<Slot>(`${this.apiUrl}`, slotData);
   }
-
 
   deleteSlot(id: string): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
@@ -25,7 +24,6 @@ export class SlotService {
     return this.http.get<Slot[]>(`${this.apiUrl}/active`);
   }
 
-
   getAllSlots(): Observable<Slot[]> {
     return this.http.get<Slot[]>(`${this.apiUrl}`);
   }
@@ -34,11 +32,9 @@ export class SlotService {
     return this.http.get<Slot[]>(`${this.apiUrl}/user/${userId}`);
   }
 
-
   getSlotsByPawnshopId(pawnshopId: string): Observable<Slot[]> {
     return this.http.get<Slot[]>(`${this.apiUrl}/pawnshop/${pawnshopId}`);
   }
-
 
   getSlotById(id: string): Observable<Slot> {
     return this.http.get<Slot>(`${this.apiUrl}/${id}`);

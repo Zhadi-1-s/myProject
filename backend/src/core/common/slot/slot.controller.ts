@@ -1,11 +1,15 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param ,Post,Body} from '@nestjs/common';
 import { SlotService } from './slot.service';
-
+import { CreateSlotDto } from './create-slot.dto';
+import { Slot } from 'src/core/database/schemas/slot.schema';
 @Controller('slots')
 export class SlotController {
   constructor(private readonly slotService: SlotService) {}
 
-    
+  @Post()
+  async createSlot(@Body() dto: CreateSlotDto): Promise<Slot> {
+    return this.slotService.createSlot(dto);
+  }
 
   @Get()
   getAllSlots() {

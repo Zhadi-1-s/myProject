@@ -1,6 +1,7 @@
 // product.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Category } from 'src/core/common/enums/category.enum';
 
 export type ProductDocument = Product & Document;
 
@@ -15,8 +16,12 @@ export class Product {
   @Prop()
   description?: string;
 
-  @Prop({ required: true })
-  category: string;
+  @Prop({
+    type: String,
+    enum: Category,
+    required: true,
+  })
+  category: Category;
 
   @Prop({ type: [String], default: [] })
   photos: string[];

@@ -28,33 +28,30 @@ export class ProductDetailComponent implements OnInit {
   }
   
  ngOnInit() {
-    console.log('INIT DETAIL:', {
-      product: this.product,
-      pawnshop: this.pawnshop,
-      user: this.user
-    });
+    // console.log('INIT DETAIL:', {
+    //   product: this.product,
+    //   pawnshop: this.pawnshop,
+    //   user: this.user
+    // });
 
     if (!this.product || !this.user) return;
 
-    // 🧍‍♂️ Если продукт создан пользователем
     if (this.product.ownerId === this.user._id) {
-      console.log('✅ Product belongs to user');
+
       this.canEdit = true;
       return;
     }
 
-    // 🏦 Если продукт принадлежит ломбарду, а ломбард принадлежит пользователю
     if (
       this.pawnshop &&
       this.product.ownerId === this.pawnshop._id &&
-       this.pawnshop.userId?._id === this.user._id
+       this.pawnshop.userId === this.user._id
     ) {
-      console.log('✅ Product belongs to user’s pawnshop');
+
       this.canEdit = true;
       return;
     }
 
-    console.warn('🚫 User cannot edit this product');
   }
 
 

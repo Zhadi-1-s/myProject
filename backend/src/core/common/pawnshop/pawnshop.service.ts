@@ -38,11 +38,8 @@ export class PawnshopService {
     return pawnshop;
   }
 
-  async findByUserId(userId:string):Promise<PawnshopProfile | null>{
-    return this.pawnshopModel
-      .findOne({ userId })
-      .populate('userId', '-password')
-      .exec();
+  async findByUserId(userId: string): Promise<PawnshopProfile | null> {
+    return this.pawnshopModel.findOne({ userId }).exec();
   }
 
   async update(id: string, updateDto: UpdatePawnshopDto): Promise<PawnshopProfile> {
