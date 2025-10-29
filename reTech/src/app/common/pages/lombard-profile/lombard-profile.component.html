@@ -51,9 +51,6 @@
           <button class="btn btn-lombard btn-outline-primary" (click)="openEditModal()">
             <i class="fa-regular fa-pen-to-square me-1"></i>{{ 'Edit profile' | translate }}
           </button>
-          <button class="btn btn-lombard btn-warning" (click)="openCreateSlotModal()">
-            <i class="fa-solid fa-vault me-1"></i>{{ 'Create slot' | translate }}
-          </button>
         </div>
 
       </div>
@@ -269,48 +266,59 @@
       </ng-template>
     </div>
 
-    <div class="active-slots mt-5" *ngIf="activeSlots?.length">
-      <h4 class="fw-semibold mb-3">
-        <i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>
-        {{ 'Active slots' | translate }}
-      </h4>
+    <div class="active-slots mt-5" *ngIf="slotWithProduct?.length">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold mb-0">
+          <i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>
+          {{ 'Active slots' | translate }}
+        </h4>
+
+        <button class="btn btn-lombard btn-warning" (click)="openCreateSlotModal()">
+          <i class="fa-solid fa-vault me-1"></i>{{ 'Create slot' | translate }}
+        </button>
+      </div>
 
       <div class="row g-3">
-        <div class="col-md-4" *ngFor="let slot of activeSlots; let i = index">
+        <div class="col-md-4" *ngFor="let item of slotWithProduct">
           <div class="card shadow-sm border-success h-100">
             <div class="card-body d-flex flex-column">
-              <!-- <div class="d-flex align-items-center mb-2">
+
+              <!-- Верхняя часть с фото и названием -->
+              <div class="d-flex align-items-center mb-2">
                 <img
-                  [src]="productsOfSlots[i]?.photos?.[0] || 'assets/png/default-product.png'"
-                  alt="{{ productsOfSlots[i]?.title }}"
+                  [src]="item.product?.photos?.[0] || 'assets/png/default-product.png'"
+                  alt="{{ item.product?.title }}"
                   class="rounded me-3"
+                  style="object-fit: cover;"
                   width="60"
                   height="60"
                 />
                 <div>
-                  <h6 class="mb-1 fw-bold">{{ productsOfSlots[i]?.title }}</h6>
-                  <span class="badge bg-success">{{ slot.status | titlecase }}</span>
+                  <h6 class="mb-1 fw-bold">{{ item.product?.title }}</h6>
+                  <span class="badge bg-success">{{ item.slot.status | titlecase }}</span>
                 </div>
-              </div> -->
+              </div>
 
+              <!-- Данные по слоту -->
               <div class="flex-grow-1">
-                <p class="mb-1"><strong>{{ 'Loan amount' | translate }}:</strong> ${{ slot.loanAmount }}</p>
-                <p class="mb-1"><strong>{{ 'Interest rate' | translate }}:</strong> {{ slot.interestRate }}%</p>
-                <p class="mb-1"><strong>{{ 'End date' | translate }}:</strong> {{ slot.endDate | date:'shortDate' }}</p>
+                <p class="mb-1"><strong>{{ 'Loan amount' | translate }}:</strong> ${{ item.slot.loanAmount }}</p>
+                <p class="mb-1"><strong>{{ 'Interest rate' | translate }}:</strong> {{ item.slot.interestRate }}%</p>
+                <p class="mb-1"><strong>{{ 'End date' | translate }}:</strong> {{ item.slot.endDate | date:'shortDate' }}</p>
               </div>
 
               <div class="mt-3 d-flex justify-content-between align-items-center">
-                <span class="text-muted small">{{ slot.createdAt | date:'short' }}</span>
+                <span class="text-muted small">{{ item.slot.createdAt | date:'short' }}</span>
                 <button class="btn btn-outline-primary btn-sm">
                   <i class="fa-solid fa-eye"></i> {{ 'Details' | translate }}
                 </button>
               </div>
+
             </div>
           </div>
         </div>
       </div>
-
     </div>
+
 
     <ng-template #noActiveSlots>
       <div class="alert alert-secondary mt-3 text-center">

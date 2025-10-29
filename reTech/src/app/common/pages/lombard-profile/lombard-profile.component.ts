@@ -38,6 +38,8 @@ export class LombardProfileComponent implements OnInit{
 
   activeSlots:Slot[] | null;
 
+  slotWithProduct: { slot: Slot; product: Product }[] = [];
+
   @ViewChild('itemsTable') itemsTable!: ElementRef;
 
   constructor(
@@ -87,7 +89,7 @@ export class LombardProfileComponent implements OnInit{
             this.productService.getProductById(slot.product).subscribe({
               next: (product) => {
                 console.log('Product for Slot:', product);
-                this.productofSlot = product;
+                this.slotWithProduct.push({ slot, product });
               }
             });
           }
