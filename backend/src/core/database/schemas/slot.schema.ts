@@ -6,8 +6,8 @@ export type SlotDocument = Slot & Document;
 
 @Schema({ timestamps: true })
 export class Slot {
-  @Prop({ type: Types.ObjectId, ref: Product.name, required: true })
-  product: Product | Types.ObjectId;
+  @Prop({ type: Types.ObjectId, ref: 'ProductId', required: true })
+  product:Types.ObjectId;
 
   @Prop({ type: Types.ObjectId, ref: 'PawnshopProfile', required: true })
   pawnshopId: Types.ObjectId;

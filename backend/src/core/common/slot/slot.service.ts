@@ -72,9 +72,6 @@ export class SlotService {
     if (!Types.ObjectId.isValid(pawnshopId)) throw new NotFoundException('Invalid pawnshop ID');
     return this.slotModel
       .find({ pawnshopId })
-      .populate('product', 'title price')
-      .populate('userId', 'username')
-      .exec();
   }
 
   // Получить слот по его ID

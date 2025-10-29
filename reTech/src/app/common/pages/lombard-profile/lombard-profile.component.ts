@@ -34,6 +34,8 @@ export class LombardProfileComponent implements OnInit{
   currentTime: Date = new Date();
   productslist : Product[] | null;
 
+  productofSlot:Product | null;
+
   activeSlots:Slot[] | null;
 
   @ViewChild('itemsTable') itemsTable!: ElementRef;
@@ -75,6 +77,20 @@ export class LombardProfileComponent implements OnInit{
       .subscribe({
         next: (slots) => {
           this.activeSlots = slots.filter(slot => slot.status === 'active');
+          console.log('Active Slots:', this.activeSlots);
+          for(const slot of this.activeSlots){
+
+            if (!slot.product) {
+              console.warn(`Slot ${slot._id} has no product ID`);
+              continue;
+            }
+            this.productService.getProductById(slot.product).subscribe({
+              next: (product) => {
+                console.log('Product for Slot:', product);
+                this.productofSlot = product;
+              }
+            });
+          }
         }
       })
   }

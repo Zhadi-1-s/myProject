@@ -5,7 +5,7 @@ import { Product } from "./product.interface";
 export interface Slot {
   _id?: string;
   product:string;              
-  pawnshopId: string|Product;          
+  pawnshopId: string;         
   userId: string;               
   loanAmount: number;           // сумма займа
   startDate: Date;              
