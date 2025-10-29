@@ -45,19 +45,17 @@
 
         <!-- Buttons -->
         <div class="d-flex gap-2 align-self-end">
-          <button class="btn btn-lombard-edit" (click)="openEditLombard()">
+          <button class="btn btn-lombard btn-lombard-edit" (click)="openEditLombard()">
             <i class="fa-solid fa-building me-2"></i>{{ 'Edit details of shop' | translate }}
           </button>
-          <button class="btn btn-outline-primary btn-sm" (click)="openEditModal()">
-            <i class="fa-regular fa-pen-to-square me-1"></i> {{ 'Edit profile' | translate }}
+          <button class="btn btn-lombard btn-outline-primary" (click)="openEditModal()">
+            <i class="fa-regular fa-pen-to-square me-1"></i>{{ 'Edit profile' | translate }}
           </button>
-          <button class="btn btn-success btn-sm" (click)="openAddOfferModal()">
-            <i class="fa-solid fa-plus me-1"></i> {{ 'Add item' | translate }}
-          </button>
-          <button class="btn btn-warning btn-sm" (click)="openCreateSlotModal()">
-            <i class="fa-solid fa-vault me-1"></i> {{ 'Create slot' | translate }}
+          <button class="btn btn-lombard btn-warning" (click)="openCreateSlotModal()">
+            <i class="fa-solid fa-vault me-1"></i>{{ 'Create slot' | translate }}
           </button>
         </div>
+
       </div>
 
       <ng-template #notLoggedIn>
@@ -183,10 +181,16 @@
 
     <!--Это таблица список продуктов кампании-->
     <div  #itemsTable id="itemsTable" class="items-list mt-4 shadow-sm rounded bg-white p-3" *ngIf="profile && productslist">
-      <h4 class="fw-semibold mb-3">
-        <i class="fa-solid fa-box me-2 text-primary"></i>
-        {{ 'Items list' | translate }}
-      </h4>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-semibold mb-0">
+          <i class="fa-solid fa-box me-2 text-primary"></i>
+          {{ 'Items list' | translate }}
+        </h4>
+
+        <button class="btn btn-lombard btn-success" (click)="openAddOfferModal()">
+          <i class="fa-solid fa-plus me-1"></i>{{ 'Add item' | translate }}
+        </button>
+      </div>
 
       <div *ngIf="productslist?.length; else noItems">
         <div class="table-responsive">
@@ -265,6 +269,54 @@
       </ng-template>
     </div>
 
+    <div class="active-slots mt-5" *ngIf="activeSlots?.length">
+      <h4 class="fw-semibold mb-3">
+        <i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>
+        {{ 'Active slots' | translate }}
+      </h4>
+
+      <div class="row g-3">
+        <div class="col-md-4" *ngFor="let slot of activeSlots; let i = index">
+          <div class="card shadow-sm border-success h-100">
+            <div class="card-body d-flex flex-column">
+              <!-- <div class="d-flex align-items-center mb-2">
+                <img
+                  [src]="productsOfSlots[i]?.photos?.[0] || 'assets/png/default-product.png'"
+                  alt="{{ productsOfSlots[i]?.title }}"
+                  class="rounded me-3"
+                  width="60"
+                  height="60"
+                />
+                <div>
+                  <h6 class="mb-1 fw-bold">{{ productsOfSlots[i]?.title }}</h6>
+                  <span class="badge bg-success">{{ slot.status | titlecase }}</span>
+                </div>
+              </div> -->
+
+              <div class="flex-grow-1">
+                <p class="mb-1"><strong>{{ 'Loan amount' | translate }}:</strong> ${{ slot.loanAmount }}</p>
+                <p class="mb-1"><strong>{{ 'Interest rate' | translate }}:</strong> {{ slot.interestRate }}%</p>
+                <p class="mb-1"><strong>{{ 'End date' | translate }}:</strong> {{ slot.endDate | date:'shortDate' }}</p>
+              </div>
+
+              <div class="mt-3 d-flex justify-content-between align-items-center">
+                <span class="text-muted small">{{ slot.createdAt | date:'short' }}</span>
+                <button class="btn btn-outline-primary btn-sm">
+                  <i class="fa-solid fa-eye"></i> {{ 'Details' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <ng-template #noActiveSlots>
+      <div class="alert alert-secondary mt-3 text-center">
+        {{ 'No active slots at the moment' | translate }}
+      </div>
+    </ng-template>
 
   </div>
 </div>

@@ -15,7 +15,9 @@ import { EditProductComponent } from '../../components/modals/edit-product/edit-
 import { ProductDetailComponent } from '../../components/modals/product-detail/product-detail.component';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateSlotComponent } from '../../components/modals/create-slot/create-slot.component';
-
+import { Slot } from '../../../shared/interfaces/slot.interface';
+import { SlotService } from '../../../shared/services/slot.service';
+import { switchMap } from 'rxjs';
 @Component({
   selector: 'app-lombard-profile',
   standalone: true,
@@ -32,40 +34,49 @@ export class LombardProfileComponent implements OnInit{
   currentTime: Date = new Date();
   productslist : Product[] | null;
 
+  activeSlots:Slot[] | null;
+
   @ViewChild('itemsTable') itemsTable!: ElementRef;
 
   constructor(
     private lombardService:LombardService,
     private authService:AuthService,
     private modalService: NgbModal,
-    private productService:ProductService
+    private productService:ProductService,
+    private slotService:SlotService
   ){}
 
 
-  ngOnInit(){
-    this.authService.currentUser$.subscribe(user => {
-      if(!user?._id)return;
-      this.user = user;
+  async ngOnInit() {
+    this.authService.currentUser$
+      .pipe(
+     
+        switchMap(user => {
+          if (!user?._id) return [];
+          this.user = user;
 
-      this.lombardService.getLombardByUserId(user._id).subscribe({
-        next : (pawnshop) => {
+          return this.lombardService.getLombardByUserId(user._id);
+        }),
+    
+        switchMap((pawnshop: any) => {
+          if (!pawnshop?._id) return [];
+
           this.profile = pawnshop;
-          console.log('loading pawnshop', pawnshop)
           this.productService.getProductsByOwner(pawnshop._id).subscribe({
             next: (products) => {
               this.productslist = products;
-              console.log('Загружаем продукты ломбарда',products);
             },
-            error(err) {
-                console.error(err.message);
-            },
-          })
-        },
-        error(err) {
-          console.error(err.message);
+            error: (err) => console.error('Error loading products:', err.message),
+          });
+
+          return this.slotService.getSlotsByPawnshopId(pawnshop._id);
+        })
+      )
+      .subscribe({
+        next: (slots) => {
+          this.activeSlots = slots.filter(slot => slot.status === 'active');
         }
       })
-    })
   }
 
   get isOpenNow(): boolean {

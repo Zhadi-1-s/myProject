@@ -78,5 +78,18 @@
     "Edit product":"Редактировать обьект",
     "Delete product":"Удалить обьект",
     "View details":"Просмотреть детали",
-    "Add":"Добавить"
+    "Add":"Добавить",
+    "Items list":"Список товаров",
+    "Photo": "Фото",
+    "Title": "Название",
+    "Category": "Категория",
+    "Price": "Цена",
+    "Status": "Статус",
+    "Created": "Создано",
+    "Action": "Действие",
+    "No items found for this pawnshop.": "Для этого ломбарда товары не найдены.",
+    "Active slots": "Активные слоты",
+    "Items for sale": "Товары на продаже",
+    "Total items": "Всего товаров",
+    "Slot usage": "Использование слотов"
 }

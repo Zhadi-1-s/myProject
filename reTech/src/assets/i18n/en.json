@@ -78,6 +78,19 @@
     "Edit product":"Edit product",
     "Delete product":"Delete product",
     "View details":"View details",
-    "Add":"Add"
+    "Add":"Add",
+    "Items list":"Items list",
+    "Photo": "Photo",
+    "Title": "Title",
+    "Category": "Category",
+    "Price": "Price",
+    "Status": "Status",
+    "Created": "Created",
+    "Action": "Action",
+    "No items found for this pawnshop.": "No items found for this pawnshop.",
+    "Active slots": "Active slots",
+    "Items for sale": "Items for sale",
+    "Total items": "Total items",
+    "Slot usage": "Slot usage"
     
 }

@@ -4,8 +4,8 @@ import { Product } from "./product.interface";
 // slot.interface.ts
 export interface Slot {
   _id?: string;
-  product: Product;              
-  pawnshopId: string;          
+  product:string;              
+  pawnshopId: string|Product;          
   userId: string;               
   loanAmount: number;           // сумма займа
   startDate: Date;              

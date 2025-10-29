@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsNumber, IsDateString, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsDateString, IsEnum,ValidateNested } from 'class-validator';
 import { Status } from '../enums/status.enum';
-
+import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
+import { Product } from 'src/core/database/schemas/product.schema';
 export class CreateSlotDto {
   @ApiProperty({
     example: '671b2f3c4a12efbd1a23a456',
