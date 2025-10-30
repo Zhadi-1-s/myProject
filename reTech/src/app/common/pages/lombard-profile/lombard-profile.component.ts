@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit,ViewChild,ElementRef } from '@angular/core';
+import { Component, OnInit,ViewChild,ElementRef, ChangeDetectorRef } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { User } from '../../../shared/interfaces/user.interface';
 import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
@@ -17,7 +17,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateSlotComponent } from '../../components/modals/create-slot/create-slot.component';
 import { Slot } from '../../../shared/interfaces/slot.interface';
 import { SlotService } from '../../../shared/services/slot.service';
-import { switchMap } from 'rxjs';
+import { switchMap,Observable,tap,filter,of,forkJoin,map } from 'rxjs';
 @Component({
   selector: 'app-lombard-profile',
   standalone: true,
@@ -42,59 +42,90 @@ export class LombardProfileComponent implements OnInit{
 
   @ViewChild('itemsTable') itemsTable!: ElementRef;
 
+  profile$!: Observable<PawnshopProfile>;
+  slotsWithProducts$!: Observable<{ slot: Slot; product: Product }[]>;
+  products$!: Observable<Product[]>;
+
   constructor(
     private lombardService:LombardService,
     private authService:AuthService,
     private modalService: NgbModal,
     private productService:ProductService,
-    private slotService:SlotService
+    private slotService:SlotService,
+    private cdr:ChangeDetectorRef
   ){}
 
+  ngOnInit() {
 
-  async ngOnInit() {
-    this.authService.currentUser$
-      .pipe(
-     
-        switchMap(user => {
-          if (!user?._id) return [];
-          this.user = user;
+    this.profile$ = this.authService.currentUser$.pipe(
+      filter((user): user is User => !!user?._id),
+      switchMap(user => this.lombardService.getLombardByUserId(user._id)),
+      tap(profile => console.log('Loaded profile:', profile))
+    );
 
-          return this.lombardService.getLombardByUserId(user._id);
-        }),
-    
-        switchMap((pawnshop: any) => {
-          if (!pawnshop?._id) return [];
+    this.products$ = this.profile$.pipe(
+      switchMap(profile => this.productService.getProductsByOwner(profile._id)),
+      tap(products => console.log('Loaded products:', products))
+    );
 
-          this.profile = pawnshop;
-          this.productService.getProductsByOwner(pawnshop._id).subscribe({
-            next: (products) => {
-              this.productslist = products;
-            },
-            error: (err) => console.error('Error loading products:', err.message),
-          });
+    this.slotsWithProducts$ = this.authService.currentUser$.pipe(
+      filter((user): user is User => !!user?._id),
+      switchMap(user => this.lombardService.getLombardByUserId(user._id)),
+      switchMap(pawnshop => {
+        this.profile = pawnshop;
+        return this.slotService.getSlotsByPawnshopId(pawnshop._id);
+      }),
+      tap(slots => console.log('Loaded slots:', slots)),
+      map(slots => slots.filter(slot => slot.status === 'active')),
+      switchMap(activeSlots => {
+        if (activeSlots.length === 0) return of([]);
 
-          return this.slotService.getSlotsByPawnshopId(pawnshop._id);
-        })
-      )
+        const productRequests = activeSlots.map(slot =>
+          this.productService.getProductById(slot.product).pipe(
+            map(product => ({ slot, product }))
+          )
+        );
+
+        return forkJoin(productRequests);
+      }),
+      tap(data => console.log('Loaded slots with products:', data))
+    );
+  }
+
+
+  loadActiveSlots(): void {
+
+    this.slotWithProduct = []; 
+    this.activeSlots = [];
+
+    const pawnshopId = this.profile?._id;
+    if (!pawnshopId) {
+      console.error('Pawnshop ID is missing for loading slots.');
+      return;
+    }
+
+
+    this.slotService.getSlotsByPawnshopId(pawnshopId)
       .subscribe({
         next: (slots) => {
           this.activeSlots = slots.filter(slot => slot.status === 'active');
-          console.log('Active Slots:', this.activeSlots);
-          for(const slot of this.activeSlots){
+          console.log('Active Slots after refresh:', this.activeSlots);
 
-            if (!slot.product) {
-              console.warn(`Slot ${slot._id} has no product ID`);
-              continue;
-            }
+          // 4. Загружаем продукты для каждого слота
+          for(const slot of this.activeSlots){
+            if (!slot.product) continue;
+            
             this.productService.getProductById(slot.product).subscribe({
               next: (product) => {
-                console.log('Product for Slot:', product);
                 this.slotWithProduct.push({ slot, product });
+                // 5. Принудительное обновление, если это необходимо
+                this.cdr.detectChanges(); 
               }
             });
           }
-        }
-      })
+        },
+        error: (err) => console.error('Error loading slots:', err.message)
+      });
   }
 
   get isOpenNow(): boolean {
@@ -120,7 +151,7 @@ export class LombardProfileComponent implements OnInit{
     modalRef.result.then(
       (updatedProduct:Product) => {
         if(updatedProduct){
-          // Обновляем продукт в списке после редактирования
+
           this.productslist = this.productslist?.map(prod => prod._id === updatedProduct._id ? updatedProduct : prod) || null;
         }
       },
@@ -139,6 +170,10 @@ export class LombardProfileComponent implements OnInit{
     //   if (result) this.loadProducts();
     // });
   }
+
+  extendSlot(item:Slot){}
+  
+  deleteSlot(item:string){}
 
   openEditLombard(){
     const modalRef = this.modalService.open(EditLombardComponent,{centered:true})
@@ -181,6 +216,16 @@ export class LombardProfileComponent implements OnInit{
 
     modalRef.componentInstance.pawnshop = this.profile;
     modalRef.componentInstance.user = this.user;
+    
+    modalRef.result.then(
+      (created:boolean) => {
+        if(created){
+          this.loadActiveSlots();
+        }
+      },
+      () => {}
+    )
+
   }
 
   filterOpenItems(){
@@ -193,8 +238,8 @@ export class LombardProfileComponent implements OnInit{
     return Math.round((active / total) * 100);
   }
 
+  
   toggleItemsList:boolean = false;
-
   scrollToTableItem() {
     this.itemsTable.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
