@@ -280,22 +280,53 @@
 
       <div class="row g-3">
         <div class="col-md-4" *ngFor="let item of slotsWithProducts$ | async">
-          <div class="card shadow-sm border-success h-100">
+          <div class="card shadow-sm border-success h-100 position-relative">
             <div class="card-body d-flex flex-column">
 
-              <!-- Верхняя часть с фото и названием -->
-              <div class="d-flex align-items-center mb-2">
-                <img
-                  [src]="item.product?.photos?.[0] || 'assets/png/default-product.png'"
-                  alt="{{ item.product?.title }}"
-                  class="rounded me-3"
-                  style="object-fit: cover;"
-                  width="60"
-                  height="60"
-                />
-                <div>
-                  <h6 class="mb-1 fw-bold">{{ item.product?.title }}</h6>
-                  <span class="badge bg-success">{{ item.slot.status | titlecase }}</span>
+              <!-- Верхняя часть -->
+              <div class="d-flex justify-content-between align-items-start mb-2">
+                <div class="d-flex align-items-center">
+                  <img
+                    [src]="item.product?.photos?.[0] || 'assets/png/default-product.png'"
+                    alt="{{ item.product?.title }}"
+                    class="rounded me-3"
+                    style="object-fit: cover;"
+                    width="60"
+                    height="60"
+                  />
+                  <div>
+                    <h6 class="mb-1 fw-bold">{{ item.product?.title }}</h6>
+                    <span class="badge bg-success">{{ item.slot.status | titlecase }}</span>
+                  </div>
+                </div>
+
+                <!-- Меню действий -->
+                <div class="dropdown">
+                  <button
+                    class="btn btn-link text-muted p-0"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <button class="dropdown-item" (click)="openSlotDetails(item.slot)">
+                        <i class="fa-solid fa-eye me-2 text-primary"></i>{{ 'Details' | translate }}
+                      </button>
+                    </li>
+                    <li>
+                      <button class="dropdown-item" (click)="editSlot(item.slot)">
+                        <i class="fa-solid fa-pen me-2 text-success"></i>{{ 'Edit' | translate }}
+                      </button>
+                    </li>
+                    <li>
+                      <button class="dropdown-item text-danger" (click)="deleteSlot(item.slot._id)">
+                        <i class="fa-solid fa-trash me-2"></i>{{ 'Delete' | translate }}
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
@@ -306,26 +337,17 @@
                 <p class="mb-1"><strong>{{ 'End date' | translate }}:</strong> {{ item.slot.endDate | date:'shortDate' }}</p>
               </div>
 
-              <!-- Нижняя панель кнопок -->
-              <div class="mt-3 d-flex justify-content-between align-items-center">
-                <span class="text-muted small">{{ item.slot.createdAt | date:'short' }}</span>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-outline-primary btn-sm">
-                    <i class="fa-solid fa-eye"></i> {{ 'Details' | translate }}
-                  </button>
-                  <button class="btn btn-outline-success btn-sm" (click)="extendSlot(item.slot)">
-                    <i class="fa-solid fa-clock-rotate-left"></i> {{ 'Extend' | translate }}
-                  </button>
-                  <button class="btn btn-outline-danger btn-sm" (click)="deleteSlot(item.slot._id)">
-                    <i class="fa-solid fa-trash"></i> {{ 'Delete' | translate }}
-                  </button>
-                </div>
+              <!-- Нижняя часть -->
+              <div class="mt-3 text-muted small d-flex justify-content-end">
+                {{ item.slot.createdAt | date:'short' }}
               </div>
 
             </div>
           </div>
         </div>
       </div>
+
+
     </div>
 
 

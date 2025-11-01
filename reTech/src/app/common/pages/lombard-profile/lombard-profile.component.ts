@@ -17,12 +17,14 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateSlotComponent } from '../../components/modals/create-slot/create-slot.component';
 import { Slot } from '../../../shared/interfaces/slot.interface';
 import { SlotService } from '../../../shared/services/slot.service';
-import { switchMap,Observable,tap,filter,of,forkJoin,map } from 'rxjs';
+import { switchMap,Observable,tap,filter,of,forkJoin,map, take } from 'rxjs';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-lombard-profile',
   standalone: true,
   imports: [CommonModule,TranslateModule,NgbModalModule,
-    NgbTooltipModule],
+    NgbTooltipModule,NgbDropdownModule],
   templateUrl: './lombard-profile.component.html',
   styleUrl: './lombard-profile.component.scss'
 })
@@ -92,41 +94,6 @@ export class LombardProfileComponent implements OnInit{
     );
   }
 
-
-  loadActiveSlots(): void {
-
-    this.slotWithProduct = []; 
-    this.activeSlots = [];
-
-    const pawnshopId = this.profile?._id;
-    if (!pawnshopId) {
-      console.error('Pawnshop ID is missing for loading slots.');
-      return;
-    }
-
-
-    this.slotService.getSlotsByPawnshopId(pawnshopId)
-      .subscribe({
-        next: (slots) => {
-          this.activeSlots = slots.filter(slot => slot.status === 'active');
-          console.log('Active Slots after refresh:', this.activeSlots);
-
-          // 4. Загружаем продукты для каждого слота
-          for(const slot of this.activeSlots){
-            if (!slot.product) continue;
-            
-            this.productService.getProductById(slot.product).subscribe({
-              next: (product) => {
-                this.slotWithProduct.push({ slot, product });
-                // 5. Принудительное обновление, если это необходимо
-                this.cdr.detectChanges(); 
-              }
-            });
-          }
-        },
-        error: (err) => console.error('Error loading slots:', err.message)
-      });
-  }
 
   get isOpenNow(): boolean {
     if (!this.profile?.openTime || !this.profile?.closeTime) return false;
@@ -212,22 +179,22 @@ export class LombardProfileComponent implements OnInit{
   }
 
   openCreateSlotModal(){
-    const modalRef = this.modalService.open(CreateSlotComponent, {size:'lg'});
-
-    modalRef.componentInstance.pawnshop = this.profile;
-    modalRef.componentInstance.user = this.user;
     
-    modalRef.result.then(
-      (created:boolean) => {
-        if(created){
-          this.loadActiveSlots();
-        }
-      },
-      () => {}
-    )
+    this.profile$.pipe(take(1)).subscribe(profile => {
+      const modalRef = this.modalService.open(CreateSlotComponent, {size:'lg'});
+
+      modalRef.componentInstance.pawnshop = profile;
+      modalRef.componentInstance.user = this.user;
+      
+      // modalRef.componentInstance.changeDetectorRef.detectChanges?.();
+    })
+
 
   }
 
+  openSlotDetails(item: Slot) {}
+  editSlot(item: Slot) {}
+  
   filterOpenItems(){
 
   }

@@ -14,6 +14,8 @@ import { Category } from '../../../../shared/enums/category.enum';
 
 import { SlotService } from '../../../../shared/services/slot.service';
 import { ProductService } from '../../../../shared/services/product.service';
+import { AuthService } from '../../../../shared/services/auth.service';
+import { take } from 'rxjs/internal/operators/take';
 @Component({
   selector: 'app-create-slot',
   standalone: true,
@@ -24,9 +26,10 @@ import { ProductService } from '../../../../shared/services/product.service';
 export class CreateSlotComponent implements OnInit {
 
   @Input() pawnshop : PawnshopProfile | null;
-  @Input() user:User | null;
 
   @Output() slotCreated = new EventEmitter<Slot>();
+
+  user:User | null;
 
   status = Status;
 
@@ -36,11 +39,14 @@ export class CreateSlotComponent implements OnInit {
   loading = false;
   errorMessage = '';
 
+  users$ = this.userService.currentUser$;
+
   constructor(
     private fb: FormBuilder,
      public activeModal: NgbActiveModal,
      private slotService: SlotService,
-     private productService:ProductService
+     private productService:ProductService,
+     private userService:AuthService
   ){
     this.form = this.fb.group({
       // Информация о товаре
@@ -65,9 +71,19 @@ export class CreateSlotComponent implements OnInit {
     //   endDate: [null, Validators.required],
     //   status: [Status.ACTIVE, Validators.required]
     // });
+    this.users$.pipe(take(1)).subscribe(user => {
+      this.user = user;
+    });
+
+    console.log('CreateSlotComponent initialized with pawnshop:', this.pawnshop, 'and user:', this.user);
   }
 
   async onSubmit():Promise<void> {
+
+    console.log('Form submitted with values:', this.form.value);
+
+    console.log('the button for create is clicked')
+
     if (this.form.invalid || !this.pawnshop || !this.user) return;
 
     this.loading = true;
@@ -85,7 +101,7 @@ export class CreateSlotComponent implements OnInit {
       }
 
       const createdProduct = await this.productService.createProduct(productPayload).toPromise();
-      
+      console.log('✅ Product created:', createdProduct);
        // 2️⃣ Создаём слот (займ в ломбарде)
       const slotPayload: Slot = {
         product: createdProduct._id,
@@ -99,7 +115,7 @@ export class CreateSlotComponent implements OnInit {
       };
 
       const createdSlot = await this.slotService.createSlot(slotPayload).toPromise();
-
+      console.log('✅ Slot created:', createdSlot);
       window.alert('Слот успешно создан!');
 
       this.slotCreated.emit(createdSlot);
