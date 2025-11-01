@@ -1,0 +1,109 @@
+<div class="container mt-4">
+  <h3 class="fw-semibold m-0">Список ломбардов</h3>
+  <div class="d-flex justify-content-between  mb-4 search-container">
+
+    <!-- Поле поиска -->
+    <div class="search-box w-50">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Поиск по названию..."
+        [(ngModel)]="searchTerm"
+      />
+    </div>
+    
+     <span >
+        {{'Results'}}  {{ (lombards$ | async)?.length || 0 }}
+    </span>
+
+    <div class="help-tooltips">
+        <div *ngFor="let item of searchHelpItemsList" class="help-items" (click)="onHelpItemClick(item)">
+            <span>{{ item }}</span>
+        </div>
+    </div>
+
+    <div class="filter-box d-flex align-items-center gap-2">
+      <!-- Фильтр по активным слотам -->
+      <select class="form-select" [(ngModel)]="activeFilter" style="width: 180px;">
+        <option value="all">Все ломбарды</option>
+        <option value="active">Только с активными слотами</option>
+        <option value="empty">Без активных слотов</option>
+      </select>
+
+      <!-- Сортировка по рейтингу -->
+      <select class="form-select" [(ngModel)]="sortByRating" style="width: 180px;">
+        <option value="none">Без сортировки</option>
+        <option value="desc">Рейтинг ↓</option>
+        <option value="asc">Рейтинг ↑</option>
+      </select>
+    </div>
+
+    <div class="applied-filters mt-3" *ngIf="appliedFilters.length > 0">
+        <span class="text-muted">
+            {{ 'Applied filters' | translate }}:
+        </span>
+        <span *ngFor="let filter of appliedFilters; let last = last"
+         (click)="removeFilter(filter)" style="cursor: pointer;">
+            <strong>{{ filter }}</strong>{{ !last ? ', ' : '' }}
+        </span>
+    </div>
+  </div>
+
+  <div *ngIf="(lombards$ | async) as lombards; else loading">
+    <div *ngIf="filterLombards(lombards).length > 0; else noLombards" class="row g-3">
+      <div class="col-md-4" *ngFor="let lombard of filterLombards(lombards)">
+        <div class="card shadow-sm h-100 border-0">
+          <img
+            *ngIf="lombard.logoUrl; else noLogo"
+            [src]="lombard.logoUrl"
+            class="card-img-top"
+            alt="{{ lombard.name }}"
+            style="height: 180px; object-fit: cover;"
+          />
+          <ng-template #noLogo>
+            <div class="d-flex justify-content-center align-items-center bg-light" style="height: 180px;">
+              <i class="fa-solid fa-store text-secondary fs-1"></i>
+            </div>
+          </ng-template>
+
+          <div class="card-body">
+            <h5 class="card-title fw-semibold mb-2">{{ lombard.name }}</h5>
+            <p class="card-text text-muted mb-1">
+              <i class="fa-solid fa-location-dot me-1 text-primary"></i>
+              {{ lombard.address }}
+            </p>
+            <p class="card-text text-muted mb-1">
+              <i class="fa-solid fa-phone me-1 text-primary"></i>
+              {{ lombard.phone }}
+            </p>
+            <p class="card-text small text-muted">
+              Время работы: {{ lombard.openTime }} – {{ lombard.closeTime }}
+            </p>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="badge bg-primary">{{ lombard.activeSlots?.length || 0 }}/{{ lombard.slotLimit }}</span>
+              <button class="btn btn-outline-primary btn-sm">
+                <i class="fa-solid fa-eye me-1"></i> Подробнее
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noLombards>
+      <div class="text-center text-muted mt-4">
+        <i class="fa-regular fa-folder-open fs-3 mb-2"></i>
+        <p>Нет доступных ломбардов</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <ng-template #loading>
+    <div class="text-center mt-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Загрузка...</span>
+      </div>
+    </div>
+  </ng-template>
+</div>

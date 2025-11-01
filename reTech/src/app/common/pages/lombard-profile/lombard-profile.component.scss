@@ -249,3 +249,10 @@
     gap: 6px;
   }
 }
+.edit-icon {
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.edit-icon:hover {
+  opacity: 1;
+}

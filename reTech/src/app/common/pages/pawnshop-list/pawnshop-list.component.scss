@@ -1,0 +1,94 @@
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .btn {
+    border-radius: 10px;
+  }
+}
+
+.search-container{
+    border: solid 1px black;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+
+}
+.search-box input{
+    margin-top: 20px;
+    width: 800px;
+    height: 50px;
+    vertical-align: middle;
+}
+.search-container {
+  flex-wrap: wrap;
+
+  .search-box input {
+    border-radius: 8px;
+  }
+
+  .filter-box select {
+    border-radius: 8px;
+  }
+}
+.help-tooltips {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.help-items {
+  border: 1px solid #6c757d; 
+  width: 150px;
+  text-align: center;
+  border-radius: 10px;
+  padding: 6px 0;
+  cursor: pointer;
+  color: #6c757d; 
+  background-color: #fff;
+  transition: all 0.25s ease;
+
+  &:hover {
+    background-color: #f1f1f1; 
+    color: #343a40; 
+    border-color: #6c757d; 
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(108, 117, 125, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: none;
+  }
+}
+.applied-filters {
+  font-size: 14px;
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  display: inline-block;
+}
+
+.filter-item {
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.2s ease;
+}
+
+.filter-item:hover {
+  color: #000;
+  text-decoration: line-through;
+  cursor: pointer;
+}

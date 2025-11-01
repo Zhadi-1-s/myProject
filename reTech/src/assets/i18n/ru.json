@@ -91,5 +91,8 @@
     "Active slots": "Активные слоты",
     "Items for sale": "Товары на продаже",
     "Total items": "Всего товаров",
-    "Slot usage": "Использование слотов"
+    "Slot usage": "Использование слотов",
+    "Delete": "Удалить",
+    "Details":"Детали",
+    "Product details":"Детали товара"
 }

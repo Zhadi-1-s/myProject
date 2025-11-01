@@ -19,12 +19,20 @@ import { Slot } from '../../../shared/interfaces/slot.interface';
 import { SlotService } from '../../../shared/services/slot.service';
 import { switchMap,Observable,tap,filter,of,forkJoin,map, take } from 'rxjs';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-lombard-profile',
   standalone: true,
-  imports: [CommonModule,TranslateModule,NgbModalModule,
-    NgbTooltipModule,NgbDropdownModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    NgbModalModule,
+    NgbTooltipModule,
+    NgbDropdownModule,
+    ReactiveFormsModule,
+    FormsModule
+  ],
   templateUrl: './lombard-profile.component.html',
   styleUrl: './lombard-profile.component.scss'
 })
@@ -48,13 +56,17 @@ export class LombardProfileComponent implements OnInit{
   slotsWithProducts$!: Observable<{ slot: Slot; product: Product }[]>;
   products$!: Observable<Product[]>;
 
+  viewMode:boolean = true;
+
+  isEditing:boolean = false;
+
   constructor(
     private lombardService:LombardService,
     private authService:AuthService,
     private modalService: NgbModal,
     private productService:ProductService,
     private slotService:SlotService,
-    private cdr:ChangeDetectorRef
+    
   ){}
 
   ngOnInit() {
@@ -94,6 +106,41 @@ export class LombardProfileComponent implements OnInit{
     );
   }
 
+  editableDescription = '';
+
+  toggleEdit() {
+    this.isEditing = true;
+    this.editableDescription = this.profile?.description || '';
+  }
+
+  saveDescription() {
+    if(!this.profile?._id) return;
+
+    const updatedLombard: Partial<PawnshopProfile> = {
+      userId: this.profile?.userId || '',
+      name: this.profile?.name || '',
+      address: this.profile?.address || '',
+      phone: this.profile?.phone || '',
+      slotLimit: this.profile?.slotLimit || 0,
+      description: this.editableDescription,
+    };
+
+     this.lombardService.updateLombard(this.profile._id, updatedLombard)
+    .subscribe({
+      next: (updatedProfile) => {
+        this.profile = updatedProfile; 
+        this.isEditing = false; 
+        console.log('Description updated:', updatedProfile);
+      },
+      error: (err) => {
+        console.error('Error updating lombard:', err);
+      }
+    });
+  }
+
+  cancelEdit(){
+    this.isEditing = false;
+  }
 
   get isOpenNow(): boolean {
     if (!this.profile?.openTime || !this.profile?.closeTime) return false;
@@ -140,7 +187,16 @@ export class LombardProfileComponent implements OnInit{
 
   extendSlot(item:Slot){}
   
-  deleteSlot(item:string){}
+  deleteSlot(slotId:string){
+    this.slotService.deleteSlot(slotId).subscribe({
+      next: (res) => {
+        console.log('Slot deleted:', res);
+      },
+      error: (err) => {
+        console.error('Error deleting slot:', err);
+      }
+    });
+  }
 
   openEditLombard(){
     const modalRef = this.modalService.open(EditLombardComponent,{centered:true})

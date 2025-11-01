@@ -1,4 +1,4 @@
-import { Controller, Get, Param ,Post,Body} from '@nestjs/common';
+import { Controller, Get, Param ,Post,Body, Delete} from '@nestjs/common';
 import { SlotService } from './slot.service';
 import { CreateSlotDto } from './create-slot.dto';
 import { Slot } from 'src/core/database/schemas/slot.schema';
@@ -29,5 +29,10 @@ export class SlotController {
   @Get(':id')
   getSlotById(@Param('id') id: string) {
     return this.slotService.findById(id);
+  }
+
+  @Delete(':id')
+  deleteSlot(@Param('id') id: string) {
+    return this.slotService.deleteSlot(id);
   }
 }
