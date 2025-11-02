@@ -8,12 +8,13 @@
         type="text"
         class="form-control"
         placeholder="Поиск по названию..."
-        [(ngModel)]="searchTerm"
+        [(ngModel)]="searchTerm$.value"
+        (ngModelChange)="onSearchChange($event)"
       />
     </div>
     
-     <span >
-        {{'Results'}}  {{ (lombards$ | async)?.length || 0 }}
+     <span class="results-text" >
+         {{ (filteredLombards$ | async)?.length || 0 }} {{'Results' | translate}} 
     </span>
 
     <div class="help-tooltips">
@@ -24,11 +25,11 @@
 
     <div class="filter-box d-flex align-items-center gap-2">
       <!-- Фильтр по активным слотам -->
-      <select class="form-select" [(ngModel)]="activeFilter" style="width: 180px;">
+      <!-- <select class="form-select" [(ngModel)]="activeFilter" style="width: 180px;">
         <option value="all">Все ломбарды</option>
         <option value="active">Только с активными слотами</option>
         <option value="empty">Без активных слотов</option>
-      </select>
+      </select> -->
 
       <!-- Сортировка по рейтингу -->
       <select class="form-select" [(ngModel)]="sortByRating" style="width: 180px;">
@@ -38,20 +39,20 @@
       </select>
     </div>
 
-    <div class="applied-filters mt-3" *ngIf="appliedFilters.length > 0">
+    <div class="applied-filters mt-3" *ngIf="(appliedFilters$ | async)?.length > 0">
         <span class="text-muted">
             {{ 'Applied filters' | translate }}:
         </span>
-        <span *ngFor="let filter of appliedFilters; let last = last"
+        <span *ngFor="let filter of appliedFilters$ | async; let last = last"
          (click)="removeFilter(filter)" style="cursor: pointer;">
             <strong>{{ filter }}</strong>{{ !last ? ', ' : '' }}
         </span>
     </div>
   </div>
 
-  <div *ngIf="(lombards$ | async) as lombards; else loading">
-    <div *ngIf="filterLombards(lombards).length > 0; else noLombards" class="row g-3">
-      <div class="col-md-4" *ngFor="let lombard of filterLombards(lombards)">
+  <div *ngIf="(filteredLombards$ | async) as lombards; else loading">
+    <div *ngIf="(filteredLombards$ | async)?.length > 0; else noLombards" class="row g-3">
+      <div class="col-md-4" *ngFor="let lombard of filteredLombards$ | async">
         <div class="card shadow-sm h-100 border-0">
           <img
             *ngIf="lombard.logoUrl; else noLogo"

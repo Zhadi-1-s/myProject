@@ -1,3 +1,4 @@
+import { Product } from "./product.interface";
 import { Slot } from "./slot.interface";
 
 export interface PawnshopProfile {
@@ -13,6 +14,7 @@ export interface PawnshopProfile {
   rating?: number;
   description?: string;
   photos?: string[];
+  products:Product[]
   activeSlots:Slot[];
   slotLimit:number;
   createdAt?: Date;

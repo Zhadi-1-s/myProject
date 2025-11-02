@@ -47,7 +47,7 @@
      routerLinkActive="active">
     <i [class]="item.icon"></i>
     {{ item.label }}
-    <span *ngIf="item.badge" class="badge">{{ item.badge }}</span>
+    <span *ngIf="item.badge" class="badge" routerLink="{{item.route}}">{{ item.badge }}</span>
   </a>
   </nav>
 </div>
