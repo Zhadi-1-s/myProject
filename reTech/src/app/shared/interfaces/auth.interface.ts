@@ -10,6 +10,7 @@ export interface RegisterDto{
     password:string;
     role:string;
     name:string;
+    avatarUrl?: string;
 }
 export interface RegisterResponse{
     access_token: string;

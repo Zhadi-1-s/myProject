@@ -45,17 +45,37 @@
     </div>
 
     <!-- Avatar -->
+    <!-- Avatar Upload -->
     <div class="mb-3">
-      <label for="avatar" class="form-label fw-semibold">{{'Avatar URL'|translate}}</label>
+      <label for="avatar" class="form-label fw-semibold">{{ 'Avatar' | translate }}</label>
+
+
+      <div class="text-center mb-2">
+        <img
+          *ngIf="editedUser.avatarUrl"
+          [src]="editedUser.avatarUrl"
+          alt="Avatar preview"
+          class="rounded-circle border"
+          width="120"
+          height="120"
+        />
+      </div>
+
+
       <input
-        type="text"
+        type="file"
         id="avatar"
         class="form-control"
-        name="avatarUrl"
-        [(ngModel)]="editedUser.avatarUrl"
-        placeholder="https://example.com/avatar.jpg"
+        (change)="onFileSelected($event)"
+        accept="image/*"
       />
+
+      <!-- статус загрузки -->
+      <div *ngIf="uploading" class="text-info mt-2">
+        {{ 'Uploading image...' | translate }}
+      </div>
     </div>
+
 
     <div class="text-center mt-4">
       <button type="submit" class="btn btn-primary me-2" [disabled]="!editForm.valid">{{'Save' |translate}}</button>

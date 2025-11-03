@@ -13,13 +13,15 @@ export class PawnshopService {
 
 
   async create(createDto: CreatePawnshopDto): Promise<PawnshopProfile> {
+    const defaultRating = 5.0;
     const defaultLogo = 'assets/png/pawnshopLogo.jpg';
     const defaultPhotos = ['assets/img/home-page1.jpg', 'assets/img/home.jpg'];
 
     const pawnShopData = { 
       ...createDto,
       logoUrl:defaultLogo,
-      photos:defaultPhotos
+      photos:defaultPhotos,
+      rating:defaultRating
     }
 
     const pawnshop = new this.pawnshopModel(pawnShopData);

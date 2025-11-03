@@ -7,6 +7,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EditModalComponent } from '../../components/modals/edit-modal/edit-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { ProductService } from '../../../shared/services/product.service';
+import { Observable } from 'rxjs';
+import { Product } from '../../../shared/interfaces/product.interface';
+import { CreateProductComponent } from '../../components/modals/create-product/create-product.component';
 
 @Component({
   selector: 'app-profile',
@@ -24,23 +28,27 @@ export class ProfileComponent implements OnInit {
 
   currentTime: Date = new Date();
 
+  products$:Observable<Product[]>;
+
   constructor(
               private authService: AuthService, 
-              private modalService: NgbModal
+              private modalService: NgbModal,
+              private productService:ProductService
   ) {}
 
   ngOnInit(): void {
     this.loading = true;
 
-    // подписываемся на BehaviorSubject — он обновится, когда профиль придет
+  
     this.authService.currentUser$.subscribe({
       next: (user) => {
         this.user = user;
+        this.products$ = this.productService.getProductsByOwner(this.user._id);
+        
         this.loading = false;
       }
     });
 
-    // если пользователь ещё не загружен — подтянем его
     if (!this.user) {
       this.authService.getUserProfile().subscribe({
         next: (profile) => (this.user = profile),
@@ -51,7 +59,6 @@ export class ProfileComponent implements OnInit {
       });
     }
 
-    setInterval(() => (this.currentTime = new Date()), 60000);
   }
 
 
@@ -69,6 +76,16 @@ export class ProfileComponent implements OnInit {
       },
       () => {} // закрытие без сохранения
     );
+
+  }
+
+  openCreateItemModal(){
+    const modalRef = this.modalService.open(CreateProductComponent);
+
+    modalRef.componentInstance.ownerId = this.user._id;
+  }
+
+  openProductDetails(product:Product){
 
   }
 

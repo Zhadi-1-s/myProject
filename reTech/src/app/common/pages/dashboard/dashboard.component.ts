@@ -3,11 +3,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
 import { CommonModule } from '@angular/common';
 import { LombardService } from '../../../shared/services/lombard.service';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [TranslateModule,CommonModule],
+  imports: [TranslateModule, CommonModule, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

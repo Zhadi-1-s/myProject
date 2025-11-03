@@ -5,6 +5,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ProductService } from '../../../../shared/services/product.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Product } from '../../../../shared/interfaces/product.interface';
+import { Category } from '../../../../shared/enums/category.enum';
+import { CloudinaryService } from '../../../../shared/services/cloudinary.service';
 
 @Component({
   selector: 'app-create-product',
@@ -18,11 +20,18 @@ export class CreateProductComponent {
   @Input() ownerId!: string;
 
   productForm : FormGroup;
+  uploading = false;
+
+  categories = Object.values(Category);
+
+  selectedFiles: File[] = [];
+  previewUrls: string[] = [];
 
   constructor(
     private fb:FormBuilder,
     private productService:ProductService,
-    public activeModal : NgbActiveModal
+    public activeModal : NgbActiveModal,
+    private uploadService:CloudinaryService
   ){
     this.productForm = this.fb.group({
       title: ['', Validators.required],
@@ -46,21 +55,59 @@ export class CreateProductComponent {
     return this.productForm.get('price');
   }
 
-  saveProduct() {
-    if (this.productForm.valid) {
-      const product: Product = {
-        ...this.productForm.value,
-        ownerId: this.ownerId, // 👈 добавляем id пользователя перед отправкой
-      };
+  async saveProduct() {
+    if (this.productForm.invalid) return;
 
-      this.productService.createProduct(product).subscribe(() => {
-        this.activeModal.close(true);
-      });
+    this.uploading = true;
+    const uploadedUrls: string[] = [];
+
+    // загружаем фото по очереди в Cloudinary
+    for (const file of this.selectedFiles) {
+      try {
+        const url = await this.uploadService.uploadImage(file);
+        uploadedUrls.push(url);
+      } catch (err) {
+        console.error('Ошибка загрузки фото:', err);
+      }
     }
+
+    const product: Product = {
+      ...this.productForm.value,
+      ownerId: this.ownerId,
+      photos: uploadedUrls,
+    };
+
+    this.productService.createProduct(product).subscribe(() => {
+      this.uploading = false;
+      this.activeModal.close(true);
+    });
   }
 
   close() {
     this.activeModal.dismiss();
   }
+
+  onPhotosSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    // добавляем новые фото в массив
+    for (const file of Array.from(input.files)) {
+      this.selectedFiles.push(file);
+
+      // показываем превью
+      const reader = new FileReader();
+      reader.onload = (e) => this.previewUrls.push(e.target?.result as string);
+      reader.readAsDataURL(file);
+    }
+
+    input.value = '';
+  }
+  
+  removePhoto(index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.previewUrls.splice(index, 1);
+  }
+
 
 }

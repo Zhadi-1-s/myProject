@@ -18,9 +18,7 @@ export class User {
   @Prop({ required: true, enum: ['user', 'pawnshop', 'admin']})
   role: 'user' | 'pawnshop' | 'admin';
 
-  @Prop({required:false,
-        default: '/assets/png/default-avatar.jpg'
-  })
+  @Prop({required:true})
   avatarUrl:string;
 }
 

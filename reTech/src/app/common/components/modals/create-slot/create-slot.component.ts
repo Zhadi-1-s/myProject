@@ -101,8 +101,7 @@ export class CreateSlotComponent implements OnInit {
       }
 
       const createdProduct = await this.productService.createProduct(productPayload).toPromise();
-      console.log('✅ Product created:', createdProduct);
-       // 2️⃣ Создаём слот (займ в ломбарде)
+   
       const slotPayload: Slot = {
         product: createdProduct._id,
         pawnshopId: this.pawnshop._id!,
@@ -115,13 +114,11 @@ export class CreateSlotComponent implements OnInit {
       };
 
       const createdSlot = await this.slotService.createSlot(slotPayload).toPromise();
-      console.log('✅ Slot created:', createdSlot);
       window.alert('Слот успешно создан!');
 
       this.slotCreated.emit(createdSlot);
       this.form.reset();
     } catch (err) {
-      console.error('❌ Error creating slot:', err);
       this.errorMessage = 'Ошибка при создании слота';
     } finally {
       this.loading = false;

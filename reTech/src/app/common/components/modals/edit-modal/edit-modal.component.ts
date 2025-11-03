@@ -7,6 +7,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AuthService } from '../../../../shared/services/auth.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { CloudinaryService } from '../../../../shared/services/cloudinary.service';
 
 @Component({
   selector: 'app-edit-modal',
@@ -20,18 +21,58 @@ export class EditModalComponent {
   @Input() user: User; // получаем данные из родительского компонента
   editedUser: User;
 
-  constructor(public activeModal: NgbActiveModal, private authService: AuthService) {}
+  uploading = false;
+  avatarPreview: string | ArrayBuffer | null = null;
+
+
+  constructor(
+    public activeModal: NgbActiveModal, 
+    private authService: AuthService,
+    private uploadService:CloudinaryService
+  ) {
+
+  }
 
   ngOnInit(): void {
     // копируем данные, чтобы не редактировать оригинальный объект
     this.editedUser = { ...this.user };
+    this.avatarPreview = this.user.avatarUrl || '/assets/png/default-avatar.jpg'
   }
 
+  async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
+      return;
+    }
+
+    this.uploading = true;
+
+    try {
+      const uploadedUrl = await this.uploadService.uploadImage(file);
+      this.editedUser.avatarUrl = uploadedUrl;
+      this.avatarPreview = uploadedUrl;
+    } catch (err) {
+      console.error('Ошибка загрузки изображения:', err);
+      alert('Ошибка при загрузке изображения');
+    } finally {
+      this.uploading = false;
+    }
+  }
+
+
   saveChanges(): void {
-    // можно добавить валидацию перед закрытием
-    this.authService.updateUser(this.editedUser).subscribe(updatedUser => {
-        this.editedUser = updatedUser;
-        this.activeModal.close(this.editedUser);
+    this.authService.updateUser(this.editedUser).subscribe({
+      next: (updatedUser) => {
+        this.activeModal.close(updatedUser);
+      },
+      error: (err) => {
+        console.error('Ошибка при сохранении пользователя:', err);
+        alert('Не удалось сохранить изменения');
+      }
     });
   }
 

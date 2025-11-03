@@ -10,6 +10,10 @@ export class JwtInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
+    if (request.url.includes('https://api.cloudinary.com')) {
+      return next.handle(request);
+    }
+
     if(isPlatformBrowser(this.platformId)) {
 
       let token = localStorage.getItem('access_token');

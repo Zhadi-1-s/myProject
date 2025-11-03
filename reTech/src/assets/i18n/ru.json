@@ -95,5 +95,14 @@
     "Delete": "Удалить",
     "Details":"Детали",
     "Product details":"Детали товара",
-    "Results":"Результата"
+    "Results":"Результата",
+    "My items":"Мои товары",
+    "Change photo":"Изменить фото",
+    "Enter product title":"Введите название продукта",
+    "Title is required":"Название обязательно",
+    "Enter description ":"Введите описание (необязательно)",
+    "Loan amount":"Сумма кредита",
+    "Enter the price of the product":"Введите цену указанного товара",
+    "Create":"Создать",
+    "View all":"Посмотреть полностью"
 }

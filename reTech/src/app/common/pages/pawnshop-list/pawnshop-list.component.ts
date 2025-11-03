@@ -53,7 +53,6 @@ export class PawnshopListComponent implements OnInit{
         const requests = lombards.map(l =>
           this.productService.getProductsByOwner(l._id).pipe(
             map(products => ({ ...l, products })), 
-            tap(products => console.log(products))
           )
         );
         return requests.length ? forkJoin(requests) : of([]);
@@ -97,7 +96,7 @@ export class PawnshopListComponent implements OnInit{
     
    const current = this.appliedFilters$.value;
     if (!current.includes(item)) {
-      this.appliedFilters$.next([...current, item]); // ✅ обновляем поток
+      this.appliedFilters$.next([...current, item]);
     }
   }
   removeFilter(filter: string) {

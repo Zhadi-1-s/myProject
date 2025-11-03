@@ -94,7 +94,15 @@
     "Slot usage": "Slot usage",
     "Delete": "Delete",
     "Details":"Details",
-    "Results":"Results"
+    "Results":"Results",
+    "My items":"My items",
+    "Change photo" : "Change Photo",
+    "Enter product title":"Enter product title",
+    "Title is required":"Title is required",
+    "Enter description":"Enter description (optional)",
+    "Loan amount":"Loan amount",
+    "Enter the price of the product":"Enter the price of the product",
+    "Create":"Create",
+    "View all":"View all"
 
-    
 }

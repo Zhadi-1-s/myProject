@@ -25,17 +25,12 @@
 
     <!-- Категория -->
     <div class="mb-3">
-      <label class="form-label fw-semibold">{{ 'Category' | translate }}</label>
-      <input
-        type="text"
-        formControlName="category"
-        class="form-control"
-        [class.is-invalid]="category.invalid && (category.dirty || category.touched)"
-        placeholder="{{ 'Enter product category' | translate }}"
-      />
-      <div class="invalid-feedback" *ngIf="category.errors?.['required']">
-        {{ 'Category is required' | translate }}
-      </div>
+          <label class="form-label">{{ 'Category' | translate }}</label>
+          <select formControlName="category" class="form-select">
+            <option *ngFor="let c of categories" [value]="c">
+              {{ c | translate }}
+            </option>
+          </select>
     </div>
 
     <!-- Описание -->
@@ -45,20 +40,49 @@
         rows="3"
         formControlName="description"
         class="form-control"
-        placeholder="{{ 'Enter description (optional)' | translate }}"
+        placeholder="{{ 'Enter description' | translate }}"
       ></textarea>
     </div>
 
+
     <!-- Фото -->
     <div class="mb-3">
-      <label class="form-label fw-semibold">{{ 'Photos (optional)' | translate }}</label>
+      <label class="form-label fw-semibold">{{ 'Photos' | translate }}</label>
       <input
-        type="text"
-        formControlName="photos"
+        type="file"
         class="form-control"
-        placeholder="{{ 'Enter photo URLs separated by commas' | translate }}"
+        accept="image/*"
+        multiple
+        (change)="onPhotosSelected($event)"
       />
+
+      <!-- превью выбранных фото -->
+      <div
+        class="d-flex flex-wrap gap-2 mt-3"
+        *ngIf="previewUrls.length > 0"
+      >
+        <div
+          class="position-relative"
+          *ngFor="let preview of previewUrls; let i = index"
+          style="width: 100px; height: 100px;"
+        >
+          <img
+            [src]="preview"
+            class="rounded object-fit-cover w-100 h-100 border"
+            alt="Preview"
+          />
+          <button
+            type="button"
+            class="btn btn-sm btn-danger position-absolute top-0 end-0"
+            style="transform: translate(25%, -25%); border-radius: 50%;"
+            (click)="removePhoto(i)"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
     </div>
+
 
     <!-- Статус -->
     <div class="mb-3">

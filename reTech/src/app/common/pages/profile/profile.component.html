@@ -4,13 +4,22 @@
     <div class="col-12">
       <div class="profile-header d-flex align-items-center p-3 mb-3" *ngIf="user; else notLoggedIn">
         <!-- Аватар -->
-        <div class="avatar-img">
-          <img [src]="user?.avatarUrl || 'assets/png/default-avatar.jpg'"
-               alt="avatar"
-               class="rounded-circle me-3"
-               width="190"
-               height="190" />
+        <div class="avatar-img position-relative" style="width: 190px; height: 190px;">
+          <img
+            [src]="user?.avatarUrl || 'assets/png/default-avatar.jpg'"
+            alt="avatar"
+            class="rounded-circle w-100 h-100 object-fit-cover"
+          />
+
+          <!-- Оверлей при наведении -->
+          <div
+            class="avatar-overlay d-flex align-items-center justify-content-center rounded-circle"
+            (click)="openEditModal()"
+          >
+            <span class="text-white fw-semibold">{{ 'Change photo' | translate }}</span>
+          </div>
         </div>
+
         <!-- Имя и почта -->
         <div class="flex-grow-1 ms-5">
           <h3 class="mb-1">{{ user?.name || 'User Name' }}</h3>
@@ -30,8 +39,8 @@
           <button class="btn btn-outline-primary btn-sm" (click)="openEditModal()">
             <i class="fa-regular fa-pen-to-square me-1"></i> {{ 'Edit profile' | translate }}
           </button>
-          <button class="btn btn-success btn-sm">
-            <i class="fa-solid fa-plus me-1"></i> {{ 'Add slot' | translate }}
+          <button class="btn btn-success btn-sm" (click)="openCreateItemModal()">
+            <i class="fa-solid fa-plus me-1"></i> {{ 'Add item' | translate }}
           </button>
         </div>
       </div>
@@ -50,19 +59,51 @@
     <div class="col-12">
       <div class="row">
         <!-- Большой блок -->
-        <div class="col-md-8">
+        <div class="col-md-4">
           <div class="profile-content p-3 mb-3">
-            <h3 class="mb-3">{{"My slots" | translate}}</h3>
-<!-- 
-            <div *ngIf="myProducts.length > 0; else noProducts">
-              
-            </div> -->
+            <h3 class="mb-3">{{ "My items" | translate }}</h3>
+
+            <div *ngIf="(products$ | async)?.length > 0; else noProducts">
+              <div
+                *ngFor="let item of products$ | async"
+                class="card mb-3 shadow-sm border-0"
+              >
+                <div class="row g-0 align-items-center">
+                  <div class="col-4">
+                    <img
+                      [src]="item.photos?.[0] || 'assets/png/no-photo.png'"
+                      alt="product"
+                      class="img-fluid rounded-start"
+                    />
+                  </div>
+                  <div class="col-8">
+                    <div class="card-body p-2">
+                      <h6 class="card-title mb-1 text-truncate">{{ item.title }}</h6>
+                      <p class="card-text text-muted small mb-1">
+                        {{ item.category }}
+                      </p>
+                      <p class="fw-semibold mb-2">{{ item.price}} Тг</p>
+                      <button
+                        class="btn btn-outline-primary btn-sm w-100"
+                        (click)="openProductDetails(item)"
+                      >
+                        <i class="fa-regular fa-eye me-1"></i>
+                        {{ 'View all' | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <ng-template #noProducts>
-              <p class="text-muted">{{'Вы еще не добавили ни одного объявления.' | translate}}</p>
+              <p class="text-muted text-center">
+                Вы еще не опубликовали товар
+              </p>
             </ng-template>
           </div>
         </div>
+
 
         <!-- Два маленьких блока -->
         <div class="col-md-4 d-flex flex-column">

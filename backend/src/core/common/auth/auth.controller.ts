@@ -37,16 +37,12 @@ export class AuthController {
   @ApiBody({ type: RegisterDto })
   async register(
     @Body() dto: RegisterDto,
-    @UploadedFile() file?: Express.Multer.File   // 👈 вот этого не хватает
+    @UploadedFile() file?: Express.Multer.File   
   ) {
     console.log('BODY:', dto);
     console.log('FILE:', file);
 
-    const avatarUrl = file
-      ? `/assets/png/default-avatar.jpg/${file.filename}`
-      : '/assets/png/default-avatar.jpg';  // 👈 если файла нет — ставим дефолт
-
-    return this.authService.register({ ...dto, avatarUrl });
+    return this.authService.register({ ...dto});
   }
 
   @Post('request-reset')
