@@ -65,3 +65,22 @@
     opacity: 1;
   }
 }
+.item-card{
+
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.item-card img{
+  width: 60px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.card-body{
+
+  padding: 0;
+}
+.card-body button{
+  width: 100px;
+}

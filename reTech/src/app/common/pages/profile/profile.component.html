@@ -69,27 +69,26 @@
                 class="card mb-3 shadow-sm border-0"
               >
                 <div class="row g-0 align-items-center">
-                  <div class="col-4">
-                    <img
-                      [src]="item.photos?.[0] || 'assets/png/no-photo.png'"
-                      alt="product"
-                      class="img-fluid rounded-start"
-                    />
-                  </div>
-                  <div class="col-8">
-                    <div class="card-body p-2">
-                      <h6 class="card-title mb-1 text-truncate">{{ item.title }}</h6>
-                      <p class="card-text text-muted small mb-1">
-                        {{ item.category }}
-                      </p>
-                      <p class="fw-semibold mb-2">{{ item.price}} Тг</p>
-                      <button
-                        class="btn btn-outline-primary btn-sm w-100"
-                        (click)="openProductDetails(item)"
-                      >
-                        <i class="fa-regular fa-eye me-1"></i>
-                        {{ 'View all' | translate }}
-                      </button>
+                  <div >
+                    <div class="item-card">
+                      <img
+                        [src]="item.photos?.[0] || 'assets/png/no-photo.png'"
+                        alt="product"
+                        class="img-fluid"
+                      />
+                      <div class="card-body">
+                        <h6 class="card-title mb-1 text-truncate">{{ item.title }}</h6>
+                        <p class="card-text text-muted small mb-1">
+                          {{ item.category }}
+                        </p>
+                        <p class="fw-semibold mb-2">{{ item.price}} Тг</p>
+                        <button
+                          class="btn btn-outline-primary btn-sm w-100"
+                          (click)="openProductDetails(item)"
+                        >
+                          {{ 'Open' | translate }}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
