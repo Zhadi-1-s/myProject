@@ -46,10 +46,8 @@ export class PawnshopListComponent implements OnInit{
   }
 
   ngOnInit(){
-
     this.lombards$ = this.lombardService.getLombards().pipe(
       switchMap(lombards => {
-  
         const requests = lombards.map(l =>
           this.productService.getProductsByOwner(l._id).pipe(
             map(products => ({ ...l, products })), 
@@ -72,7 +70,6 @@ export class PawnshopListComponent implements OnInit{
             l.name.toLowerCase().includes(search.toLowerCase())
           );
         }
-
         if (appliedFilters.length > 0) {
           filtered = filtered.filter(lombard =>
             lombard.products?.some(product =>
@@ -99,6 +96,7 @@ export class PawnshopListComponent implements OnInit{
       this.appliedFilters$.next([...current, item]);
     }
   }
+
   removeFilter(filter: string) {
     const current = this.appliedFilters$.value;
     this.appliedFilters$.next(current.filter(f => f !== filter));

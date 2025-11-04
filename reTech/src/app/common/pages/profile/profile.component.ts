@@ -8,9 +8,13 @@ import { EditModalComponent } from '../../components/modals/edit-modal/edit-moda
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductService } from '../../../shared/services/product.service';
-import { Observable } from 'rxjs';
+import { Observable,map,pipe } from 'rxjs';
 import { Product } from '../../../shared/interfaces/product.interface';
 import { CreateProductComponent } from '../../components/modals/create-product/create-product.component';
+import { ProductDetailComponent } from '../../components/modals/product-detail/product-detail.component';
+import { EditProductComponent } from '../../components/modals/edit-product/edit-product.component';
+import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +24,7 @@ import { CreateProductComponent } from '../../components/modals/create-product/c
   styleUrls: ['./profile.component.scss'] 
 })
 export class ProfileComponent implements OnInit {
-  user: User | null = null;
+  user: User;
   loading = true;
   error: string | null = null;
 
@@ -28,22 +32,43 @@ export class ProfileComponent implements OnInit {
 
   currentTime: Date = new Date();
 
+  selectedTab: 'active' | 'inactive' = 'active';
+
   products$:Observable<Product[]>;
+  activeProducts$!: Observable<Product[]>;
+  inactiveProducts$!: Observable<Product[]>;
+
+  favoritePawnshops$:Observable<PawnshopProfile[]>;
+
+  favorites: any[] = [];
 
   constructor(
               private authService: AuthService, 
               private modalService: NgbModal,
-              private productService:ProductService
-  ) {}
+              private productService:ProductService,
+              private userService:UserService
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.loading = true;
 
-  
     this.authService.currentUser$.subscribe({
       next: (user) => {
         this.user = user;
-        this.products$ = this.productService.getProductsByOwner(this.user._id);
+        if(this.user){
+          this.products$ = this.productService.getProductsByOwner(this.user._id);
+
+             this.activeProducts$ = this.products$.pipe(
+                map((products) => products.filter((p) => p.status === 'active'))
+                
+            );
+            this.inactiveProducts$ = this.products$.pipe(
+              map((products) => products.filter((p) => p.status !== 'active'))
+            )
+            this.loadFavorites();
+        }
         
         this.loading = false;
       }
@@ -58,9 +83,29 @@ export class ProfileComponent implements OnInit {
         },
       });
     }
+    
+  }
+
+  loadFavorites(){
+    if(this.user){
+      this.userService.getFavorites(this.user._id).subscribe({
+        next: (res) => (this.favorites = res),
+        
+        error: (err) => console.error(err),
+      });
+      console.log(this.favorites)
+    }
+  }
+
+  deleteProduct(itemId:string){
 
   }
 
+  editProduct(item:Product){
+    const modalRef = this.modalService.open(EditProductComponent);
+
+    modalRef.componentInstance.product = item;
+  }
 
   openEditModal(){
     const modalRef = this.modalService.open(EditModalComponent, { size: 'lg', centered: true });
@@ -74,7 +119,7 @@ export class ProfileComponent implements OnInit {
           // this.authService.updateUser(updatedUser); 
         }
       },
-      () => {} // закрытие без сохранения
+      () => {} 
     );
 
   }
@@ -85,8 +130,12 @@ export class ProfileComponent implements OnInit {
     modalRef.componentInstance.ownerId = this.user._id;
   }
 
-  openProductDetails(product:Product){
+  openProductDetails(item:Product){
+    const modalRef = this.modalService.open(ProductDetailComponent);
 
+    modalRef.componentInstance.product = item;
+    modalRef.componentInstance.user = this.user;
+    modalRef.componentInstance.pawnshop = null;
   }
 
 }

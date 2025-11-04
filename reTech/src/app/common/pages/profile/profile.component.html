@@ -63,50 +63,135 @@
           <div class="profile-content p-3 mb-3">
             <h3 class="mb-3">{{ "My items" | translate }}</h3>
 
-            <div *ngIf="(products$ | async)?.length > 0; else noProducts">
-              <div
-                *ngFor="let item of products$ | async"
-                class="card mb-3 shadow-sm border-0"
-              >
-                <div class="row g-0 align-items-center">
-                  <div >
-                    <div class="item-card">
-                      <img
-                        [src]="item.photos?.[0] || 'assets/png/no-photo.png'"
-                        alt="product"
-                        class="img-fluid"
-                      />
-                      <div class="card-body">
-                        <h6 class="card-title mb-1 text-truncate">{{ item.title }}</h6>
-                        <p class="card-text text-muted small mb-1">
-                          {{ item.category }}
-                        </p>
-                        <p class="fw-semibold mb-2">{{ item.price}} Тг</p>
-                        <button
-                          class="btn btn-outline-primary btn-sm w-100"
-                          (click)="openProductDetails(item)"
-                        >
-                          {{ 'Open' | translate }}
+            <ul class="nav nav-tabs mb-3 justify-content-between equal-tabs">
+              <li class="nav-item flex-fill text-center">
+                <a
+                  class="nav-link"
+                  [class.active]="selectedTab === 'active'"
+                  (click)="selectedTab = 'active'"
+                >
+                  {{ 'Active items' | translate }}
+                </a>
+              </li>
+              <li class="nav-item flex-fill text-center">
+                <a
+                  class="nav-link"
+                  [class.active]="selectedTab === 'inactive'"
+                  (click)="selectedTab = 'inactive'"
+                >
+                  {{ 'Inactive items' | translate }}
+                </a>
+              </li>
+            </ul>
+
+
+            <!-- Активные -->
+            <div *ngIf="selectedTab === 'active'">
+              <ng-container *ngIf="(activeProducts$ | async)?.length > 0; else noActive">
+                <div
+                  *ngFor="let item of activeProducts$ | async"
+                  class="card mb-3 shadow-sm border-0"
+                >
+                  <div class="item-card">
+                    <img
+                      [src]="item.photos?.[0] || 'assets/png/no-photo.png'"
+                      alt="product"
+                      class="img-fluid"
+                    />
+                    <div class="card-body">
+                      <h6 class="card-title mb-1 text-truncate">{{ item.title }}</h6>
+                      <p class="card-text text-muted small mb-1">{{ item.category }}</p>
+                      <p class="fw-semibold mb-2">{{ item.price }} ₸</p>
+                    </div>
+                  <div class="position-absolute top-0 end-0 m-2 dropdown">
+                    <button
+                      class="btn btn-link text-muted p-0"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                      <li>
+                        <button class="dropdown-item" (click)="openProductDetails(item)">
+                          {{ 'Details' | translate }}
                         </button>
-                      </div>
+                      </li>
+                      <li>
+                        <button class="dropdown-item" (click)="editProduct(item)">
+                          {{ 'Edit' | translate }}
+                        </button>
+                      </li>
+                      <li>
+                        <button class="dropdown-item text-danger" (click)="deleteProduct(item._id)">
+                          {{ 'Delete' | translate }}
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+
+
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #noActive>
+                <p class="text-muted text-center mb-0">
+                  {{ 'You have no active items' | translate }}
+                </p>
+              </ng-template>
+            </div>
+
+            <!-- Неактивные -->
+            <div *ngIf="selectedTab === 'inactive'">
+              <ng-container *ngIf="(inactiveProducts$ | async)?.length > 0; else noInactive">
+                <div
+                  *ngFor="let item of inactiveProducts$ | async"
+                  class="card mb-3 shadow-sm border-0 inactive-card"
+                >
+                  <div class="item-card position-relative">
+                    <!-- Плашка статуса -->
+                    <div class="status-badge">
+                      {{ item.status| translate }}
+                    </div>
+
+                    <img
+                      [src]="item.photos?.[0] || 'assets/png/no-photo.png'"
+                      alt="product"
+                      class="img-fluid product-image"
+                    />
+
+                    <div class="card-body">
+                      <h6 class="card-title mb-1 text-truncate">{{ item.title }}</h6>
+                      <p class="card-text text-muted small mb-1">{{ item.category }}</p>
+                      <p class="fw-semibold mb-2">{{ item.price }} ₸</p>
+                      <button
+                        class="btn btn-outline-secondary btn-sm w-100"
+                        (click)="openProductDetails(item)"
+                      >
+                        {{ 'View details' | translate }}
+                      </button>
                     </div>
                   </div>
                 </div>
-              </div>
+              </ng-container>
+
+              <ng-template #noInactive>
+                <p class="text-muted text-center mb-0">
+                  {{ 'You have no inactive items' | translate }}
+                </p>
+              </ng-template>
             </div>
 
-            <ng-template #noProducts>
-              <p class="text-muted text-center">
-                Вы еще не опубликовали товар
-              </p>
-            </ng-template>
           </div>
         </div>
-
 
         <!-- Два маленьких блока -->
         <div class="col-md-4 d-flex flex-column">
           <div class="small-block p-3 mb-3">{{'Избранные магазины' | translate}}</div>
+          <div *ngFor="let item of favorites">
+            {{item}}
+          </div>
           <div class="small-block p-3">{{'Избранные товары' | translate}}</div>
         </div>
       </div>

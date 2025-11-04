@@ -105,5 +105,12 @@
     "Enter the price of the product":"Введите цену указанного товара",
     "Create":"Создать",
     "View all":"Посмотреть полностью",
-    "Open":"Открыть"
+    "Open":"Открыть",
+    "Active items":"Активные ",
+    "Inactive items":"Неактивные",
+    "You have no active items":"У вас еще нет активных товаров",
+    "You have no inactive items":"у вас нет неактивных товаров",
+    "Inactive":"Неактивный",
+    "Profile photo":"Фото профиля",
+    "Save changes":"Сохранить изменения"
 }

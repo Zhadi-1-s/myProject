@@ -4,8 +4,9 @@ export interface User{
     _id?: string; // из MongoDB
     name:string;
     email: string;
-    password: string; // использовать только при логине/регистрации
+    password: string; 
     role: 'user' | 'pawnshop' | 'admin';
     createdAt?: Date; // добавляется через timestamps
-    avatarUrl:string; // profile picture
+    avatarUrl:string;
+    favoritePawnshops:string[]; 
 }

@@ -2,6 +2,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { Category } from 'src/core/common/enums/category.enum';
+import { Status } from 'src/core/common/enums/status.enum';
 
 export type ProductDocument = Product & Document;
 
@@ -26,8 +27,8 @@ export class Product {
   @Prop({ type: [String], default: [] })
   photos: string[];
 
-  @Prop({ required: true, enum: ['open', 'sold', 'closed'], default: 'open' })
-  status: 'open' | 'sold' | 'closed';
+  @Prop({ required: true, enum:Status, default: 'open' })
+  status: Status;
   
   @Prop({ required: true, type: Number, min: 0 })
   price: number;

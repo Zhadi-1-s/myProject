@@ -33,4 +33,25 @@ export class UserService {
     this.logger.log('Deleting user.');
     return this.userModel.findOneAndDelete(query);
   }
+
+  async addFavorite(userId: string, pawnshopId: string) {
+    return this.userModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { favorites: pawnshopId } }, // не добавит дубликат
+      { new: true }
+    ).populate('favoritePawnshops');
+  }
+
+  async removeFavorite(userId: string, pawnshopId: string) {
+    return this.userModel.findByIdAndUpdate(
+      userId,
+      { $pull: { favorites: pawnshopId } },
+      { new: true }
+    ).populate('favoritePawnshops');
+  }
+
+  async getFavorites(userId: string) {
+    return this.userModel.findById(userId).populate('favoritePawnshops');
+  }
+
 }

@@ -33,47 +33,27 @@
     </div>
 
     <!-- Status -->
-    <div class="col-md-6">
-      <label class="form-label">{{ 'Status' | translate }}</label>
-      <select class="form-select" formControlName="status">
-        <option value="open">{{ 'Open' | translate }}</option>
-        <option value="sold">{{ 'Sold' | translate }}</option>
-        <option value="closed">{{ 'Closed' | translate }}</option>
-      </select>
-    </div>
+      <div class="col-md-6">
+        <label class="form-label">{{ 'Status' | translate }}</label>
+        <select class="form-select" formControlName="status">
+          <option *ngFor="let status of statusValues" [value]="status">
+            {{ status | titlecase | translate }}
+          </option>
+        </select>
+      </div>
 
     <!-- Photos -->
-    <!-- <div class="col-12">
-      <label class="form-label">{{ 'Photos' | translate }}</label>
-      <div class="d-flex flex-wrap gap-2">
-        <div
-          *ngFor="let photo of photos; let i = index"
-          class="position-relative"
-          style="width: 90px; height: 90px;"
-        >
-          <img
-            [src]="photo"
-            class="rounded border object-fit-cover"
-            style="width: 100%; height: 100%;"
-            alt="Product photo"
-          />
-          <button
-            type="button"
-            class="btn btn-sm btn-danger position-absolute top-0 end-0 translate-middle badge rounded-pill"
-            (click)="removePhoto(i)"
-          >
-            ×
-          </button>
-        </div>
-        <label
-          class="d-flex justify-content-center align-items-center border rounded"
-          style="width: 90px; height: 90px; cursor: pointer;"
-        >
-          <i class="fa-solid fa-plus text-muted"></i>
-          <input type="file" hidden (change)="onFileSelect($event)" />
-        </label>
-      </div>
-    </div> -->
+    <div class="col-12">
+      <label class="form-label fw-semibold">{{ 'Photos' | translate }}</label>
+
+      <app-image-view
+        [photos]="photos"
+        [editable]="true"
+        (photoRemoved)="removePhoto($event)"
+        (photoAdded)="onFileSelect()"
+      ></app-image-view>
+    </div>
+
   </form>
 </div>
 

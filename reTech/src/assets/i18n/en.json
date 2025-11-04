@@ -104,6 +104,13 @@
     "Enter the price of the product":"Enter the price of the product",
     "Create":"Create",
     "View all":"View all",
-    "Open":"Open"
-
+    "Open":"Open",
+    "Active items":"Active items",
+    "Inactive items":"Inactive items",
+    "You have no active items":"You have no active items",
+    "You have no inactive items":"You have no inactive items",
+    "Inactive":"Inactive",
+    "Profile photo":"Profile photo",
+    "Save changes":"Save changes"
+    
 }

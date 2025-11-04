@@ -10,3 +10,11 @@ button.badge {
   text-align: center;
   padding: 0;
 }
+.hover-overlay {
+  transition: opacity 0.2s ease;
+  opacity: 0;
+}
+
+.position-relative:hover .hover-overlay {
+  opacity: 1;
+}
