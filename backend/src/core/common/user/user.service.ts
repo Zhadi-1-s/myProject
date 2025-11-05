@@ -37,7 +37,7 @@ export class UserService {
   async addFavorite(userId: string, pawnshopId: string) {
     return this.userModel.findByIdAndUpdate(
       userId,
-      { $addToSet: { favorites: pawnshopId } }, // не добавит дубликат
+      { $addToSet: { favoritePawnshops: pawnshopId } }, // не добавит дубликат
       { new: true }
     ).populate('favoritePawnshops');
   }
@@ -45,7 +45,7 @@ export class UserService {
   async removeFavorite(userId: string, pawnshopId: string) {
     return this.userModel.findByIdAndUpdate(
       userId,
-      { $pull: { favorites: pawnshopId } },
+      { $pull: { favoritePawnshops: pawnshopId } },
       { new: true }
     ).populate('favoritePawnshops');
   }

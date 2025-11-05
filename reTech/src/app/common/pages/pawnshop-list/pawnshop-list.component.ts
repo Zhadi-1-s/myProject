@@ -7,6 +7,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Product } from '../../../shared/interfaces/product.interface';
 import { ProductService } from '../../../shared/services/product.service';
+import { UserService } from '../../../shared/services/user.service';
+import { AuthService } from '../../../shared/services/auth.service';
+import { User } from '../../../shared/interfaces/user.interface';
 
 @Component({
   selector: 'app-pawnshop-list',
@@ -25,7 +28,11 @@ export class PawnshopListComponent implements OnInit{
   activeFilter: 'all' | 'active' | 'empty' = 'all';
   sortByRating: 'none' | 'asc' | 'desc' = 'none';
 
-  appliedFilters$ = new BehaviorSubject<string[]>([]);
+  appliedFilters$ = new BehaviorSubject<string[]>([])
+
+  user :User;
+
+  favorites: any[] = [];
 
   searchHelpItemsList: string[] = [
     'Iphone',
@@ -40,12 +47,21 @@ export class PawnshopListComponent implements OnInit{
 
   constructor(
     private lombardService:LombardService,
-    private productService:ProductService
+    private productService:ProductService,
+    private userService:UserService,
+    private authService:AuthService
   ){
 
   }
 
   ngOnInit(){
+
+    this.authService.currentUser$.subscribe(
+      (user) => {
+        this.user = user;
+      }
+    )
+
     this.lombards$ = this.lombardService.getLombards().pipe(
       switchMap(lombards => {
         const requests = lombards.map(l =>
@@ -56,6 +72,9 @@ export class PawnshopListComponent implements OnInit{
         return requests.length ? forkJoin(requests) : of([]);
       })
     );
+
+    this.loadFavorites();
+    console.log(this.favorites)
 
     this.filteredLombards$ = combineLatest([
       this.lombards$,
@@ -89,6 +108,39 @@ export class PawnshopListComponent implements OnInit{
 
   }
 
+  loadFavorites(){
+    if(this.user){
+      this.userService.getFavorites(this.user._id).subscribe({
+        next: (res) => (this.favorites = res),
+        
+        error: (err) => console.error(err),
+      });
+      console.log(this.favorites)
+    }
+  }
+
+  toggleFavorite(pawnshopId: string): void {
+    if (!this.user) return;
+
+    const isFavorite = this.user.favoritePawnshops?.includes(pawnshopId);
+
+    const req$ = isFavorite
+      ? this.userService.removeFavorite(this.user._id!, pawnshopId)
+      : this.userService.addFavorite(this.user._id!, pawnshopId);
+
+    req$.subscribe({
+      next: (res) => {
+        if (isFavorite) {
+          this.user.favoritePawnshops = this.user.favoritePawnshops.filter(id => id !== pawnshopId);
+        } else {
+          this.user.favoritePawnshops = [...(this.user.favoritePawnshops || []), pawnshopId];
+        }
+      },
+      error: (err) => console.error('Ошибка при обновлении избранного:', err)
+    });
+  }
+
+
   onHelpItemClick(item: string) {
     
    const current = this.appliedFilters$.value;
@@ -105,6 +157,17 @@ export class PawnshopListComponent implements OnInit{
 
    onSearchChange(value: string) {
     this.searchTerm$.next(value);
+  }
+
+  toFavorite(userId: string, pawnshopId: string): void {
+    this.userService.addFavorite(userId, pawnshopId).subscribe({
+      next: (res) => {
+        console.log('Добавлено в избранное:', res);
+      },
+      error: (err) => {
+        console.error('Ошибка при добавлении в избранное:', err);
+      }
+    });
   }
 
 }

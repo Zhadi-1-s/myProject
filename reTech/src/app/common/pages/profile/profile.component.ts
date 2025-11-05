@@ -89,11 +89,13 @@ export class ProfileComponent implements OnInit {
   loadFavorites(){
     if(this.user){
       this.userService.getFavorites(this.user._id).subscribe({
-        next: (res) => (this.favorites = res),
+        next: (res) => (
+          this.favorites = res,
+          console.log(res)
+        ),
         
         error: (err) => console.error(err),
       });
-      console.log(this.favorites)
     }
   }
 
