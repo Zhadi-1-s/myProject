@@ -44,26 +44,26 @@ export class EditProductComponent {
     this.photos = [...(this.product.photos || [])];
   }
 
- async onFileSelect(): Promise<void> {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
+  async onFileSelect(): Promise<void> {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
 
-  input.onchange = async (e: any) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    input.onchange = async (e: any) => {
+      const file = e.target.files[0];
+      if (!file) return;
 
-    try {
-      const url = await this.uploadService.uploadImage(file);
-      this.photos.push(url);
-      console.log('🌐 Ответ от Cloudinary:', url);
-    } catch (err) {
-      console.error('Ошибка загрузки фото:', err);
-    }
-  };
+      try {
+        const url = await this.uploadService.uploadImage(file);
+        this.photos.push(url);
+        console.log('🌐 Ответ от Cloudinary:', url);
+      } catch (err) {
+        console.error('Ошибка загрузки фото:', err);
+      }
+    };
 
-  input.click();
-}
+    input.click();
+  }
 
 
 

@@ -3,7 +3,8 @@
     <h6 class="m-0">
       {{ 'Gallery' | translate }}
     </h6>
-    <button class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1" (click)="addPhoto()">
+  
+    <button *ngIf="editable" class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1" (click)="addPhoto()">
       <i class="fa-solid fa-plus"></i>
       {{ 'Add' | translate }}
     </button>

@@ -1,0 +1,95 @@
+.testing{
+    border: solid 1px;
+}
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Выровнять всё по левому краю */
+}
+
+.info-block {
+  flex-shrink: 0; /* Не сжимается и не сдвигается */
+}
+
+
+.divider-custom {
+  border: none;
+  border-top: 2px solid #dee2e6;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.description-block {
+  background-color: #f8f9fa;
+  border-left: 4px solid #007bff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  max-width: 800px;
+
+  h6 {
+    color: #2c3e50;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+  }
+}
+.divider-custom {
+  border: none;
+  border-top: 2px solid #8e8f90;
+  max-width: 800px;
+  margin-left: 0;
+}
+.image-gallery {
+  margin: 0;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  height: 200px;
+  overflow-y: hidden;
+
+  h5 {
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+  }
+
+  .gallery-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-top: 12px;
+  }
+
+  .gallery-item {
+    width: 100px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    img {
+      width: 100%;
+      max-width: 100px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+      img {
+        transform: scale(1.05);
+      }
+    }
+  }
+}

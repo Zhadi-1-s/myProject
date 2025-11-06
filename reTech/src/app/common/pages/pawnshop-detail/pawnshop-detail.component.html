@@ -1,5 +1,110 @@
-<div *ngIf="pawnShop$|async">
-    <span>
-        {{pawnShop$|async}}
-    </span>
+<div class="container-fluid mt-3">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="profile-header d-flex align-items-start p-3 mb-3" *ngIf="pawnShop$| async as profile; else notLoggedIn">
+                <!-- Pawnshop Logo -->
+                <div class="avatar-img me-4">
+                    <img [src]="profile?.logoUrl || 'assets/png/default-pawnshop.jpg'"
+                        alt="pawnshop-logo"
+                        class="rounded-circle me-3"
+                        width="190"
+                        height="190" />
+                    
+                </div>
+
+                <!-- Pawnshop Info -->
+                <div class="flex-grow-1 ms-5 profile-info" *ngIf="profile">
+
+                    <div class="info-block">
+                        <div class="d-flex align-items-center flex-wrap gap-5">
+                        <!-- Название -->
+                        <h3 class="mb-0 me-3">{{ profile?.name || 'Pawnshop name' }}</h3>
+
+                        <!-- 🕒 Время -->
+                        <p class="text-muted mb-0 small fw-semibold d-flex align-items-center">
+                            <i class="fa-regular fa-clock me-1"></i>
+                            {{ profile?.openTime }} – {{ profile?.closeTime }}
+                            <span
+                            [ngClass]="{
+                                'text-success': isOpenNow,
+                                'text-danger': !isOpenNow
+                            }"
+                            class="ms-2 fw-bold"
+                            >
+                            {{ isOpenNow ? 'Открыто' : 'Закрыто' }}
+                            </span>
+                        </p>
+
+                        <!-- ⏰ Текущее время -->
+                        <p class="text-muted mb-0 small fw-semibold d-flex align-items-center">
+                            <i class="fa-regular fa-clock me-1"></i>
+                            {{ currentTime | date:'shortTime' }}
+                        </p>
+
+                        <!-- ⭐ Рейтинг -->
+                        <div class="d-flex align-items-center">
+                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                            <i
+                                class="fa-star"
+                                [ngClass]="{
+                                'fa-solid text-warning': profile.rating >= star,
+                                'fa-regular text-muted': profile.rating < star
+                                }"
+                                style="font-size: 16px; margin-right: 3px;"
+                            ></i>
+                            </ng-container>
+                        </div>
+                        </div>
+                        <hr class="my-4 divider-custom" />
+                    </div>
+
+                    <!-- Описание -->
+                    <div class="description-block mt-4">
+                        <h6 class="fw-semibold mb-2">
+                        <i class="fa-regular fa-file-lines me-2 text-primary"></i>
+                        О нас
+                        </h6>
+                        <p class="text-muted mb-0">
+                        {{ profile?.description || 'Описание пока отсутствует' }}
+                        </p>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <ng-template #notLoggedIn>
+                <div class="alert alert-warning d-flex align-items-center p-4 mb-3" role="alert">
+                <i class="fa-solid fa-profile-lock me-3 fs-4"></i>
+                <div>
+                    <h5 class="mb-1 fw-bold">{{ 'You are not logged in' | translate }}</h5>
+                    <p class="mb-0">
+                    {{ 'Please' | translate }}
+                    <a routerLink="/login" class="text-primary fw-semibold">{{ 'log in' | translate }}</a>
+                    {{ 'or' | translate }}
+                    <a routerLink="/register" class="text-primary fw-semibold">{{ 'register' | translate }}</a>.
+                    </p>
+                </div>
+                </div>
+            </ng-template>
+        </div>
+
+        <div class="col-12">
+            <div class="image-gallery ms-5" *ngIf="pawnShop$| async as profile; else notLoggedIn">
+                        <h5 class="fw-semibold mb-3">
+                            <i class="fa-regular fa-images me-2 text-primary"></i>
+                            Фотографии ломбарда
+                        </h5>
+
+                        <div class="gallery-grid">
+                            <div *ngFor="let photo of profile.photos" class="gallery-item">
+                             <img [src]="photo" alt="Фото ломбарда" />
+                            </div>
+                        </div>
+            </div>
+        </div>  
+
+
+    </div>
 </div>

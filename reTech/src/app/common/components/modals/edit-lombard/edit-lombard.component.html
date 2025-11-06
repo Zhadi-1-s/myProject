@@ -90,15 +90,15 @@
       </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">{{ 'Photos (comma separated)' | translate }}</label>
-      <input
-        type="text"
-        class="form-control"
-        name="photos"
-        [(ngModel)]="editedShop.photos"
-        placeholder="assets/img/photo1.jpg, assets/img/photo2.jpg"
-      />
+    <div class="col-12">
+      <label class="form-label fw-semibold">{{ 'Photos' | translate }}</label>
+
+      <app-image-view
+        [photos]="photos"
+        [editable]="true"
+        (photoRemoved)="removePhoto($event)"
+        (photoAdded)="onFileSelect()"
+      ></app-image-view>
     </div>
   </form>
 </div>
