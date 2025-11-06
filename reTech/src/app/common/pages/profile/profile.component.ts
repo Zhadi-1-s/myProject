@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../shared/services/auth.service';
 import { User } from '../../../shared/interfaces/user.interface';
 import { Router, RouterModule } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { EditModalComponent } from '../../components/modals/edit-modal/edit-modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,7 +19,7 @@ import { UserService } from '../../../shared/services/user.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule,RouterModule,TranslateModule],
+  imports: [CommonModule, RouterModule, TranslateModule, NgbTooltip],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'] 
 })
@@ -138,6 +138,10 @@ export class ProfileComponent implements OnInit {
     modalRef.componentInstance.product = item;
     modalRef.componentInstance.user = this.user;
     modalRef.componentInstance.pawnshop = null;
+  }
+
+  openPawnshopDetail(id:string){
+
   }
 
 }

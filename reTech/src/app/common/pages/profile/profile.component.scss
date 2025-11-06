@@ -176,3 +176,18 @@
     }
   }
 }
+.favorite-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #d1d1d1;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.favorite-card:hover {
+  background-color: #f5f5f5; /* лёгкий серый */
+  transform: scale(1.01);
+}
+
+
+

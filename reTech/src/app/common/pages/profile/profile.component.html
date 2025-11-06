@@ -57,9 +57,9 @@
 
     <!-- Нижний ряд -->
     <div class="col-12">
-      <div class="row">
+      <div class="row align-items-stretch">
         <!-- Большой блок -->
-        <div class="col-md-4">
+        <div class="col-md-4 d-flex">
           <div class="profile-content p-3 mb-3">
             <h3 class="mb-3">{{ "My items" | translate }}</h3>
 
@@ -186,16 +186,16 @@
           </div>
         </div>
 
-        <!-- Два маленьких блока -->
         <div class="col-md-4 d-flex flex-column">
           <!-- Заголовок -->
-          <div class="small-block p-3 mb-3 fw-semibold">
+          <div class="small-block p-3 mb-3 fw-semibold flex-fill" >
             {{ 'Избранные магазины' | translate }}
             <div *ngIf="favorites.length > 0; else noFavorites" class="d-flex flex-column gap-2 mt-2">
               <div
                 *ngFor="let item of favorites"
-                class="d-flex align-items-center p-2 border rounded-2"
+                class="d-flex align-items-center p-2 border rounded-2 favorite-card"
                 style="border-color: #d1d1d1;"
+                [routerLink]="['/pawnshop-detail', item._id]"
               >
                 <!-- Фото -->
                 <img
@@ -244,8 +244,8 @@
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="small-block p-3 fw-semibold">
+        <div class="col-md-4 d-flex">
+          <div class="small-block p-3 fw-semibold flex-fill">
             {{ 'Избранные товары' | translate }}
           </div>
         </div>

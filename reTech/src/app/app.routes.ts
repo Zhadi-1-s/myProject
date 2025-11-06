@@ -27,7 +27,10 @@ export const routes: Routes = [
         path:'lombard-profile',loadComponent : () => import('./common/pages/lombard-profile/lombard-profile.component').then(m => m.LombardProfileComponent)
     },
     {
+        path:'pawnshop-detail/:id',loadComponent: () => import('./common/pages/pawnshop-detail/pawnshop-detail.component').then(m => m.PawnshopDetailComponent)
+    },
+    {
         path:'pawnshop-list',loadComponent: () => import('./common/pages/pawnshop-list/pawnshop-list.component').then(m => m.PawnshopListComponent)
-    }
+    },
     
 ];
