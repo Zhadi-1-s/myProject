@@ -23,6 +23,9 @@ export class User {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'PawnshopProfile' }], default: [] })
   favoritePawnshops: Types.ObjectId[];
+
+  @Prop({type:[{type:Types.ObjectId, ref:'Product'}] , default:[]})
+  favoriteItems:Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -90,20 +90,64 @@
             </ng-template>
         </div>
 
-        <div class="col-12">
-            <div class="image-gallery ms-5" *ngIf="pawnShop$| async as profile; else notLoggedIn">
-                        <h5 class="fw-semibold mb-3">
-                            <i class="fa-regular fa-images me-2 text-primary"></i>
-                            Фотографии ломбарда
-                        </h5>
+        <div class="row align-itemms-stretch mt-4">
+            <!-- ФОТО ЛОМБАРДА -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="image-gallery" *ngIf="pawnShop$ | async as profile; else notLoggedIn">
+                <h5 class="fw-semibold mb-3">
+                    <i class="fa-regular fa-images me-2 text-primary"></i>
+                    Фотографии ломбарда
+                </h5>
 
-                        <div class="gallery-grid">
-                            <div *ngFor="let photo of profile.photos" class="gallery-item">
-                             <img [src]="photo" alt="Фото ломбарда" />
+                <div class="gallery-grid">
+                    <div *ngFor="let photo of profile.photos" class="gallery-item">
+                    <img [src]="photo" alt="Фото ломбарда" />
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- ТОВАРЫ ЛОМБАРДА -->
+           <div class="col-lg-8 col-md-6 mb-4">
+            <div class="pawnshop-products" *ngIf="products$ | async as products">
+                <h5 class="fw-semibold mb-3">
+                    <i class="fa-solid fa-box-open me-2 text-primary"></i>
+                    Товары ломбарда на продаже
+                </h5>
+
+                <div *ngIf="products.length > 0; else noProducts" class="product-container">
+                    <div class="mb-3" *ngFor="let product of products">
+                        <div class="product-card" (click)="openProductDetail(product)" style="position: relative;">
+                            <img [src]="[product.photos[0]]" alt="main-photo" class="main-photo">
+    
+                            <i 
+                                class="fa-heart" 
+                                style="position: absolute; top: 10px; right: 10px; font-size: 1.6rem; cursor: pointer;"
+                                [ngClass]="{
+                                    'fa-solid text-danger': user?.favoriteItems?.includes(product._id),
+                                    'fa-regular text-white': !user?.favoriteItems?.includes(product._id)
+                                }"
+                                (click)="toggleFavoriteItem(product._id, $event)">
+                                </i>
+
+                            <div class="info-block">
+                                <span>{{product.title}}</span>
+                                <span class="mt-2">{{product.price}} Тг</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <ng-template #noProducts>
+                    <p class="text-muted">Пока нет товаров на продаже</p>
+                </ng-template>
             </div>
-        </div>  
+           </div>
+
+
+
+
+        </div>
 
 
     </div>

@@ -53,4 +53,43 @@ export class UserController {
     if (!user) throw new NotFoundException('User not found');
     return user.favoritePawnshops; // можно вернуть только массив избранных
   }
+
+   @Patch(':userId/favorite-items/:productId')
+  @ApiOperation({ summary: 'Добавить товар в избранное пользователя' })
+  @ApiParam({ name: 'userId', description: 'ID пользователя', type: String })
+  @ApiParam({ name: 'productId', description: 'ID товара', type: String })
+  async addFavoriteItem(
+    @Param('userId') userId: string,
+    @Param('productId') productId: string,
+  ) {
+    this.logger.log(`Добавление product ${productId} в избранное пользователя ${userId}`);
+    const user = await this.userService.addfavoriteItem(userId, productId);
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  @Delete(':userId/favorite-items/:productId')
+  @ApiOperation({ summary: 'Удалить товар из избранного пользователя' })
+  @ApiParam({ name: 'userId', description: 'ID пользователя', type: String })
+  @ApiParam({ name: 'productId', description: 'ID товара', type: String })
+  async removeFavoriteItem(
+    @Param('userId') userId: string,
+    @Param('productId') productId: string,
+  ) {
+    this.logger.log(`Удаление product ${productId} из избранного пользователя ${userId}`);
+    const user = await this.userService.removeFavoriteItem(userId, productId);
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  @Get(':userId/favorite-items')
+  @ApiOperation({ summary: 'Получить все избранные товары пользователя' })
+  @ApiParam({ name: 'userId', description: 'ID пользователя', type: String })
+  async getFavoriteItems(@Param('userId') userId: string) {
+    this.logger.log(`Получение списка избранных товаров пользователя ${userId}`);
+    const user = await this.userService.getFavoriteItems(userId);
+    if (!user) throw new NotFoundException('User not found');
+    return user.favoriteItems;
+  }
+
 }

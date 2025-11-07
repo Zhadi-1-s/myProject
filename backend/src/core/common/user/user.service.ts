@@ -42,6 +42,22 @@ export class UserService {
     ).populate('favoritePawnshops');
   }
 
+  async addfavoriteItem(userId:string, productId:string){
+    return this.userModel.findByIdAndUpdate(
+      userId,
+      {$addToSet: {favoriteItems:productId}},
+      {new:true}
+    ).populate('favoriteItems');
+  }
+
+  async removeFavoriteItem(userId:string, productId:string){
+    return this.userModel.findByIdAndUpdate(
+      userId,
+      {$pull: {favoriteItems:productId}},
+      {new : true}
+    ).populate('favoriteItems')
+  }
+
   async removeFavorite(userId: string, pawnshopId: string) {
     return this.userModel.findByIdAndUpdate(
       userId,
@@ -52,6 +68,9 @@ export class UserService {
 
   async getFavorites(userId: string) {
     return this.userModel.findById(userId).populate('favoritePawnshops');
+  }
+  async getFavoriteItems(userId:string){
+    return this.userModel.findById(userId).populate('favoriteItems')
   }
 
 }

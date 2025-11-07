@@ -25,4 +25,16 @@ export class UserService{
         return this.http.get(`${this.apiUrl}/${userId}/favorites`);
     }
 
+    addFavoriteItem(userId:string,productId:string):Observable<any>{
+        return this.http.patch(`${this.apiUrl}/${userId}/favorite-items/${productId}`, {})
+    }
+
+    removeFavoriteItem(userId:string,productId:string):Observable<any>{
+        return this.http.delete(`${this.apiUrl}/${userId}/favorite-items/${productId}`)
+    }
+
+    getFavoriteItems(userId:string):Observable<any>{
+        return this.http.get(`${this.apiUrl}/${userId}/favorite-items`)
+    }
+
 }

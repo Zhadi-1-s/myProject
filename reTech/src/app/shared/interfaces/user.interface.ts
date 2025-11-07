@@ -1,4 +1,3 @@
-import { Product } from "./product.interface";
 
 export interface User{
     _id?: string; // из MongoDB
@@ -9,4 +8,5 @@ export interface User{
     createdAt?: Date; // добавляется через timestamps
     avatarUrl:string;
     favoritePawnshops:string[]; 
+    favoriteItems:string[];
 }
