@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom,LOCALE_ID } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -7,6 +7,10 @@ import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromD
 import { JwtInterceptor } from './shared/interceptors/jwt.interceptor';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { provideLegacyTranslate } from './translate.config';
+import { registerLocaleData } from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu, 'ru');
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes),
@@ -18,6 +22,10 @@ export const appConfig: ApplicationConfig = {
       useClass: JwtInterceptor,
       multi:true,
      }, 
-     importProvidersFrom(NgbModule)
+     importProvidersFrom(NgbModule),
+     {
+      provide: LOCALE_ID,
+      useValue: 'ru',
+     }
     ]
 };

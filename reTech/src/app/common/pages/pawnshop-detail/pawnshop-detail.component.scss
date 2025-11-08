@@ -134,10 +134,33 @@
   }
 }
 
-.info-block{
-  font-size: 14px;
-  font-weight: 500;
+.info-block {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: #ffffff;
+  border-radius: 12px;
+
+  font-family: 'Inter', sans-serif;
+
+}
+
+.product-title {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.product-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #007bff;
+  margin-bottom: 4px;
+}
+
+.product-date {
+  font-size: 13px;
+  color: #777;
 }

@@ -8,7 +8,7 @@ import { EditModalComponent } from '../../components/modals/edit-modal/edit-moda
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductService } from '../../../shared/services/product.service';
-import { Observable,map,pipe } from 'rxjs';
+import { Observable,map,pipe ,filter, switchMap, tap,firstValueFrom} from 'rxjs';
 import { Product } from '../../../shared/interfaces/product.interface';
 import { CreateProductComponent } from '../../components/modals/create-product/create-product.component';
 import { ProductDetailComponent } from '../../components/modals/product-detail/product-detail.component';
@@ -24,7 +24,7 @@ import { UserService } from '../../../shared/services/user.service';
   styleUrls: ['./profile.component.scss'] 
 })
 export class ProfileComponent implements OnInit {
-  user: User;
+  user$:Observable<User>;
   loading = true;
   error: string | null = null;
 
@@ -37,10 +37,8 @@ export class ProfileComponent implements OnInit {
   products$:Observable<Product[]>;
   activeProducts$!: Observable<Product[]>;
   inactiveProducts$!: Observable<Product[]>;
-
   favoritePawnshops$:Observable<PawnshopProfile[]>;
-
-  favorites: any[] = [];
+  favoriteProducts$:Observable<Product[]>;
 
   constructor(
               private authService: AuthService, 
@@ -52,53 +50,33 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user$ = this.authService.currentUser$
+    
     this.loading = true;
 
-    this.authService.currentUser$.subscribe({
-      next: (user) => {
-        this.user = user;
-        if(this.user){
-          this.products$ = this.productService.getProductsByOwner(this.user._id);
+    this.activeProducts$ = this.authService.currentUser$.pipe(
+      filter((user): user is User => !!user?._id),
+      switchMap(user => this.productService.getProductsByOwner(user._id)),
+      map((products) => products.filter((p => p.status === 'active')))
+    )
+    this.inactiveProducts$ = this.authService.currentUser$.pipe(
+      filter((user):user is User => !!user?._id),
+      switchMap(user => this.productService.getProductsByOwner(user._id)),
+      map((products) => products.filter((p => p.status !== 'active')))
+    )
 
-             this.activeProducts$ = this.products$.pipe(
-                map((products) => products.filter((p) => p.status === 'active'))
-                
-            );
-            this.inactiveProducts$ = this.products$.pipe(
-              map((products) => products.filter((p) => p.status !== 'active'))
-            )
-            this.loadFavorites();
-        }
-        
-        this.loading = false;
-      }
-    });
-
-    if (!this.user) {
-      this.authService.getUserProfile().subscribe({
-        next: (profile) => (this.user = profile),
-        error: () => {
-          this.error = 'Не удалось загрузить профиль';
-          this.loading = false;
-        },
-      });
-    }
+    this.favoritePawnshops$ = this.authService.currentUser$.pipe(
+      filter((user): user is User => !!user?._id),
+      switchMap(user => this.userService.getFavorites(user._id)),
+      tap(pawnshop => console.log(pawnshop,'loaded farvoire pawnshops'))
+    )
+    this.favoriteProducts$ = this.authService.currentUser$.pipe(
+      filter((user):user is User => !!user?._id),
+      switchMap(user => this.userService.getFavoriteItems(user._id)),
+      tap(products => console.log(products, 'loaded favorite products'))
+    )
     
   }
-
-  loadFavorites(){
-    if(this.user){
-      this.userService.getFavorites(this.user._id).subscribe({
-        next: (res) => (
-          this.favorites = res,
-          console.log(res)
-        ),
-        
-        error: (err) => console.error(err),
-      });
-    }
-  }
-
   deleteProduct(itemId:string){
 
   }
@@ -109,34 +87,29 @@ export class ProfileComponent implements OnInit {
     modalRef.componentInstance.product = item;
   }
 
-  openEditModal(){
-    const modalRef = this.modalService.open(EditModalComponent, { size: 'lg', centered: true });
-    modalRef.componentInstance.user = this.user;
+  async openEditModal() {
+    const user = await firstValueFrom(this.authService.currentUser$);
 
-    modalRef.result.then(
-      (updatedUser: User) => {
-        if (updatedUser) {
-          // тут можно сделать запрос на API для обновления профиля
-          this.user = updatedUser;
-          // this.authService.updateUser(updatedUser); 
-        }
-      },
-      () => {} 
-    );
+    if (!user) return;
+
+    const modalRef = this.modalService.open(EditModalComponent, { size: 'lg', centered: true });
+    modalRef.componentInstance.user = user;
 
   }
 
-  openCreateItemModal(){
+  async openCreateItemModal(){
+    const user = await firstValueFrom(this.authService.currentUser$);
     const modalRef = this.modalService.open(CreateProductComponent);
 
-    modalRef.componentInstance.ownerId = this.user._id;
+    modalRef.componentInstance.ownerId = user._id;
   }
 
-  openProductDetails(item:Product){
+  async openProductDetails(item:Product){
+    const user = await firstValueFrom(this.authService.currentUser$);
     const modalRef = this.modalService.open(ProductDetailComponent);
 
     modalRef.componentInstance.product = item;
-    modalRef.componentInstance.user = this.user;
+    modalRef.componentInstance.user = user;
     modalRef.componentInstance.pawnshop = null;
   }
 

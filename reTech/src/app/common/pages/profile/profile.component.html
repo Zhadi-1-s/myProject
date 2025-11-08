@@ -2,7 +2,7 @@
   <div class="row justify-content-center">
     <!-- Верхний блок (30%) -->
     <div class="col-12">
-      <div class="profile-header d-flex align-items-center p-3 mb-3" *ngIf="user; else notLoggedIn">
+      <div class="profile-header d-flex align-items-center p-3 mb-3" *ngIf="user$| async as user; else notLoggedIn">
         <!-- Аватар -->
         <div class="avatar-img position-relative" style="width: 190px; height: 190px;">
           <img
@@ -190,51 +190,53 @@
           <!-- Заголовок -->
           <div class="small-block p-3 mb-3 fw-semibold flex-fill" >
             {{ 'Избранные магазины' | translate }}
-            <div *ngIf="favorites.length > 0; else noFavorites" class="d-flex flex-column gap-2 mt-2">
-              <div
-                *ngFor="let item of favorites"
-                class="d-flex align-items-center p-2 border rounded-2 favorite-card"
-                style="border-color: #d1d1d1;"
-                [routerLink]="['/pawnshop-detail', item._id]"
-              >
-                <!-- Фото -->
-                <img
-                  *ngIf="item.logoUrl; else noLogo"
-                  [src]="item.logoUrl"
-                  alt="{{ item.name }}"
-                  class="rounded me-3"
-                  style="width: 50px; height: 50px; object-fit: cover;"
-                />
-                <ng-template #noLogo>
-                  <div
-                    class="d-flex justify-content-center align-items-center bg-light rounded me-3"
-                    style="width: 50px; height: 50px;"
-                  >
-                    <i class="fa-solid fa-store text-secondary"></i>
-                  </div>
-                </ng-template>
-
-                <!-- Название и рейтинг -->
-                <div class="flex-grow-1 d-flex justify-content-between align-items-center">
-                    <span class="fw-medium">{{ item.name }}</span>
-
-                    <!-- ⭐️ Шкала рейтинга -->
-                    <div class="d-flex align-items-center ms-2">
-                      <ng-container *ngFor="let star of [1,2,3,4,5]">
-                        <i
-                          class="fa-star"
-                          [ngClass]="{
-                            'fa-solid text-warning': item.rating >= star,
-                            'fa-regular text-muted': item.rating < star
-                          }"
-                          style="font-size: 14px; margin-left: 2px;"
-                        ></i>
-                      </ng-container>
+            <ng-container *ngIf="favoritePawnshops$ | async as favoritePawnshops; else noFavorites">
+              <div  *ngIf="favoritePawnshops.length > 0; else noFavorites" class="d-flex flex-column gap-2 mt-2">
+                <div
+                  *ngFor="let item of favoritePawnshops"
+                  class="d-flex align-items-center p-2 border rounded-2 favorite-card"
+                  style="border-color: #d1d1d1;"
+                  [routerLink]="['/pawnshop-detail', item._id]"
+                >
+                  <!-- Фото -->
+                  <img
+                    *ngIf="item.logoUrl; else noLogo"
+                    [src]="item.logoUrl"
+                    alt="{{ item.name }}"
+                    class="rounded me-3"
+                    style="width: 50px; height: 50px; object-fit: cover;"
+                  />
+                  <ng-template #noLogo>
+                    <div
+                      class="d-flex justify-content-center align-items-center bg-light rounded me-3"
+                      style="width: 50px; height: 50px;"
+                    >
+                      <i class="fa-solid fa-store text-secondary"></i>
                     </div>
-                  </div>
-
+                  </ng-template>
+  
+                  <!-- Название и рейтинг -->
+                  <div class="flex-grow-1 d-flex justify-content-between align-items-center">
+                      <span class="fw-medium">{{ item.name }}</span>
+  
+                      <!-- ⭐️ Шкала рейтинга -->
+                      <div class="d-flex align-items-center ms-2">
+                        <ng-container *ngFor="let star of [1,2,3,4,5]">
+                          <i
+                            class="fa-star"
+                            [ngClass]="{
+                              'fa-solid text-warning': item.rating >= star,
+                              'fa-regular text-muted': item.rating < star
+                            }"
+                            style="font-size: 14px; margin-left: 2px;"
+                          ></i>
+                        </ng-container>
+                      </div>
+                    </div>
+  
+                </div>
               </div>
-            </div>
+            </ng-container>
             <ng-template #noFavorites>
               <div class="text-muted text-center py-3">
                 <i class="fa-regular fa-heart fs-3 mb-2 d-block"></i>
@@ -247,8 +249,45 @@
         <div class="col-md-4 d-flex">
           <div class="small-block p-3 fw-semibold flex-fill">
             {{ 'Избранные товары' | translate }}
+
+            <ng-container *ngIf="favoriteProducts$ | async as favoriteProducts; else noFavoriteProducts">
+              <div *ngIf="favoriteProducts.length > 0; else noFavoriteProducts" class="d-flex flex-column gap-2 mt-2">
+                <div *ngFor="let product of favoriteProducts" class="card favorite-card d-flex flex-row align-items-center p-2" (click)="openProductDetails(product)">
+                  
+                  <!-- Фото продукта -->
+                  <img 
+                    *ngIf="product.photos?.length; else noPhoto"
+                    [src]="product.photos[0]"
+                    alt="{{ product.title }}"
+                    class="product-photo me-3"
+                  />
+                  <ng-template #noPhoto>
+                    <div class="d-flex justify-content-center align-items-center bg-light rounded me-3"
+                        style="width: 50px; height: 50px;">
+                      <i class="fa-solid fa-box text-secondary"></i>
+                    </div>
+                  </ng-template>
+
+                  <!-- Контент карточки -->
+                  <div class="product-info d-flex flex-column justify-content-center flex-grow-1">
+                    <span class="product-title fw-semibold text-truncate">{{ product.title }}</span>
+                    <span class="product-category text-muted small">{{ product.category }}</span>
+                    <span class="product-price fw-bold">{{ product.price | number }} ₸</span>
+                  </div>
+
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #noFavoriteProducts>
+              <div class="text-muted text-center py-3">
+                <i class="fa-regular fa-heart fs-3 mb-2 d-block"></i>
+                {{ 'Нет избранных товаров' | translate }}
+              </div>
+            </ng-template>
           </div>
         </div>
+
 
       </div>
     </div>

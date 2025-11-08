@@ -59,7 +59,7 @@
                     </div>
 
                     <!-- Описание -->
-                    <div class="description-block mt-4">
+                    <div class="description-block">
                         <h6 class="fw-semibold mb-2">
                         <i class="fa-regular fa-file-lines me-2 text-primary"></i>
                         О нас
@@ -69,8 +69,6 @@
                         </p>
                     </div>
                 </div>
-
-
 
             </div>
 
@@ -121,18 +119,19 @@
                             <img [src]="[product.photos[0]]" alt="main-photo" class="main-photo">
     
                             <i 
-                                class="fa-heart" 
-                                style="position: absolute; top: 10px; right: 10px; font-size: 1.6rem; cursor: pointer;"
+                                class="fa-solid fa-heart" 
+                                style="position: absolute; top: 10px; right: 10px; font-size: 1.2rem; cursor: pointer;"
                                 [ngClass]="{
-                                    'fa-solid text-danger': user?.favoriteItems?.includes(product._id),
-                                    'fa-regular text-white': !user?.favoriteItems?.includes(product._id)
+                                    'text-danger': user?.favoriteItems?.includes(product._id),
+                                    'text-white': !user?.favoriteItems?.includes(product._id)
                                 }"
                                 (click)="toggleFavoriteItem(product._id, $event)">
                                 </i>
 
                             <div class="info-block">
-                                <span>{{product.title}}</span>
-                                <span class="mt-2">{{product.price}} Тг</span>
+                                <span class="product-title">{{ product.title }}</span>
+                                <span class="product-price">{{ product.price | number }} ₸</span>
+                                <span class="product-date">{{ product.createdAt | date: 'd MMMM' }}</span>
                             </div>
                         </div>
                     </div>

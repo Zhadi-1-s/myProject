@@ -10,11 +10,12 @@ import { ProductService } from '../../../shared/services/product.service';
 import { UserService } from '../../../shared/services/user.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { User } from '../../../shared/interfaces/user.interface';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-pawnshop-list',
   standalone: true,
-  imports: [CommonModule,TranslateModule, ReactiveFormsModule,FormsModule],
+  imports: [CommonModule,TranslateModule, ReactiveFormsModule,FormsModule,RouterModule],
   templateUrl: './pawnshop-list.component.html',
   styleUrl: './pawnshop-list.component.scss'
 })
@@ -119,7 +120,8 @@ export class PawnshopListComponent implements OnInit{
     }
   }
 
-  toggleFavorite(pawnshopId: string): void {
+  toggleFavorite(pawnshopId: string,event:MouseEvent): void {
+    event.stopPropagation(); 
     if (!this.user) return;
 
     const isFavorite = this.user.favoritePawnshops?.includes(pawnshopId);
@@ -159,7 +161,7 @@ export class PawnshopListComponent implements OnInit{
     this.searchTerm$.next(value);
   }
 
-  toFavorite(userId: string, pawnshopId: string): void {
+  toFavorite(userId: string, pawnshopId: string,): void {
     this.userService.addFavorite(userId, pawnshopId).subscribe({
       next: (res) => {
         console.log('Добавлено в избранное:', res);

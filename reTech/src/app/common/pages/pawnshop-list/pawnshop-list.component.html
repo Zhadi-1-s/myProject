@@ -54,21 +54,20 @@
   <div *ngIf="(filteredLombards$ | async) as lombards; else loading">
     <div *ngIf="lombards.length > 0; else noLombards" class="row g-3">
       <div class="col-md-4" *ngFor="let lombard of lombards">
-        <div class="card shadow-sm h-100 border-0 position-relative">
+        <div class="card shadow-sm h-100 border-0 position-relative"
+         [routerLink]="['/pawnshop-detail', lombard._id]"
+         style="cursor: pointer;">
 
           <!-- ❤️ Кнопка избранного -->
-          <button
-            class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm"
-            (click)="toggleFavorite(lombard._id)"
-          >
-            <i
-              class="fa-heart"
-              [ngClass]="{
-                'fa-solid text-danger': user?.favoritePawnshops?.includes(lombard._id),
-                'fa-regular text-secondary': !user?.favoritePawnshops?.includes(lombard._id)
-              }"
-            ></i>
-          </button>
+        <i
+          class="fa-solid fa-heart"
+          style="position: absolute; top: 10px; right: 10px; font-size: 1.4rem; cursor: pointer;"
+          [ngClass]="{
+            'text-danger': user?.favoritePawnshops?.includes(lombard._id),
+            'text-white': !user?.favoritePawnshops?.includes(lombard._id)
+          }"
+          (click)="toggleFavorite(lombard._id,$event)"
+          ></i>
 
           <img
             *ngIf="lombard.logoUrl; else noLogo"
@@ -86,15 +85,27 @@
           <div class="card-body">
             <h5 class="card-title fw-semibold mb-2">{{ lombard.name }}</h5>
             <p class="card-text text-muted mb-1">
-              <i class="fa-solid fa-location-dot me-1 text-primary"></i>
+              <i class="fa-solid fa-location-dot me-1 text-secondary"></i>
               {{ lombard.address }}
             </p>
             <p class="card-text text-muted mb-1">
-              <i class="fa-solid fa-phone me-1 text-primary"></i>
+              <i class="fa-solid fa-phone me-1 text-secondary"></i>
               {{ lombard.phone }}
             </p>
             <p class="card-text small text-muted">
               Время работы: {{ lombard.openTime }} – {{ lombard.closeTime }}
+            </p>
+            <p class="card-text small text-muted">
+              <ng-container *ngFor="let star of [1,2,3,4,5]">
+                        <i
+                          class="fa-star"
+                          [ngClass]="{
+                            'fa-solid text-warning': lombard.rating >= star,
+                            'fa-regular text-muted': lombard.rating < star
+                          }"
+                          style="font-size: 14px; margin-left: 2px;"
+                        ></i>
+              </ng-container>
             </p>
 
             <div class="d-flex justify-content-between align-items-center mt-3">
