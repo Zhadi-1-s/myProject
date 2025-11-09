@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PawnshopProfile } from '../interfaces/shop-profile.interface';
 import { HttpClient } from '@angular/common/http';
+import { Review } from '../interfaces/reviews.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,8 @@ export class LombardService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  addReview(pawnshopId: string, review: Review): Observable<PawnshopProfile> {
+    return this.http.put<PawnshopProfile>(`${this.apiUrl}/${pawnshopId}/review`, review);
+  }
   
 }

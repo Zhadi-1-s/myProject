@@ -46,6 +46,9 @@ export class PawnshopListComponent implements OnInit{
     'Tablet'
   ]
 
+  isTooltipOpen = false;
+  sortOrder: 'asc' | 'desc' | null = 'desc';
+
   constructor(
     private lombardService:LombardService,
     private productService:ProductService,
@@ -99,6 +102,11 @@ export class PawnshopListComponent implements OnInit{
             )
           );
         }
+        if (this.sortOrder === 'asc') {
+          filtered = filtered.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+        } else if (this.sortOrder === 'desc') {
+          filtered = filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        }
 
         return filtered;
 
@@ -118,6 +126,16 @@ export class PawnshopListComponent implements OnInit{
       });
       console.log(this.favorites)
     }
+  }
+
+  toggleTooltip() {
+    this.isTooltipOpen = !this.isTooltipOpen;
+  }
+
+  onSortChange(order: 'asc' | 'desc') {
+    this.sortOrder = order;
+    
+     this.searchTerm$.next(this.searchTerm$.value); 
   }
 
   toggleFavorite(pawnshopId: string,event:MouseEvent): void {

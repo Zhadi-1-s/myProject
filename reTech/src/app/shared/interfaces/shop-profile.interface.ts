@@ -1,5 +1,6 @@
 import { Product } from "./product.interface";
 import { Slot } from "./slot.interface";
+import { Review } from "./reviews.interface";
 
 export interface PawnshopProfile {
   _id?: string;      // id из MongoDB
@@ -10,7 +11,7 @@ export interface PawnshopProfile {
   logoUrl?: string;
   openTime: string;  //  "09:00"
   closeTime: string; //  "18:00"
-  scheduleDays?: string[]; //  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+  workingDays?: string[]; //  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
   rating?: number;
   description?: string;
   photos?: string[];
@@ -18,4 +19,5 @@ export interface PawnshopProfile {
   activeSlots:Slot[];
   slotLimit:number;
   createdAt?: Date;
+  reviews?: Review[]; 
 }

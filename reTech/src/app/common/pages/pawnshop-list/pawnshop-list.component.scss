@@ -106,3 +106,33 @@
   font-weight: 500;
 
 }
+.sort-block{
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  align-items: baseline;
+}
+.rating-sort {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+}
+
+.rating-tooltip {
+  position: absolute;
+  top: 120%;
+  left: 0;
+  z-index: 10;
+  min-width: 180px;
+}
+
+.tooltip-item {
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.tooltip-item:hover {
+  background-color: #f1f1f1;
+}

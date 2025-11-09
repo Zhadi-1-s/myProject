@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put,Patch } from '@nestjs/common';
 import { PawnshopService } from './pawnshop.service';
 import { CreatePawnshopDto, UpdatePawnshopDto } from './pawnshop.dto';
 
@@ -38,5 +38,13 @@ export class PawnshopController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.pawnshopService.remove(id);
+  }
+
+  @Put(':id/review')
+  addReview(
+    @Param('id') id: string,
+    @Body() reviewDto: { userId: string; userName?: string; rating: number; comment?: string }
+  ) {
+    return this.pawnshopService.addReview(id, reviewDto);
   }
 }

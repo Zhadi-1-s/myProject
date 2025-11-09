@@ -1,6 +1,7 @@
 // pawnshop-profile.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Review, ReviewSchema } from './reviews.schema';
 
 export type PawnshopProfileDocument = PawnshopProfile & Document;
 
@@ -48,6 +49,9 @@ export class PawnshopProfile {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Product' }], default: [] })
   products: Types.ObjectId[];
+
+  @Prop({type:[ReviewSchema], default:[]})
+  reviews:Review[]
 }
 
 export const PawnshopProfileSchema = SchemaFactory.createForClass(PawnshopProfile);

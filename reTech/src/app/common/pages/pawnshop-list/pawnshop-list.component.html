@@ -14,9 +14,41 @@
       />
     </div>
     
-     <span class="results-text" >
-         {{ (filteredLombards$ | async)?.length || 0 }} {{'Results' | translate}} 
-    </span>
+    <div class="sort-block d-flex align-items-center gap-3 mt-2 position-relative">
+      <span class="results-text">
+        {{ (filteredLombards$ | async)?.length || 0 }} {{ 'Results' | translate }}
+      </span>
+
+      <div class="rating-sort position-relative">
+        <span class="rating-label text-secondary fw-semibold" (click)="toggleTooltip()">
+          Рейтинг
+           <i
+              [class.fa-solid]="true"
+              [class.fa-arrow-up-wide-short]="sortOrder === 'asc'"
+              [class.fa-arrow-down-short-wide]="sortOrder === 'desc'"
+              class="ms-1"
+            ></i>
+        </span>
+
+        <div
+          class="rating-tooltip shadow-sm border rounded-2 bg-white p-2"
+          *ngIf="isTooltipOpen"
+        >
+          <div class="tooltip-item d-flex align-items-center gap-2"
+              (click)="onSortChange('asc'); toggleTooltip()">
+            <i class="fa-solid fa-arrow-up-wide-short"></i>
+            <span>По возрастанию</span>
+          </div>
+
+          <div class="tooltip-item d-flex align-items-center gap-2 mt-1"
+              (click)="onSortChange('desc'); toggleTooltip()">
+            <i class="fa-solid fa-arrow-down-short-wide"></i>
+            <span>По убыванию</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <div class="help-tooltips">
         <div *ngFor="let item of searchHelpItemsList" class="help-items" (click)="onHelpItemClick(item)">
@@ -25,19 +57,7 @@
     </div>
 
     <div class="filter-box d-flex align-items-center gap-2">
-      <!-- Фильтр по активным слотам -->
-      <!-- <select class="form-select" [(ngModel)]="activeFilter" style="width: 180px;">
-        <option value="all">Все ломбарды</option>
-        <option value="active">Только с активными слотами</option>
-        <option value="empty">Без активных слотов</option>
-      </select> -->
-
-      <!-- Сортировка по рейтингу -->
-      <select class="form-select" [(ngModel)]="sortByRating" style="width: 180px;">
-        <option value="none">Без сортировки</option>
-        <option value="desc">Рейтинг ↓</option>
-        <option value="asc">Рейтинг ↑</option>
-      </select>
+        
     </div>
 
     <div class="applied-filters mt-3" *ngIf="(appliedFilters$ | async)?.length > 0">
@@ -110,9 +130,13 @@
 
             <div class="d-flex justify-content-between align-items-center mt-3">
               <span class="badge bg-primary">{{ lombard.activeSlots?.length || 0 }}/{{ lombard.slotLimit }}</span>
-              <button class="btn btn-outline-primary btn-sm">
+              <!-- <button class="btn btn-outline-primary btn-sm">
                 <i class="fa-solid fa-eye me-1"></i> Подробнее
-              </button>
+              </button> -->
+              <span class="text-muted small">
+                {{ lombard.products.length }} {{ lombard.products.length === 1 ? 'товар' : (lombard.products.length >= 2 && lombard.products.length <= 4 ? 'товара' : 'товаров') }}
+              </span>
+             
             </div>
           </div>
         </div>

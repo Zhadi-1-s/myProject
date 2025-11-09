@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException,BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { PawnshopProfile } from 'src/core/database/schemas/shopProfile.schema';
 import { CreatePawnshopDto,UpdatePawnshopDto } from './pawnshop.dto';
+import { Review } from 'src/core/database/schemas/reviews.schema';
 
 @Injectable()
 export class PawnshopService {
@@ -53,11 +54,40 @@ export class PawnshopService {
     }
     return pawnshop;
   }
-
+  
   async remove(id: string): Promise<void> {
     const result = await this.pawnshopModel.findByIdAndDelete(id).exec();
     if (!result) {
       throw new NotFoundException(`Pawnshop with id ${id} not found`);
     }
   }
+
+  async addReview(pawnshopId: string, reviewDto: { userId: string; userName?: string; rating: number; comment?: string }): Promise<PawnshopProfile> {
+    const pawnshop = await this.pawnshopModel.findById(pawnshopId);
+    if (!pawnshop) throw new NotFoundException(`Pawnshop with id ${pawnshopId} not found`);
+
+    const existing = pawnshop.reviews.find(r => r.userId.toString() === reviewDto.userId);
+    if (existing) {
+      throw new BadRequestException('User has already reviewed this pawnshop');
+    }
+
+    // Конвертация userId в ObjectId
+    const review: Review = {
+      ...reviewDto,
+      userId: new Types.ObjectId(reviewDto.userId),
+      createdAt: new Date(),
+    };
+
+    // Добавляем в массив reviews
+    pawnshop.reviews.push(review);
+
+    // Пересчёт рейтинга
+    const total = pawnshop.reviews.reduce((sum, r) => sum + r.rating, 0);
+    pawnshop.rating = total / pawnshop.reviews.length;
+
+    await pawnshop.save();
+
+    return pawnshop;
+  }
+
 }

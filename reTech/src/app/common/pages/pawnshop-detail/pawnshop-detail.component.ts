@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LombardService } from '../../../shared/services/lombard.service';
-import { Observable, switchMap, tap,map,of } from 'rxjs';
+import { Observable, switchMap, tap,map,of,take } from 'rxjs';
 import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -14,11 +14,13 @@ import { ProductDetailComponent } from '../../components/modals/product-detail/p
 import { User } from '../../../shared/interfaces/user.interface';
 import { AuthService } from '../../../shared/services/auth.service';
 import { UserService } from '../../../shared/services/user.service';
+import { Review } from '../../../shared/interfaces/reviews.interface';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pawnshop-detail',
   standalone: true,
-  imports: [CommonModule,TranslateModule],
+  imports: [CommonModule,TranslateModule,FormsModule],
   templateUrl: './pawnshop-detail.component.html',
   styleUrl: './pawnshop-detail.component.scss'
 })
@@ -39,13 +41,19 @@ export class PawnshopDetailComponent implements OnInit{
 
   favoriteItems:any[] = [];
 
+  newRating: number = 5;
+  newComment: string = '';
+
+  reviews:string[];
+
   constructor(
     private lombardService:LombardService,
     private route:ActivatedRoute,
     private productService:ProductService,
     private modalService: NgbModal,
     private authService:AuthService,
-    private userService:UserService
+    private userService:UserService,
+    private pawnshopService:LombardService
   ){
 
   }
@@ -98,6 +106,36 @@ export class PawnshopDetailComponent implements OnInit{
       tap(products => console.log('products of pawshop', products))
     )
   }
+
+  addReview(pawnshopId: string) {
+    if (!this.user || !pawnshopId) return;
+
+    const review: Review = {
+      userId: this.user._id!,
+      userName: this.user.name,
+      rating: this.newRating,
+      comment: this.newComment,
+      createdAt: new Date()
+    };
+
+    this.pawnshopService.addReview(pawnshopId, review).subscribe({
+      next: updatedPawnshop => {
+        this.pawnShop$ = of(updatedPawnshop); // обновляем view
+        this.newRating = 5;
+        this.newComment = '';
+        console.log(updatedPawnshop, 'updated pawnshop');
+      },
+      error: err => {
+        if (err.status === 400) {
+          alert('Вы уже оставляли отзыв для этого ломбарда');
+        } else {
+          console.error(err);
+        }
+      }
+    });
+  }
+
+
 
 
   openProductDetail(product: Product){
