@@ -7,5 +7,4 @@ export interface Offer{
     message?: string;
     status: 'pending' | 'accepted' | 'rejected';
     createdAt?: Date;
-
 }

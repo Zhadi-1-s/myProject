@@ -21,6 +21,11 @@
     </div>
 
     <div class="mb-3">
+      <span>Сколько слотов(предметов)</span>
+      <input type="number" formControlName="slotLimit" placeholder="Число">
+    </div>
+
+    <div class="mb-3">
         <label class="form-label">{{ 'График работы' | translate }}</label>
         <div class="d-flex align-items-center gap-2">
             <input
@@ -44,6 +49,38 @@
       <label class="form-label">Описание</label>
       <textarea formControlName="description" class="form-control" rows="3" placeholder="Краткое описание"></textarea>
     </div>
+
+    <div class="mb-3">
+      <label class="form-label">Условия ломбарда</label>
+
+      <div formGroupName="terms">
+        <div class="mb-2">
+          <label class="form-label">Процентная ставка (%)</label>
+          <input type="number" class="form-control" formControlName="interestRate" placeholder="3.5">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Минимальный срок (дней)</label>
+          <input type="number" class="form-control" formControlName="minTermDays" placeholder="7">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Максимальная сумма</label>
+          <input type="number" class="form-control" formControlName="maxAmount" placeholder="500000">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Комиссия (%)</label>
+          <input type="number" class="form-control" formControlName="fees" placeholder="2.5">
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Дополнительно</label>
+          <textarea class="form-control" formControlName="additional" rows="2" placeholder="Особые условия или примечания"></textarea>
+        </div>
+      </div>
+    </div>
+
 
     <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
 

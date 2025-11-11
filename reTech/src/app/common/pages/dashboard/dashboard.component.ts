@@ -4,6 +4,8 @@ import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interfa
 import { CommonModule } from '@angular/common';
 import { LombardService } from '../../../shared/services/lombard.service';
 import { RouterLink } from "@angular/router";
+import { AuthService } from '../../../shared/services/auth.service';
+import { NgbSlide } from "../../../../../node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel";
 
 @Component({
   selector: 'app-dashboard',
@@ -16,8 +18,11 @@ export class DashboardComponent implements OnInit{
 
   lombardList:PawnshopProfile[];
 
+  user$ = this.authService.currentUser$;
+
   constructor(
-              private lombardService:LombardService
+              private lombardService:LombardService,
+              private authService:AuthService
   ){}
 
   ngOnInit(){

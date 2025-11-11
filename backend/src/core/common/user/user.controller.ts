@@ -48,7 +48,6 @@ export class UserController {
   @ApiOperation({ summary: 'Получить все избранные магазины пользователя' })
   @ApiParam({ name: 'userId', description: 'ID пользователя', type: String })
   async getFavorites(@Param('userId') userId: string) {
-    this.logger.log(`Получение списка избранных магазинов пользователя ${userId}`);
     const user = await this.userService.getFavorites(userId);
     if (!user) throw new NotFoundException('User not found');
     return user.favoritePawnshops; // можно вернуть только массив избранных
@@ -62,7 +61,7 @@ export class UserController {
     @Param('userId') userId: string,
     @Param('productId') productId: string,
   ) {
-    this.logger.log(`Добавление product ${productId} в избранное пользователя ${userId}`);
+
     const user = await this.userService.addfavoriteItem(userId, productId);
     if (!user) throw new NotFoundException('User not found');
     return user;
@@ -76,7 +75,7 @@ export class UserController {
     @Param('userId') userId: string,
     @Param('productId') productId: string,
   ) {
-    this.logger.log(`Удаление product ${productId} из избранного пользователя ${userId}`);
+
     const user = await this.userService.removeFavoriteItem(userId, productId);
     if (!user) throw new NotFoundException('User not found');
     return user;
@@ -86,7 +85,7 @@ export class UserController {
   @ApiOperation({ summary: 'Получить все избранные товары пользователя' })
   @ApiParam({ name: 'userId', description: 'ID пользователя', type: String })
   async getFavoriteItems(@Param('userId') userId: string) {
-    this.logger.log(`Получение списка избранных товаров пользователя ${userId}`);
+    
     const user = await this.userService.getFavoriteItems(userId);
     if (!user) throw new NotFoundException('User not found');
     return user.favoriteItems;

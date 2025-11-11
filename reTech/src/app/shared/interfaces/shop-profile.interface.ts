@@ -1,6 +1,7 @@
 import { Product } from "./product.interface";
 import { Slot } from "./slot.interface";
 import { Review } from "./reviews.interface";
+import { PawnshopTerms } from "./pawnshopTerm.interface";
 
 export interface PawnshopProfile {
   _id?: string;      // id из MongoDB
@@ -20,4 +21,5 @@ export interface PawnshopProfile {
   slotLimit:number;
   createdAt?: Date;
   reviews?: Review[]; 
+  terms:PawnshopTerms;
 }

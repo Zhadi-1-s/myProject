@@ -11,12 +11,20 @@
       </p>
 
       <!-- CTA Button -->
-      <a href="#" class="btn btn-info btn-lg rounded-pill px-5 py-3 mb-5 text-white fw-semibold shadow">
+      <a routerLink="/login"
+       *ngIf="!(user$ | async); else loggedIn"
+        class="btn btn-warning btn-lg rounded-pill px-5 py-3 mb-5 fw-semibold shadow-sm text-dark"
+        style="background-color:#f9b934;border:none;">
         {{ 'Start now' | translate }}
       </a>
 
-      <!-- Advantages -->
-      <div class="row justify-content-center mt-4">
+      <ng-template #loggedIn>
+        <a routerLink="/offers" class="btn btn-dark btn-lg rounded-pill px-5 py-3 mb-5 fw-semibold shadow-sm">
+          {{ 'View Offers' | translate }}
+        </a>
+      </ng-template>
+
+      <!-- <div class="row justify-content-center mt-4">
         <div class="col-md-4 mb-4">
           <div class="card border-0 shadow-sm h-100 p-4" style="border-radius: 20px;">
             <div class="card-body text-center">
@@ -52,7 +60,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </section>
 

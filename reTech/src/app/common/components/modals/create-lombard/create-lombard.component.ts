@@ -28,9 +28,17 @@ export class CreateLombardComponent {
         name: ['', Validators.required],
         address: ['', Validators.required],
         phone: ['', [Validators.required, Validators.pattern(/^\+?\d{10,15}$/)]],
+        slotLimit: [null, [Validators.required, Validators.min(0)]],
         openTime: ['', Validators.required],
         closeTime: ['', Validators.required],
-        description: ['']
+        description: [''],
+         terms: this.fb.group({
+            interestRate: [null],
+            minTermDays: [null],
+            maxAmount: [null],
+            fees: [null],
+            additional: ['']
+          })
       });
   }
 
