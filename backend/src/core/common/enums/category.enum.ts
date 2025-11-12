@@ -6,6 +6,5 @@ export enum Category {
   AUDIO = 'Audio',
   CAMERAS = 'Cameras',
   WATCHES = 'Watches',
-  GOLD = 'Gold',
   OTHER = 'Other',
 }

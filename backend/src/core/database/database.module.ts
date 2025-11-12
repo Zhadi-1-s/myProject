@@ -19,7 +19,6 @@ import { PawnshopTerms, PawnshopTermsSchema } from "./schemas/pawnshop-term.sche
         { name: PawnInventoryItem.name, schema: PawnInventoryItemSchema },
         { name: PawnshopProfile.name, schema: PawnshopProfileSchema },
         {name:Review.name, schema:ReviewSchema},
-        {name:'PawnshopTerms',schema:PawnshopTermsSchema}
         ]),
     ],
     exports:[MongooseModule],

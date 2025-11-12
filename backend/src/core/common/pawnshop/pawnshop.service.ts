@@ -20,12 +20,12 @@ export class PawnshopService {
 
     const pawnShopData = { 
       ...createDto,
-      logoUrl:defaultLogo,
-      photos:defaultPhotos,
-      rating:defaultRating
+      rating:defaultRating,
+      terms: createDto.terms
     }
 
     const pawnshop = new this.pawnshopModel(pawnShopData);
+    console.log('Saving pawnshop:', pawnShopData);
     return pawnshop.save();
   }
 

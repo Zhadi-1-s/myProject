@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString, IsNumber, IsArray, ArrayUnique,IsMongoId } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsNumber, IsArray, ArrayUnique,IsMongoId,ValidateNested } from 'class-validator';
+import { PawnshopTermsDto } from './pawnshop-terms.dto';
+import { Type } from 'class-transformer';
 
 export class CreatePawnshopDto {
 
@@ -76,6 +78,12 @@ export class CreatePawnshopDto {
   @IsNotEmpty()
   @IsNumber()
   slotLimit: number;
+
+  @ApiProperty({ type: PawnshopTermsDto, required: false })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PawnshopTermsDto)
+  terms?: PawnshopTermsDto;
 
 }
 
