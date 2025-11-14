@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LombardService } from '../../../shared/services/lombard.service';
 import { Observable, switchMap, tap,map,of,take } from 'rxjs';
 import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { Product } from '../../../shared/interfaces/product.interface';
@@ -16,6 +16,8 @@ import { AuthService } from '../../../shared/services/auth.service';
 import { UserService } from '../../../shared/services/user.service';
 import { Review } from '../../../shared/interfaces/reviews.interface';
 import { FormsModule } from '@angular/forms';
+import { TermModalComponent } from '../../components/modals/term-modal/term-modal.component';
+import { LoginRequiredComponent } from '../../components/modals/login-required/login-required.component';
 
 @Component({
   selector: 'app-pawnshop-detail',
@@ -35,7 +37,7 @@ export class PawnshopDetailComponent implements OnInit{
   pawnShop$: Observable<PawnshopProfile>;
   products$: Observable<(Product & { open?: boolean })[]> = of([]);
   favoriteItems$: Observable<Product[]> = of([]);
-
+  favoriteShops$:Observable<PawnshopProfile[]> = of([]);
   currentTime = new Date();
   isOpenNow = false;
 
@@ -46,6 +48,8 @@ export class PawnshopDetailComponent implements OnInit{
 
   reviews:string[];
 
+  favorites:any[];
+
   constructor(
     private lombardService:LombardService,
     private route:ActivatedRoute,
@@ -53,7 +57,8 @@ export class PawnshopDetailComponent implements OnInit{
     private modalService: NgbModal,
     private authService:AuthService,
     private userService:UserService,
-    private pawnshopService:LombardService
+    private pawnshopService:LombardService,
+    private router:Router
   ){
 
   }
@@ -63,18 +68,22 @@ export class PawnshopDetailComponent implements OnInit{
     this.authService.currentUser$.subscribe(
       (user) => {
         this.user = user;
-        if(user._id){
-          this.favoriteItems$ = this.userService.getFavoriteItems(user._id);
-          this.favoriteItems$.subscribe(fav => {
-            this.favoriteItems = fav;
-            console.log(this.favoriteItems,'dasdasdasda')
-          })
-        }
+        this.authService.currentUser$.subscribe(user => {
+        this.user = user;
+
+        if (!user) return;
+
+        this.userService.getAllFavorites(user._id).subscribe(res => {
+          this.favoriteItems = res.items;
+          this.favorites = res.shops;
+
+          console.log('Товары:', res.items);
+          console.log('Ломбарды:', res.shops);
+        });
+      });
+
       }
     )
-
-
-
     this.id = this.route.snapshot.paramMap.get('id')!;
 
     if(this.id){
@@ -105,6 +114,16 @@ export class PawnshopDetailComponent implements OnInit{
       switchMap(profile => this.productService.getProductsByOwner(profile._id)),
       tap(products => console.log('products of pawshop', products))
     )
+  }
+
+  showTerms = false;
+  openTermsModal() {
+    const modalRef = this.modalService.open(TermModalComponent, {
+      centered: true,
+      size: 'md'
+    });
+
+    modalRef.componentInstance.terms = this.pawnShop.terms;
   }
 
   addReview(pawnshopId: string) {
@@ -150,7 +169,7 @@ export class PawnshopDetailComponent implements OnInit{
 
   }
 
-   loadFavorites(){
+   loadFavoritItems(){
     if(this.user){
       this.userService.getFavoriteItems(this.user._id).subscribe({
         next: (res) => (this.favoriteItems = res),
@@ -161,9 +180,24 @@ export class PawnshopDetailComponent implements OnInit{
     }
   }
 
+  loadFavorites(){
+    if(this.user){
+      this.userService.getFavorites(this.user._id).subscribe({
+        next: (res) => (this.favorites = res),
+        
+        error: (err) => console.error(err),
+      });
+      console.log(this.favorites)
+    }
+  }
+
+
   toggleFavoriteItem(productId: string, event: MouseEvent): void {
     event.stopPropagation(); // чтобы не срабатывал click на карточке
-    if (!this.user || !this.user._id) return;
+    if (!this.user || !this.user._id) {
+      this.openLoginRequiredModal();
+      return;
+    }
 
     const isFavorite = this.user.favoriteItems?.includes(productId);
 
@@ -172,8 +206,7 @@ export class PawnshopDetailComponent implements OnInit{
       : this.userService.addFavoriteItem(this.user._id, productId);
 
     req$.subscribe({
-      next: (res) => {
-        console.log('✅ Ответ от сервера:', res);
+      next: (res) => {;
         if (isFavorite) {
           this.user.favoriteItems = this.user.favoriteItems.filter(id => id !== productId);
         } else {
@@ -184,5 +217,17 @@ export class PawnshopDetailComponent implements OnInit{
     });
   }
 
+  openLoginRequiredModal() {
+    const modalRef = this.modalService.open(LoginRequiredComponent, {
+      centered: true,
+      size: 'sm'
+    });
+
+    modalRef.result.then((res) => {
+      if (res === 'login') {
+        this.router.navigate(['/auth/login']);
+      }
+    }, () => {});
+  }
 
 }

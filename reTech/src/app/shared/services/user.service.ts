@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable,forkJoin } from "rxjs";
 
 @Injectable({
     providedIn:'root'
@@ -36,5 +36,12 @@ export class UserService{
     getFavoriteItems(userId:string):Observable<any>{
         return this.http.get(`${this.apiUrl}/${userId}/favorite-items`)
     }
+
+    getAllFavorites(userId: string) {
+    return forkJoin({
+        items: this.getFavoriteItems(userId),
+        shops: this.getFavorites(userId)
+    });
+}
 
 }
