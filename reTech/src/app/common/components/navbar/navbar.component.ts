@@ -24,10 +24,15 @@ export class NavbarComponent implements OnInit {
 
   user: User | null = null;
 
-  navItems: NavItem[] = [
+  navItemsUser: NavItem[] = [
     { label: 'Dashboard', icon: 'fa-regular fa-house', route: '/dashboard' },
     { label: 'Lombards', icon: 'fa-regular fa-building', route: '/pawnshop-list' },
-    { label: 'Assistent', icon: 'bi bi-robot', route: '/assignments'},
+    { label: 'Help', icon: 'fa-solid fa-circle-question', route: '/calendar' }
+  ];
+
+  navItemsPawnshop: NavItem[] = [
+    { label: 'Dashboard', icon: 'fa-regular fa-house', route: '/dashboard' },
+    { label: 'Products', icon: 'fa-solid fa-boxes-stacked', route: '/products' },
     { label: 'Help', icon: 'fa-solid fa-circle-question', route: '/calendar' }
   ];
 
@@ -39,21 +44,25 @@ export class NavbarComponent implements OnInit {
   isPawnShop:boolean = false;
 
   ngOnInit() {
-    this.filteredItems = this.navItems; // изначально все пункты
-    this.isLoggedIn = this.authService.isAuthenticated();
     this.authService.currentUser$.subscribe(user => {
       this.user = user;
-      if (user && user.role === 'pawnshop') {
+
+      if (!user) {
+        // Если не авторизован → показываем дефолтное меню
+        this.filteredItems = this.navItemsUser;
+        return;
+      }
+
+      if (user.role === 'pawnshop') {
         this.isPawnShop = true;
+        this.filteredItems = this.navItemsPawnshop;
+      } else {
+        this.isPawnShop = false;
+        this.filteredItems = this.navItemsUser;
       }
     });
   }
 
-  onSearchChange() {
-    this.filteredItems = this.navItems.filter(item =>
-      item.label.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
 
   logout() {
     localStorage.removeItem('access_token');

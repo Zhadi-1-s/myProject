@@ -7,5 +7,12 @@ html, body {
   font-family: 'Roboto', sans-serif;
 }
 .btn{
-  outline: none;
+  outline: none!important;
+}
+.btn-close:focus,
+.btn-close:focus-visible,
+.btn-close:active:focus,
+.btn-close:active:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }

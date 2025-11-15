@@ -1,5 +1,13 @@
 <div class="topbar">
   <div class="topbar-right">
+
+    <!-- Offers Button -->
+    <button class="btn btn-light btn-sm rounded-circle border-none me-3 d-flex align-items-center justify-content-center"
+            style="width: 40px; height: 40px;"
+            >
+      <i class="fa-solid fa-gift"></i>
+    </button>
+
     <!-- Language Switcher -->
     <div class="language-switcher dropdown">
       <button class="btn btn-sm btn-light border-none dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -12,7 +20,6 @@
         <li>
           <a class="dropdown-item"  [class.active]="currentLang === 'ru'" (click)="changeLang('ru')">
             Русский</a></li>
-        <!-- <li><a class="dropdown-item" (click)="changeLang('kk')">Қазақша</a></li> -->
       </ul>
     </div>
 

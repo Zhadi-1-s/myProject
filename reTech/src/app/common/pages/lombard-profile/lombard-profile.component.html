@@ -162,45 +162,43 @@
         </div>
 
         <!-- Правая колонка -->
-        <div class="extra-content">
+        <div class="extra-content" *ngIf="profile$ | async as profile">
           <div class="small-block text-center">
+
             <i class="fa-solid fa-star text-warning fs-4 mb-2"></i>
             <h6 class="fw-semibold mb-3">{{ 'Rating and reviews' | translate }}</h6>
 
             <!-- Средний рейтинг -->
             <div class="mb-3">
-              <span class="fs-5 fw-bold text-dark">4.8</span>
+              <span class="fs-5 fw-bold text-dark">
+                {{ profile.rating || 0 }}
+              </span>
               <span class="text-muted small">/ 5.0</span>
+
               <div class="stars text-warning mt-1">
-                ★★★★☆
+                {{ getStars(profile.rating) }}
               </div>
             </div>
 
-            <!-- Фейковые отзывы -->
-            <div class="reviews text-start px-3">
-              <div class="review mb-2">
-                <p class="mb-1 fw-semibold">Aruzhan K.</p>
+            <!-- Реальные отзывы -->
+            <div class="reviews text-start px-3" *ngIf="profile.reviews?.length; else noReviews">
+              <div class="review mb-2" *ngFor="let r of profile.reviews">
+                <p class="mb-1 fw-semibold">{{ r.userName || 'User' }}</p>
                 <p class="text-muted small fst-italic">
-                  “Fast service and fair prices. Highly recommend!”
-                </p>
-              </div>
-
-              <div class="review mb-2">
-                <p class="mb-1 fw-semibold">Dias M.</p>
-                <p class="text-muted small fst-italic">
-                  “Staff were helpful, got a good deal for my phone.”
-                </p>
-              </div>
-
-              <div class="review">
-                <p class="mb-1 fw-semibold">Elena T.</p>
-                <p class="text-muted small fst-italic">
-                  “Clean place and trustworthy staff.”
+                  “{{ r.comment }}”
                 </p>
               </div>
             </div>
+
+            <ng-template #noReviews>
+              <p class="text-muted small fst-italic text-center">
+                {{ 'No reviews yet' | translate }}
+              </p>
+            </ng-template>
+
           </div>
         </div>
+
         
       </div>
     </div>

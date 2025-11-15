@@ -157,6 +157,14 @@ export class LombardProfileComponent implements OnInit{
 
     return now >= open && now <= close;
   }
+  
+  getStars(rating: number = 0): string {
+    const full = Math.floor(rating);
+    const half = rating % 1 >= 0.5 ? 1 : 0;
+    const empty = 5 - full - half;
+
+    return '★'.repeat(full) + (half ? '☆' : '') + '☆'.repeat(empty);
+  }
 
   editProduct(item:Product){
     const modalRef = this.modalService.open(EditProductComponent,{size:'lg'});
