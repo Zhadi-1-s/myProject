@@ -32,5 +32,8 @@ export const routes: Routes = [
     {
         path:'pawnshop-list',loadComponent: () => import('./common/pages/pawnshop-list/pawnshop-list.component').then(m => m.PawnshopListComponent)
     },
+    {
+        path:'product-list',loadComponent: () => import('./common/pages/products-list/products-list.component').then(m => m.ProductsListComponent)
+    }
     
 ];

@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit {
 
   navItemsPawnshop: NavItem[] = [
     { label: 'Dashboard', icon: 'fa-regular fa-house', route: '/dashboard' },
-    { label: 'Products', icon: 'fa-solid fa-boxes-stacked', route: '/products' },
+    { label: 'Products', icon: 'fa-solid fa-boxes-stacked', route: '/product-list' },
     { label: 'Help', icon: 'fa-solid fa-circle-question', route: '/calendar' }
   ];
 
