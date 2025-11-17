@@ -2,15 +2,19 @@
 
      <h3 class="fw-semibold m-0">Список продуктов</h3>
 
-    <div class="search-box w-50">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Поиск по названию..."
-        [(ngModel)]="searchTerm$.value"
-        (ngModelChange)="onSearchChange($event)"
-      />
+    <div class="d-flex justify-content-between  mb-4 search-container">
+
+        <div class="search-box w-50">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Поиск по названию..."
+            [(ngModel)]="searchTerm$.value"
+            (ngModelChange)="onSearchChange($event)"
+          />
+        </div>
     </div>
+
 
     <div *ngIf="(filteredProducts$ | async) as products; else loading">
 
@@ -18,7 +22,8 @@
             <div class="col-md-4" *ngFor="let product of products">
 
             <div class="card shadow-sm h-100 border-0 position-relative"
-                [routerLink]="['/product-detail', product._id]"
+                (click)="openProductDetails(product)"
+
                 style="cursor: pointer;">
 
                 <!-- ❤️ Избранное -->
@@ -34,17 +39,17 @@
 
                 <!-- Фото товара -->
                 <img
-                *ngIf="product.photos?.length > 0; else noPhoto"
-                [src]="product.photos[0]"
-                class="card-img-top"
-                alt="{{ product.title }}"
-                style="height: 180px; object-fit: cover;"
+                    *ngIf="product.photos?.length > 0; else noPhoto"
+                    [src]="product.photos[0]"
+                    class="card-img-top"
+                    alt="{{ product.title }}"
+                    style="height: 180px; object-fit: cover;"
                 />
 
                 <ng-template #noPhoto>
-                <div class="d-flex justify-content-center align-items-center bg-light" style="height: 180px;">
-                    <i class="fa-solid fa-image text-secondary fs-1"></i>
-                </div>
+                    <div class="d-flex justify-content-center align-items-center bg-light" style="height: 180px;">
+                        <i class="fa-solid fa-image text-secondary fs-1"></i>
+                    </div>
                 </ng-template>
 
                 <div class="card-body">
@@ -66,15 +71,7 @@
                     {{ product.category }}
                 </p>
 
-                <!-- Статус -->
-                <p class="card-text small"
-                    [ngClass]="{
-                    'text-success': product.status === 'active',
-                    'text-danger': product.status === 'sold',
-                    }">
-                    <i class="fa-solid fa-circle me-1"></i>
-                    {{ product.status }}
-                </p>
+
 
                 <!-- Дата -->
                 <p class="card-text text-muted small">

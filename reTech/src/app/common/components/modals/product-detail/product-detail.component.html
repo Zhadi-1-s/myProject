@@ -73,6 +73,15 @@
 </div>
 
 <div class="modal-footer">
+  <button 
+    *ngIf="user?.role === 'pawnshop'"
+    class="btn btn-primary"
+    (click)="sendOffer()"
+  >
+    <i class="fa-solid fa-paper-plane me-1"></i>
+    {{ 'Send Offer' | translate }}
+  </button>
+
   <button class="btn btn-secondary" (click)="activeModal.dismiss()">
     {{ 'Close' | translate }}
   </button>

@@ -10,7 +10,7 @@ import { ImageViewComponent } from '../../image-view/image-view.component';
 @Component({
   selector: 'app-create-lombard',
   standalone: true,
-  imports: [CommonModule,ReactiveFormsModule,TranslateModule,ImageViewComponent],
+  imports: [CommonModule,ReactiveFormsModule,TranslateModule],
   templateUrl: './create-lombard.component.html',
   styleUrl: './create-lombard.component.scss'
 })

@@ -1,10 +1,21 @@
-export interface Notification{
-
+export interface Notification {
   _id?: string;
-  userId: string;         // кому принадлежит уведомление
-  type: 'chat' | 'system' | 'offer';
-  message: string;
-  isRead: boolean;
-  createdAt: Date;
+  userId: string;  // кому
+  type: 
+    | 'new-offer'
+    | 'offer-accepted'
+    | 'offer-rejected'
+    | 'new-message'
+    | 'system'
+    | 'chat-opened'
+    | 'product-sold'
+    | 'price-changed';
 
+  title: string;
+  message?: string;
+
+  refId?: string; // ссылка на offerId / chatId / productId
+
+  isRead: boolean;
+  createdAt?: Date;
 }

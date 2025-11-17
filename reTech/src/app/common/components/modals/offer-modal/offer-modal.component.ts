@@ -1,0 +1,48 @@
+import { Component, Input } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Offer } from '../../../../shared/interfaces/offer.interface';
+
+@Component({
+  selector: 'app-offer-modal',
+  standalone: true,
+  imports: [ReactiveFormsModule],
+  templateUrl: './offer-modal.component.html',
+  styleUrl: './offer-modal.component.scss'
+})
+export class OfferModalComponent {
+
+  @Input() productId!:string;
+  @Input() pawnshopId!:string;
+
+  constructor(
+    public activeModal: NgbActiveModal,
+    private fb: FormBuilder
+  ){
+
+  }
+
+  offerForm = this.fb.group({
+    price: ['', [Validators.required, Validators.min(1)]],
+    message: ['']
+  });
+
+  submit() {
+    if (this.offerForm.invalid) return;
+
+    const offer: Offer = {
+      productId: this.productId,
+      pawnshopId: this.pawnshopId,
+      price: Number(this.offerForm.value.price),
+      message: this.offerForm.value.message || '',
+      status: 'pending'
+    };
+
+    this.activeModal.close(offer); // возвращаем данные наверх
+  }
+
+  cancel() {
+    this.activeModal.dismiss();
+  }
+
+}
