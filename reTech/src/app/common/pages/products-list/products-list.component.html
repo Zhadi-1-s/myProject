@@ -21,7 +21,7 @@
         <div *ngIf="products.length > 0; else noProducts" class="row g-3">
             <div class="col-md-4" *ngFor="let product of products">
 
-            <div class="card shadow-sm h-100 border-0 position-relative"
+            <div class="card shadow-sm position-relative product-card"
                 (click)="openProductDetails(product)"
 
                 style="cursor: pointer;">
@@ -41,7 +41,7 @@
                 <img
                     *ngIf="product.photos?.length > 0; else noPhoto"
                     [src]="product.photos[0]"
-                    class="card-img-top"
+                    class="card-img-top product-card-img"
                     alt="{{ product.title }}"
                     style="height: 180px; object-fit: cover;"
                 />
@@ -54,30 +54,28 @@
 
                 <div class="card-body">
 
-                <!-- Название -->
-                <h5 class="card-title fw-semibold mb-2">
-                    {{ product.title }}
-                </h5>
+                    <!-- Название -->
+                    <h5 class="card-title fw-semibold mb-2">
+                        {{ product.title }}
+                    </h5>
 
-                <!-- Цена -->
-                <p class="card-text text-muted mb-1">
-                    <i class="fa-solid fa-tag me-1 text-secondary"></i>
-                    {{ product.price | number:'1.0-0' }} ₸
-                </p>
+                    <!-- Цена -->
+                    <p class="card-text text-muted mb-1">
+                        <i class="fa-solid fa-tag me-1 text-secondary"></i>
+                        {{ product.price | number:'1.0-0' }} ₸
+                    </p>
 
-                <!-- Категория -->
-                <p class="card-text text-muted mb-1">
-                    <i class="fa-solid fa-layer-group me-1 text-secondary"></i>
-                    {{ product.category }}
-                </p>
+                    <!-- Категория -->
+                    <p class="card-text text-muted mb-1">
+                        <i class="fa-solid fa-layer-group me-1 text-secondary"></i>
+                        {{ product.category }}
+                    </p>
 
-
-
-                <!-- Дата -->
-                <p class="card-text text-muted small">
-                    <i class="fa-regular fa-calendar me-1"></i>
-                    {{ product.createdAt | date:'dd.MM.yyyy' }}
-                </p>
+                    <!-- Дата -->
+                    <p class="card-text text-muted small">
+                        <i class="fa-regular fa-calendar me-1"></i>
+                        {{ product.createdAt | date:'dd.MM.yyyy' }}
+                    </p>
 
                 </div>
             </div>

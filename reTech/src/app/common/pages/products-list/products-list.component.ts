@@ -26,7 +26,7 @@ export class ProductsListComponent implements OnInit {
   
   pawnshopId:string;
   products$:Observable<Product[]>;
-  filteredProducts$:Observable<Product[]> = of([])
+  filteredProducts$:Observable<Product[]>;
   searchTerm$ = new BehaviorSubject<string>('');
 
   appliedFilters$ = new BehaviorSubject<string[]>([])
@@ -53,16 +53,23 @@ export class ProductsListComponent implements OnInit {
         tap(user => console.log('Current user:', user))
       )
     ]).pipe(
-      map(([items, user]) => {
-        let filtered;
+      switchMap(([items,user]) => {
         if(user?._id){
-          filtered = items.filter(p => p.status === 'active' && p.ownerId !== user._id);
-          console.log('Filtered products (excluding user):', filtered);
-        } else {
-          filtered = items.filter(p => p.status === 'active');
-          console.log('Filtered products (all active):', filtered);
+          return this.pawnShopService.getLombardByUserId(user?._id).pipe(
+            map(pawnshop => {
+              const filtered = items.filter(
+                s => s.status === 'active' && pawnshop._id !== s.ownerId
+              );
+              console.log('Filtered products (excluding own):', filtered);
+              return filtered;
+            })
+          )
         }
-        return filtered;
+        else {
+          const filtered = items.filter(p => p.status === 'active');
+          console.log('Filtered products (all active):', filtered);
+          return of(filtered); // Wrap the array in 'of' to return an Observable<Product[]>
+        }
       })
     );
 
@@ -83,8 +90,7 @@ export class ProductsListComponent implements OnInit {
 
 
 
-  onSearchChange(event){
-    const value = (event.target as HTMLInputElement).value;
+  onSearchChange(value:string){
     this.searchTerm$.next(value);
   }
 
