@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional, IsArray, IsEnum, IsMongoId, isString, IsNumber } from 'class-validator';
 import { Category } from '../enums/category.enum';
+import { Status } from '../enums/status.enum';
 
 export class CreateProductDto {
   @ApiProperty({ example: '6707f9a3c52f1a2b6b2f1d1c', description: 'ID владельца (User._id) или (PawnShopId)' })
@@ -29,10 +30,9 @@ export class CreateProductDto {
   @IsArray()
   photos?: string[];
 
-  @ApiProperty({ enum: ['open', 'sold', 'closed'], default: 'open' })
+  @ApiProperty({enum:Status,default:Status.ACTIVE})
   @IsOptional()
-  @IsEnum(['open', 'sold', 'closed'])
-  status?: 'open' | 'sold' | 'closed';
+  status?: Status;
 
   @ApiProperty({example:'1000 тг',required:true})
   @IsNumber()

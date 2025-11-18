@@ -50,7 +50,7 @@ export class ProductsListComponent implements OnInit {
       ),
       this.authService.currentUser$.pipe(
         startWith(null),
-        tap(user => console.log('Current user:', user))
+        tap(user => this.user = user)
       )
     ]).pipe(
       switchMap(([items,user]) => {

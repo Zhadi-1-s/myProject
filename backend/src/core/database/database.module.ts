@@ -8,6 +8,7 @@ import { PawnshopProfile,PawnshopProfileSchema } from "./schemas/shopProfile.sch
 import { PawnInventoryItem,PawnInventoryItemSchema } from "./schemas/pawnInventory.schema";
 import { Review, ReviewSchema } from "./schemas/reviews.schema";
 import { PawnshopTerms, PawnshopTermsSchema } from "./schemas/pawnshop-term.schema";
+import { NotificationSchema } from "./schemas/notifications.schema";
 
 @Module({
     imports:[
@@ -19,6 +20,7 @@ import { PawnshopTerms, PawnshopTermsSchema } from "./schemas/pawnshop-term.sche
         { name: PawnInventoryItem.name, schema: PawnInventoryItemSchema },
         { name: PawnshopProfile.name, schema: PawnshopProfileSchema },
         {name:Review.name, schema:ReviewSchema},
+        {name:Notification.name, schema:NotificationSchema}
         ]),
     ],
     exports:[MongooseModule],

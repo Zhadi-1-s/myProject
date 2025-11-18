@@ -1,11 +1,42 @@
 <div class="topbar">
   <div class="topbar-right">
 
+    <div class="position-relative">
+      <button 
+          class="btn btn-light btn-sm rounded-circle border-none me-3 d-flex align-items-center justify-content-center"
+          style="width: 40px; height: 40px;"
+          (click)="toggleNotifications()">
+
+        <i class="fa-solid fa-bell"></i>
+
+        <!-- Badge -->
+        <span *ngIf="unreadCount$ |async as unreadCount"
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              style="font-size: 10px;">
+          {{ unreadCount }}
+        </span>
+      </button>
+
+      <!-- Dropdown -->
+      <div 
+        class="notifications-dropdown"
+        *ngIf="isNotificationsOpen && notifications$ | async as notifications">
+
+        <div class="notif-header">Notifications</div>
+
+        <div *ngIf="notifications.length === 0" class="empty-msg">
+          No notifications
+        </div>
+
+        <div *ngFor="let n of notifications" class="notif-item" [class.unread]="!n.isRead">
+          <div class="notif-title">{{ n.title }}</div>
+          <div class="notif-msg">{{ n.message }}</div>
+          <div class="notif-date">{{ n.createdAt | date:'short' }}</div>
+        </div>
+
+      </div>
+    </div>
     <!-- Offers Button -->
-    <button class="btn btn-light btn-sm rounded-circle border-none me-3 d-flex align-items-center justify-content-center"
-            style="width: 40px; height: 40px;">
-      <i class="fa-solid fa-bell"></i>
-    </button>
 
     <!-- Language Switcher -->
     <div class="language-switcher dropdown">

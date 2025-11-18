@@ -38,7 +38,7 @@ export class CreateProductComponent {
       category: ['', Validators.required],
       description: [''],
       photos: this.fb.control<string[]>([]),
-      status: ['open'],
+      status: ['active'],
       price: [null, [Validators.required, Validators.min(1)]],
     });
   }
@@ -75,6 +75,7 @@ export class CreateProductComponent {
       ...this.productForm.value,
       ownerId: this.ownerId,
       photos: uploadedUrls,
+      status:'active'
     };
 
     this.productService.createProduct(product).subscribe(() => {

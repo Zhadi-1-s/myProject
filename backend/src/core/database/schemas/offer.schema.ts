@@ -9,7 +9,7 @@ export class Offer {
   @Prop({ type: Types.ObjectId, ref: 'Product', required: true })
   productId: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  @Prop({ type: Types.ObjectId, ref: 'Pawnshop', required: true })
   pawnshopId: Types.ObjectId;
 
   @Prop({ required: true })

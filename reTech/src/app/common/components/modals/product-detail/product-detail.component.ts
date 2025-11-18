@@ -34,6 +34,12 @@ export class ProductDetailComponent implements OnInit,OnChanges {
       if (changes['user']) {
         console.log('USER ПРИШЁЛ В МОДАЛКУ:', this.user);
       }
+      if (changes['pawnshop']) {
+        console.log('PAWNSHOP ПРИШЁЛ В МОДАЛКУ:', this.pawnshop);
+      }
+      if (changes['product']) {
+        console.log('PRODUCT ПРИШЁЛ В МОДАЛКУ:', this.product);
+      }
   }
 
  ngOnInit() {
@@ -51,12 +57,15 @@ export class ProductDetailComponent implements OnInit,OnChanges {
       return;
     }
 
+     console.log('ngOnInit PRODUCT:', this.product, 'type of ownerId:', typeof this.product.ownerId);
+      console.log('ngOnInit PAWNSHOP:', this.pawnshop, 'type of _id:', this.pawnshop?._id);
+
     if (
       this.pawnshop &&
       this.product.ownerId === this.pawnshop._id &&
        this.pawnshop.userId === this.user._id
     ) {
-
+      console.log('pawnshop._id', this.pawnshop._id);
       this.canEdit = true;
       return;
     }
@@ -69,7 +78,8 @@ export class ProductDetailComponent implements OnInit,OnChanges {
       centered: true,
       backdrop: 'static'
     });
-
+    console.log(this.product._id)
+    console.log(this.pawnshop._id)
     modalRef.componentInstance.productId = this.product._id
     modalRef.componentInstance.pawnshopId = this.pawnshop._id;
 

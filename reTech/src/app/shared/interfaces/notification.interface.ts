@@ -1,4 +1,4 @@
-export interface Notification {
+export interface AppNotification {
   _id?: string;
   userId: string;  // кому
   type: 
@@ -12,9 +12,9 @@ export interface Notification {
     | 'price-changed';
 
   title: string;
-  message?: string;
+  message: string;
 
-  refId?: string; // ссылка на offerId / chatId / productId
+  refId: string; // ссылка на offerId / chatId / productId
 
   isRead: boolean;
   createdAt?: Date;

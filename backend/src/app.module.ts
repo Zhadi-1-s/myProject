@@ -10,6 +10,8 @@ import { ServiceModule } from './core/common/services/services.module';
 import { PawnshopModule } from './core/common/pawnshop/pawnshop.module';
 import { ProductModule } from './core/common/product/product.module';
 import { SlotModule } from './core/common/slot/slot.module';
+import { NotificationModule } from './core/common/notification/notification.module';
+import { OfferModule } from './core/common/offer/offer.module';
 
 @Module({
   imports: [
@@ -26,7 +28,9 @@ import { SlotModule } from './core/common/slot/slot.module';
     ServiceModule,
     PawnshopModule,
     ProductModule,
-    SlotModule
+    SlotModule,
+    NotificationModule,
+    OfferModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Offer } from '../../../../shared/interfaces/offer.interface';
+import { OfferService } from '../../../../shared/services/offer.service';
 
 @Component({
   selector: 'app-offer-modal',
@@ -17,7 +18,8 @@ export class OfferModalComponent {
 
   constructor(
     public activeModal: NgbActiveModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private offerService:OfferService
   ){
 
   }
@@ -38,7 +40,11 @@ export class OfferModalComponent {
       status: 'pending'
     };
 
-    this.activeModal.close(offer); // возвращаем данные наверх
+    this.offerService.createOffer(offer).subscribe((next) => {
+      console.log(next, 'Offer sended succesfully')
+      this.activeModal.close(offer); // возвращаем данные наверх
+    })
+
   }
 
   cancel() {
