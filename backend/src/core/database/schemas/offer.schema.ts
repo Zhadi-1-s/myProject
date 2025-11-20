@@ -6,10 +6,10 @@ export type OfferDocument = Offer & Document;
 
 @Schema({ timestamps: { createdAt: true, updatedAt: false } })
 export class Offer {
-  @Prop({ type: Types.ObjectId, ref: 'Product', required: true })
+  @Prop({ type: Types.ObjectId, ref: 'ProductId', required: true })
   productId: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: 'Pawnshop', required: true })
+  @Prop({ type: Types.ObjectId, ref: 'PawnshopProfile', required: true })
   pawnshopId: Types.ObjectId;
 
   @Prop({ required: true })

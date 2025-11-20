@@ -24,7 +24,7 @@ export class ProductsListComponent implements OnInit {
 
   user:User;
   
-  pawnshopId:string;
+  pawnshop:PawnshopProfile;
   products$:Observable<Product[]>;
   filteredProducts$:Observable<Product[]>;
   searchTerm$ = new BehaviorSubject<string>('');
@@ -57,6 +57,8 @@ export class ProductsListComponent implements OnInit {
         if(user?._id){
           return this.pawnShopService.getLombardByUserId(user?._id).pipe(
             map(pawnshop => {
+              this.pawnshop = pawnshop;
+              console.log(pawnshop)
               const filtered = items.filter(
                 s => s.status === 'active' && pawnshop._id !== s.ownerId
               );
@@ -88,8 +90,6 @@ export class ProductsListComponent implements OnInit {
     );
   }
 
-
-
   onSearchChange(value:string){
     this.searchTerm$.next(value);
   }
@@ -99,6 +99,7 @@ export class ProductsListComponent implements OnInit {
 
     modalRef.componentInstance.product = item;
     modalRef.componentInstance.user = this.user;
+    modalRef.componentInstance.pawnshop = this.pawnshop;
   }
 
 }
