@@ -82,6 +82,7 @@ export class ProductDetailComponent implements OnInit,OnChanges {
     console.log(this.pawnshop._id)
     modalRef.componentInstance.productId = this.product._id
     modalRef.componentInstance.pawnshopId = this.pawnshop._id;
+    modalRef.componentInstance.productOwnerId = this.product.ownerId;
 
     modalRef.result.then(result => {
       if (result) {

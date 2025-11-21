@@ -4,17 +4,31 @@ import { Offer,OfferDocument } from 'src/core/database/schemas/offer.schema';
 import { Model, Types } from 'mongoose';
 import { CreateOfferDto } from './offer.dto';
 import { UpdateOfferStatusDto } from './update-offer.dto';
+import { NotificationService } from '../notification/notification.service';
 
 @Injectable()
 export class OfferService {
   constructor(
     @InjectModel(Offer.name)
     private offerModel: Model<OfferDocument>,
+    private notificationService:NotificationService
   ) {}
 
   // Создать оффер
   async create(dto: CreateOfferDto) {
-    return this.offerModel.create(dto);
+    const offer = await this.offerModel.create(dto);
+
+    await this.notificationService.create({
+      userId: dto.productOwnerId, // кому отправляем уведомление
+      type: 'new-offer',
+      title: 'New offer received',
+      message: `Someone offered $${dto.price} on your product.`,
+      refId: offer._id?.toString(),
+      isRead:false
+    });
+
+    return offer;
+
   }
 
   // Получить офферы по productId

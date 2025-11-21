@@ -12,6 +12,9 @@ export class Offer {
   @Prop({ type: Types.ObjectId, ref: 'PawnshopProfile', required: true })
   pawnshopId: Types.ObjectId;
 
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
+  productOwnerId: Types.ObjectId;
+
   @Prop({ required: true })
   price: number;
 

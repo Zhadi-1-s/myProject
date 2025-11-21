@@ -15,6 +15,7 @@ export class OfferModalComponent {
 
   @Input() productId!:string;
   @Input() pawnshopId!:string;
+  @Input() productOwnerId:string;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -35,6 +36,7 @@ export class OfferModalComponent {
     const offer: Offer = {
       productId: this.productId,
       pawnshopId: this.pawnshopId,
+      productOwnerId: this.productOwnerId,
       price: Number(this.offerForm.value.price),
       message: this.offerForm.value.message || '',
       status: 'pending'

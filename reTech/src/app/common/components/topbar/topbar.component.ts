@@ -6,7 +6,7 @@ import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { inject } from '@angular/core';
 import { AuthService } from '../../../shared/services/auth.service';
 import { User } from '../../../shared/interfaces/user.interface';
-import { Observable } from 'rxjs';
+import { Observable, switchMap,filter,map } from 'rxjs';
 import { NotificationService } from '../../../shared/services/notification.service';
 
 import { AppNotification } from '../../../shared/interfaces/notification.interface';
@@ -21,7 +21,7 @@ import { AppNotification } from '../../../shared/interfaces/notification.interfa
 export class TopbarComponent implements OnInit {
 
   currentLang = 'en';
-  user: User;
+  
   isNotificationsOpen = false;
 
   isPawnShop:boolean = false;
@@ -29,7 +29,8 @@ export class TopbarComponent implements OnInit {
   unreadCount$ : Observable<number>;
 
   notifications$:Observable<AppNotification[]>
-
+  user$ = this.authService.currentUser$;
+  isPawnShop$: Observable<boolean>;
   private platformId = inject(PLATFORM_ID);
 
   constructor(
@@ -58,14 +59,21 @@ export class TopbarComponent implements OnInit {
     //     this.translate.use('en');
     //   }
     // }
-    this.authService.currentUser$.subscribe(user => {
-      this.user = user;
-      this.notifications$ = this.notificationService.getUserNotifications(user?._id);
-      this.unreadCount$ = this.notificationService.getUnreadCount(user?._id)
-      if (user && user.role === 'pawnshop') {
-        this.isPawnShop = true;
-      }
-    });
+
+    this.notifications$ = this.user$.pipe(
+      filter(user => !!user?._id),
+      switchMap(user => this.notificationService.getUserNotifications(user!._id))
+    );
+
+    this.unreadCount$ = this.user$.pipe(
+      filter(user => !!user?._id),
+      switchMap(user => this.notificationService.getUnreadCount(user!._id))
+    )
+
+    this.isPawnShop$ = this.user$.pipe(
+      map(user => user?.role === 'pawnshop')
+    );
+
   }
 
   toggleNotifications() {

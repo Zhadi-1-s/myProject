@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsNotEmpty, IsBoolean } from 'class-validator';
 
 export class CreateNotificationDto {
   @IsString()
@@ -28,4 +28,9 @@ export class CreateNotificationDto {
   @IsString()
   @IsOptional()
   refId?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isRead:boolean;
+
 }
