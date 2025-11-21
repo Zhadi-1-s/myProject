@@ -117,5 +117,19 @@
     "View Offers":"Предложения",
     "Create slot":"Создать слот",
     "Send Offer":"Отправить предложение",
-    "Close":"Close"
+    "Close":"Close",
+    "Notifications":"Уведомления",
+    "No notifications":"Нет уведомлении",
+    "Profile":"Профиль",
+    "Logout":"Выйти",
+    "new-offer": "Новый оффер",
+    "offer-accepted": "Оффер принят",
+    "offer-rejected": "Оффер отклонён",
+    "new-message": "Новое сообщение",
+    "system": "Системное уведомление",
+    "chat-opened": "Чат открыт",
+    "product-sold": "Товар продан",
+    "price-changed": "Цена изменена",
+    "New offer received": "Получен новый оффер",
+    "Someone offered on your product.": "Кто-то предложил за ваш товар."
 }

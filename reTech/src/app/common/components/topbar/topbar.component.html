@@ -11,9 +11,15 @@
         <i class="fa-solid fa-bell"></i>
 
         <!-- Badge: количество непрочитанных -->
-        <span *ngIf="unreadCount$ | async as unreadCount; else noUnread"
-              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-              style="font-size: 10px;">
+        <span *ngIf="unreadCount$ | async as unreadCount"
+              class="position-absolute badge rounded-pill bg-danger"
+              style="
+                top: 10px;
+                right: 30px;
+                transform: translate(50%, -50%);
+                font-size: 10px;
+                padding: 3px 6px;
+              ">
           {{ unreadCount }}
         </span>
         <ng-template #noUnread></ng-template>
@@ -24,15 +30,15 @@
         class="notifications-dropdown"
         *ngIf="isNotificationsOpen && (notifications$ | async) as notifications">
 
-        <div class="notif-header">Notifications</div>
+        <div class="notif-header">{{'Notifications'|translate}}</div>
 
         <div *ngIf="notifications.length === 0" class="empty-msg">
-          No notifications
+          {{'No notifications'|translate}}
         </div>
 
         <div *ngFor="let n of notifications" class="notif-item" [class.unread]="!n.isRead">
-          <div class="notif-title">{{ n.title }}</div>
-          <div class="notif-msg">{{ n.message }}</div>
+          <div class="notif-title">{{ n.title | translate}}</div>
+          <div class="notif-msg">{{ n.message | translate}}</div>
           <div class="notif-date">{{ n.createdAt | date:'short' }}</div>
         </div>
 
@@ -70,12 +76,12 @@
       <ul class="dropdown-menu dropdown-menu-end">
         <li>
           <a class="dropdown-item" [routerLink]="isPawnShop ? '/lombard-profile' : '/profile'">
-            <i class="fa-solid fa-user me-2"></i> Profile
+            <i class="fa-solid fa-user me-2"></i> {{'Profile'|translate}}
           </a>
         </li>
         <li>
           <a class="dropdown-item" (click)="logout()">
-            <i class="fa-solid fa-right-from-bracket me-2"></i> Logout
+            <i class="fa-solid fa-right-from-bracket me-2"></i> {{'Logout'|translate}}
           </a>
         </li>
       </ul>

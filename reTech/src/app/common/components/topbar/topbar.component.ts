@@ -1,6 +1,6 @@
 import { Component, OnInit ,PLATFORM_ID} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 
 import { inject } from '@angular/core';
@@ -14,7 +14,7 @@ import { AppNotification } from '../../../shared/interfaces/notification.interfa
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [RouterLink,CommonModule,DatePipe],
+  imports: [RouterLink,CommonModule,DatePipe,TranslateModule],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss'
 })

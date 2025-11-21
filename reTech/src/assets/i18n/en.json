@@ -116,6 +116,20 @@
     "View Offers":"View Offers",
     "Create slot":"Create slot",
     "Send Offer":"Send Offer",
-    "Close":"Close"
+    "Close":"Close",
+    "Notifications":"Notifications",
+    "No notificatinos":"No notifications",
+    "Profile":"Profile",
+    "Logout":"Logout",
+    "new-offer": "New offer",
+    "offer-accepted": "Offer accepted",
+    "offer-rejected": "Offer rejected",
+    "new-message": "New message",
+    "system": "System notification",
+    "chat-opened": "Chat opened",
+    "product-sold": "Product sold",
+    "price-changed": "Price changed",
+    "New offer received": "New offer received",
+    "Someone offered on your product.": "Someone offered on your product."
     
 }

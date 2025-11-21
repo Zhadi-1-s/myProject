@@ -5,24 +5,29 @@ import { Model, Types } from 'mongoose';
 import { CreateOfferDto } from './offer.dto';
 import { UpdateOfferStatusDto } from './update-offer.dto';
 import { NotificationService } from '../notification/notification.service';
+import { PawnshopService } from '../pawnshop/pawnshop.service';
 
 @Injectable()
 export class OfferService {
   constructor(
     @InjectModel(Offer.name)
     private offerModel: Model<OfferDocument>,
-    private notificationService:NotificationService
+    private notificationService:NotificationService,
+    private pawnshopService:PawnshopService
   ) {}
 
   // Создать оффер
   async create(dto: CreateOfferDto) {
     const offer = await this.offerModel.create(dto);
 
+    const pawnshop = await this.pawnshopService.findOne(dto.pawnshopId);
+    const pawnshopName = pawnshop.name;
+    
     await this.notificationService.create({
       userId: dto.productOwnerId, // кому отправляем уведомление
       type: 'new-offer',
       title: 'New offer received',
-      message: `Someone offered $${dto.price} on your product.`,
+      message: `${pawnshopName} offered on your product.`,
       refId: offer._id?.toString(),
       isRead:false
     });
