@@ -1,3 +1,14 @@
+.products-header {
+  display: flex;
+  align-items: baseline; /* по центру по вертикали */
+  gap: 10px;
+}
+.results-count {
+  font-size: 0.9rem;
+  color: #acacac;
+  align-self: baseline;
+  align-items: baseline;
+}
 .search-container{
 
     display: flex;
@@ -73,11 +84,16 @@
   font-size: 0.75rem;  // компактный текст
   margin-bottom: 2px;
 }
+.sort-block-wrapper {
+  width: 100%;       /* занимает всю ширину родителя */
+  max-width: 50%;    /* ограничение по ширине, совпадает с search-box */
+}
 .sort-block{
   display: flex;
   flex-direction: row;
   gap: 15px;
   align-items: baseline;
+  width: 100%;
 }
 .price-sort {
   background: #fff;
@@ -85,7 +101,7 @@
   border-radius: 10px;
   border: 1px solid #e3e3e3;
   display: flex;
-  align-items: center;
+
   flex-direction: column;
   gap: 16px;   /* расстояние между элементами */
   width: fit-content; /* контейнер подстраивается под содержимое */
@@ -185,6 +201,13 @@
   background: #dedede;
   transform: scale(0.97);
 }
+.help-tooltips {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+}
 .help-items {
   border: 0.3px solid rgba(108, 117, 125, 0.3);
   width: 100px;
@@ -192,7 +215,6 @@
   text-align: center;
   align-items: center;
   display: flex;
-  flex-direction: row;
   justify-content: center;
   border-radius: 18px;
   padding: 6px 0;
@@ -215,4 +237,44 @@
     transform: scale(0.98);
     box-shadow: none;
   }
+}
+.apply-filters {
+  display: flex;
+  justify-content: flex-end;
+}
+.apply-filters .btn {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.75rem;
+}
+.applied-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+
+  .filter-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    background: #f1f3f5;
+    color: #f6f6f6;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-size: 0.78rem;
+    font-weight: 500;
+
+    border: 1px solid #ddd;
+    transition: all .2s ease;
+    cursor: default;
+
+    &:hover {
+      background: #e9ecef;
+    }
+  }
+}
+
+.applied-filters .badge {
+  font-size: 0.75rem;
+  padding: 0.35em 0.5em;
 }
