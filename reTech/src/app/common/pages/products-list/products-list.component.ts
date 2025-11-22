@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { CommonModule,isPlatformBrowser } from '@angular/common';
+import { Component, OnInit,Inject,PLATFORM_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject, Observable,of,combineLatest,map, filter, tap, switchMap,startWith } from 'rxjs';
 import { Product } from '../../../shared/interfaces/product.interface';
@@ -11,12 +11,14 @@ import { User } from '../../../shared/interfaces/user.interface';
 import { AuthService } from '../../../shared/services/auth.service';
 import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
 import { LombardService } from '../../../shared/services/lombard.service';
+import { TranslateModule } from '@ngx-translate/core';
+import {NgxSliderModule,Options} from '@angular-slider/ngx-slider'
 
 
 @Component({
   selector: 'app-products-list',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule,RouterModule],
+  imports: [CommonModule,FormsModule,ReactiveFormsModule,RouterModule,TranslateModule,NgxSliderModule],
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.scss'
 })
@@ -31,17 +33,44 @@ export class ProductsListComponent implements OnInit {
 
   appliedFilters$ = new BehaviorSubject<string[]>([])
 
+  isBrowser = false;
+
+  sliderOptions: Options = {
+    floor: 0,
+    ceil: 100000,
+    step: 1000,
+    draggableRange: true,
+  };
+
+  searchHelpItemsList: string[] = [
+    'Iphone',
+    'Samsung',
+    'Xiaomi',
+    'Laptop',
+    'Headphones',
+    'Camera',
+    'Watch',
+    'Tablet'
+  ]
+
+  priceFrom: number | null = null;
+  priceTo: number | null = null;
+  priceSort: 'asc' | 'desc' | '' = '';
+
   constructor(
     private productService :ProductService,
     private modalService: NgbModal,
     private authService:AuthService,
-    private pawnShopService :LombardService
+    private pawnShopService :LombardService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ){
 
   }
 
   ngOnInit() {
     console.log('ngOnInit start');
+
+    this.isBrowser = isPlatformBrowser(this.platformId);
 
     // Загружаем товары и отслеживаем юзера
     this.products$ = combineLatest([
@@ -58,19 +87,20 @@ export class ProductsListComponent implements OnInit {
           return this.pawnShopService.getLombardByUserId(user?._id).pipe(
             map(pawnshop => {
               this.pawnshop = pawnshop;
-              console.log(pawnshop)
-              const filtered = items.filter(
-                s => s.status === 'active' && pawnshop._id !== s.ownerId
-              );
-              console.log('Filtered products (excluding own):', filtered);
-              return filtered;
+
+              if(pawnshop){
+                return items.filter(
+                  s => s.status === 'active' && s.ownerId !== pawnshop._id
+                );
+              }
+              
+              
+              return items.filter(p => p.status === 'active');
             })
           )
         }
         else {
-          const filtered = items.filter(p => p.status === 'active');
-          console.log('Filtered products (all active):', filtered);
-          return of(filtered); // Wrap the array in 'of' to return an Observable<Product[]>
+          return of(items.filter(p => p.status === 'active'));
         }
       })
     );
@@ -89,6 +119,8 @@ export class ProductsListComponent implements OnInit {
       })
     );
   }
+
+  applyFilters(){}
 
   onSearchChange(value:string){
     this.searchTerm$.next(value);

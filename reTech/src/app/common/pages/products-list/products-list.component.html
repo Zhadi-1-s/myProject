@@ -15,82 +15,90 @@
         </div>
     </div>
 
+   <div class="sort-block d-flex align-items-center gap-3 mt-2 flex-wrap">
+        <span class="results-count">
+            {{ (filteredProducts$ | async)?.length || 0 }} {{ 'Results' | translate }}
+     </span>
 
-    <div *ngIf="(filteredProducts$ | async) as products; else loading">
+        <div class="price-sort d-flex align-items-center gap-2 flex-wrap">
 
-        <div *ngIf="products.length > 0; else noProducts" class="row g-3">
-            <div class="col-md-4" *ngFor="let product of products">
+        <!-- Диапазон цены -->
+        <div class="price-range-slider flex-grow-1">
+            <ngx-slider *ngIf="isBrowser" 
+                        [(value)]="priceFrom"
+                        [(highValue)]="priceTo"
+                        [options]="sliderOptions"
+                        (userChangeEnd)="applyFilters()">
+            </ngx-slider>
 
-            <div class="card shadow-sm position-relative product-card"
-                (click)="openProductDetails(product)"
-
-                style="cursor: pointer;">
-
-                <!-- ❤️ Избранное -->
-                <!-- <i
-                class="fa-solid fa-heart"
-                style="position: absolute; top: 10px; right: 10px; font-size: 1.4rem; cursor: pointer;"
-                [ngClass]="{
-                    'text-danger': user?.favoriteItems?.includes(product._id),
-                    'text-white': !user?.favoriteItems?.includes(product._id)
-                }"
-                (click)="toggleFavorite(product._id, $event)"
-                ></i> -->
-
-                <!-- Фото товара -->
-                <img
-                    *ngIf="product.photos?.length > 0; else noPhoto"
-                    [src]="product.photos[0]"
-                    class="card-img-top product-card-img"
-                    alt="{{ product.title }}"
-                    style="height: 180px; object-fit: cover;"
-                />
-
-                <ng-template #noPhoto>
-                    <div class="d-flex justify-content-center align-items-center bg-light" style="height: 180px;">
-                        <i class="fa-solid fa-image text-secondary fs-1"></i>
-                    </div>
-                </ng-template>
-
-                <div class="card-body">
-
-                    <!-- Название -->
-                    <h5 class="card-title fw-semibold mb-2">
-                        {{ product.title }}
-                    </h5>
-
-                    <!-- Цена -->
-                    <p class="card-text text-muted mb-1">
-                        <i class="fa-solid fa-tag me-1 text-secondary"></i>
-                        {{ product.price | number:'1.0-0' }} ₸
-                    </p>
-
-                    <!-- Категория -->
-                    <p class="card-text text-muted mb-1">
-                        <i class="fa-solid fa-layer-group me-1 text-secondary"></i>
-                        {{ product.category }}
-                    </p>
-
-                    <!-- Дата -->
-                    <p class="card-text text-muted small">
-                        <i class="fa-regular fa-calendar me-1"></i>
-                        {{ product.createdAt | date:'dd.MM.yyyy' }}
-                    </p>
-
-                </div>
-            </div>
+            <div class="price-values d-flex justify-content-between mt-1">
+                <span>{{ priceFrom | number:'1.0-0' }} ₸</span>
+                <span>{{ priceTo | number:'1.0-0' }} ₸</span>
             </div>
         </div>
 
-        <!-- Нет товаров -->
+        <!-- Сортировка -->
+        <select class="form-select form-select-sm sort-select" [(ngModel)]="priceSort" (ngModelChange)="applyFilters()">
+            <option value="">Сортировка</option>
+            <option value="asc">По возрастанию</option>
+            <option value="desc">По убыванию</option>
+        </select>
+
+        </div>
+    </div>
+
+
+
+    <div *ngIf="(filteredProducts$ | async) as products; else loading">
+
+        <div *ngIf="products.length > 0; else noProducts"
+            class="products-wrapper">
+
+            <div *ngFor="let product of products" class="">
+                <div class="shadow-sm position-relative product-card"
+                    (click)="openProductDetails(product)">
+                    
+                    <!-- Фото товара -->
+                    <img
+                        *ngIf="product.photos?.length > 0; else noPhoto"
+                        [src]="product.photos[0]"
+                        class="product-card-img"
+                        alt="{{ product.title }}"
+                        />
+
+                    <ng-template #noPhoto>
+                        <div class="d-flex justify-content-center align-items-center bg-light" style="height: 140px;">
+                            <i class="fa-solid fa-image text-secondary fs-1"></i>
+                        </div>
+                    </ng-template>
+
+                    <div class="card-body">
+                        <h5 class="card-title fw-semibold mb-1">{{ product.title }}</h5>
+                        <p class="card-text text-muted mb-1">
+                            <i class="fa-solid fa-tag me-1 text-secondary"></i>
+                            {{ product.price | number:'1.0-0' }} ₸
+                        </p>
+                        <p class="card-text text-muted mb-1">
+                            <i class="fa-solid fa-layer-group me-1 text-secondary"></i>
+                            {{ product.category | translate }}
+                        </p>
+                        <p class="card-text text-muted small">
+                            <i class="fa-regular fa-calendar me-1"></i>
+                            {{ product.createdAt | date:'dd.MM.yyyy' }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <ng-template #noProducts>
             <div class="text-center text-muted mt-4">
             <i class="fa-regular fa-folder-open fs-3 mb-2"></i>
             <p>Нет доступных товаров</p>
             </div>
         </ng-template>
-
     </div>
+
 
     <ng-template #loading>
         <div class="text-center text-muted mt-4">

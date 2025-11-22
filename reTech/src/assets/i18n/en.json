@@ -130,6 +130,10 @@
     "product-sold": "Product sold",
     "price-changed": "Price changed",
     "New offer received": "New offer received",
-    "Someone offered on your product.": "Someone offered on your product."
+    "Someone offered on your product.": "Someone offered on your product.",
+    "Products":"Products",
+    "Lombards":"Lombards",
+    "Dashboard":"Dashboard",
+    "Help":"Help"
     
 }

@@ -131,5 +131,9 @@
     "product-sold": "Товар продан",
     "price-changed": "Цена изменена",
     "New offer received": "Получен новый оффер",
-    "Someone offered on your product.": "Кто-то предложил за ваш товар."
+    "Someone offered on your product.": "Кто-то предложил за ваш товар.",
+    "Products":"Товары",
+    "Lombards":"Ломбарды",
+    "Dashboard":"Главная",
+    "Help":"Помощь"
 }
