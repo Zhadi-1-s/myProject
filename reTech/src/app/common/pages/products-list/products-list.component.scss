@@ -18,7 +18,8 @@
 .products-wrapper {
   display: flex;
   flex-wrap: wrap;       // чтобы карточки переносились
-  gap: 30px;             // расстояние между карточками
+  gap: 30px; 
+  margin-top: 20px;            // расстояние между карточками
 }
 
 .product-card-wrapper {
@@ -42,12 +43,14 @@
   border: 1px solid #ddd;
   padding: 8px;
   background-color: #fff;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s; /* добавляем трансформацию */
   width: 150px;
+  cursor: pointer;
 }
 
 .product-card:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* более заметная тень */
+  transform: translateY(-4px); /* слегка поднимаем карточку */
 }
 
 .product-card-img {
@@ -76,8 +79,140 @@
   gap: 15px;
   align-items: baseline;
 }
-.rating-sort {
-  position: relative;
+.price-sort {
+  background: #fff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e3e3e3;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;   /* расстояние между элементами */
+  width: fit-content; /* контейнер подстраивается под содержимое */
+}
+
+/* Один блок слайдера */
+.price-slider-item {
+  display: flex;
+  flex-direction: column;
+  width: 120px; /* фикс ширина, чтобы ровно смотрелось в ряд */
+
+}
+
+/* подпись */
+.price-slider-item .label {
+  font-size: 0.75rem;
+  color: #838383;
+  margin-bottom: -4px;
+  font-weight: 700;
+}
+
+/* значение справа */
+.price-slider-item .value {
+  font-size: 0.75rem;
+  text-align: right;
+  margin-top: -6px;
+  color: #333;
+}
+
+/* уменьшаем высоту селекта */
+.price-sort select.form-select-sm {
+  width: 120px;          /* фиксированная ширина */
+  padding: 4px 6px;      /* делаем компактнее */
+  font-size: 0.8rem;
+  height: 32px;
+}
+::ng-deep .ngx-slider .ngx-slider-pointer {
+    width: 14px !important;
+    height: 14px !important;
+    top: -5px !important;
+    background-color: #4a7cff !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 4px rgba(0,0,0,0.2);
+}
+
+::ng-deep .ngx-slider .ngx-slider-pointer:after {
+    display: none !important;  /* убираем точку внутри */
+}
+
+::ng-deep .ngx-slider .ngx-slider-bar {
+    height: 4px !important;
+}
+
+::ng-deep .ngx-slider .ngx-slider-selection {
+    background-color: #4a7cff !important;
+    height: 4px !important;
+}
+::ng-deep .ngx-slider .ngx-slider-floor{
+    display: none !important;
+}
+::ng-deep .ngx-slider .ngx-slider-ceil {
+  display: none !important;
+}
+::ng-deep .ngx-slider .ngx-slider-model-value,
+::ng-deep .ngx-slider .ngx-slider-model-high-value {
+  display: none !important;
+}
+.toggle-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  background: #f6f6f6;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 6px 12px;
+
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+
   cursor: pointer;
-  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.toggle-filter i {
+  font-size: 0.9rem;
+  color: #999999;
+}
+
+.toggle-filter:hover {
+  background: #ebebeb;
+  border-color: #ccc;
+}
+
+.toggle-filter:active {
+  background: #dedede;
+  transform: scale(0.97);
+}
+.help-items {
+  border: 0.3px solid rgba(108, 117, 125, 0.3);
+  width: 100px;
+  height: 25px;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 18px;
+  padding: 6px 0;
+  cursor: pointer;
+  color: #6c757d; 
+  background-color: #fff;
+  font-size: 12px;
+  transition: all 0.25s ease;
+  border-color: #6c757d; 
+
+  &:hover {
+    background-color: #f1f1f1; 
+    color: #343a40; 
+    border-color: #6c757d; 
+    transform: translateY(-2px);
+    // box-shadow: 0 2px 6px rgba(108, 117, 125, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow: none;
+  }
 }

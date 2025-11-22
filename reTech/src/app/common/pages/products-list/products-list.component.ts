@@ -35,12 +35,19 @@ export class ProductsListComponent implements OnInit {
 
   isBrowser = false;
 
-  sliderOptions: Options = {
+  sliderMinOptions: Options = {
     floor: 0,
-    ceil: 100000,
-    step: 1000,
-    draggableRange: true,
+    ceil: 500000,
+    showTicks: false,
+    showTicksValues: false
   };
+
+  sliderMaxOptions: Options = {
+    floor: 0,
+    ceil: 500000
+  };
+
+  toogleFilterBlock: boolean = false;
 
   searchHelpItemsList: string[] = [
     'Iphone',

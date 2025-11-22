@@ -67,8 +67,10 @@ export class NavbarComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('access_token');
+    this.authService.setCurrentUser(null)
     this.router.navigate(['/login']);
   }
+
   goToLogin(){
     this.router.navigate(['/login']);
   }

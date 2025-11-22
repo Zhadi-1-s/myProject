@@ -15,36 +15,52 @@
         </div>
     </div>
 
-   <div class="sort-block d-flex align-items-center gap-3 mt-2 flex-wrap">
-        <span class="results-count">
-            {{ (filteredProducts$ | async)?.length || 0 }} {{ 'Results' | translate }}
-     </span>
+   <div class="sort-block d-flex flex-column  gap-3 mt-2 flex-wrap">
 
-        <div class="price-sort d-flex align-items-center gap-2 flex-wrap">
+        <div class="d-flex gap-3">
+            <span class="results-count">
+                {{ (filteredProducts$ | async)?.length || 0 }} {{ 'Results' | translate }}
+            </span>
+            <button class="toggle-filter" (click)="toogleFilterBlock = !toogleFilterBlock">
+                Фильтры
+                <i class="fa-solid fa-sliders"></i>
+            </button>
+        </div>
 
-        <!-- Диапазон цены -->
-        <div class="price-range-slider flex-grow-1">
-            <ngx-slider *ngIf="isBrowser" 
+        <div class="price-sort  gap-3" *ngIf="toogleFilterBlock">
+
+            <div>
+                <!-- Слайдер "Цена от" -->
+                <div class="price-slider-item">
+                    <label class="label">Цена от</label>
+                    <ngx-slider *ngIf="isBrowser"
                         [(value)]="priceFrom"
-                        [(highValue)]="priceTo"
-                        [options]="sliderOptions"
+                        [options]="sliderMinOptions"
                         (userChangeEnd)="applyFilters()">
-            </ngx-slider>
-
-            <div class="price-values d-flex justify-content-between mt-1">
-                <span>{{ priceFrom | number:'1.0-0' }} ₸</span>
-                <span>{{ priceTo | number:'1.0-0' }} ₸</span>
+                    </ngx-slider>
+                    <div class="value">{{ priceFrom | number:'1.0-0' }} ₸</div>
+                </div>
+    
+                <!-- Слайдер "Цена до" -->
+                <div class="price-slider-item">
+                    <label class="label">Цена до</label>
+                    <ngx-slider *ngIf="isBrowser"
+                        [(value)]="priceTo"
+                        [options]="sliderMaxOptions"
+                        (userChangeEnd)="applyFilters()">
+                    </ngx-slider>
+                    <div class="value">{{ priceTo | number:'1.0-0' }} ₸</div>
+                </div>
             </div>
-        </div>
 
-        <!-- Сортировка -->
-        <select class="form-select form-select-sm sort-select" [(ngModel)]="priceSort" (ngModelChange)="applyFilters()">
-            <option value="">Сортировка</option>
-            <option value="asc">По возрастанию</option>
-            <option value="desc">По убыванию</option>
-        </select>
+            <div class="help-tooltips">
+                <div *ngFor="let item of searchHelpItemsList" class="help-items" >
+                    <span>{{ item }}</span>
+                </div>
+            </div>
 
         </div>
+
     </div>
 
 
