@@ -23,19 +23,22 @@
     <div class="sort-block-wrapper w-50">
         <div class="sort-block d-flex flex-column  gap-3 mt-2 flex-wrap ">
      
-             <div class="d-flex gap-3">
-                 
-                 <button class="toggle-filter" (click)="toogleFilterBlock = !toogleFilterBlock">
-                     Фильтры
-                     <i class="fa-solid fa-sliders"></i>
-                 </button>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+    
+                    <!-- Кнопка всегда фиксированного размера -->
+                    <button class="toggle-filter btn btn-secondary" (click)="toogleFilterBlock = !toogleFilterBlock">
+                        Фильтры <i class="fa-solid fa-sliders"></i>
+                    </button>
 
-                 <div class="applied-filters d-flex flex-wrap gap-2 mb-2" *ngIf="(appliedFilters$ | async)?.length">
-                    <span class="filter-badge bg-secondary" *ngFor="let filter of appliedFilters$ | async">
-                        {{ filter }}
-                    </span>
+                    <!-- Applied filters: перенос на новую строку, если много -->
+                   <div class="applied-filters d-flex flex-wrap gap-2 mb-2" *ngIf="(appliedFilters$ | async)?.length">
+                        <span class="filter-badge bg-secondary" *ngFor="let filter of appliedFilters$ | async" >
+                            {{ filter }}
+                        </span>
+                    </div>
+
+
                 </div>
-             </div>
      
              <div class="price-sort  gap-3" [@filterAnimation]="toogleFilterBlock ? 'open' : 'closed'">
      
@@ -46,7 +49,7 @@
                          <ngx-slider *ngIf="isBrowser"
                              [(value)]="priceFrom"
                              [options]="sliderMinOptions"
-                             (userChangeEnd)="applyFilters()">
+                             >
                          </ngx-slider>
                          <div class="value">{{ priceFrom | number:'1.0-0' }} ₸</div>
                      </div>
@@ -57,7 +60,7 @@
                          <ngx-slider *ngIf="isBrowser"
                              [(value)]="priceTo"
                              [options]="sliderMaxOptions"
-                             (userChangeEnd)="applyFilters()">
+                             >
                          </ngx-slider>
                          <div class="value">{{ priceTo | number:'1.0-0' }} ₸</div>
                      </div>
@@ -70,7 +73,7 @@
                  </div>
      
                  <div class="apply-filters mt-2 gap-2">
-                     <button class="btn btn-primary btn-sm" (click)="applyFilters()">
+                     <button class="btn btn-primary btn-sm" (click)="updateAppliedFilters()">
                          Применить
                      </button>
                      <button class="btn btn-outline-secondary btn-sm" (click)="clearFilters()">

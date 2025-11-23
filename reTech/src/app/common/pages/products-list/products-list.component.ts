@@ -1,7 +1,7 @@
 import { CommonModule,isPlatformBrowser } from '@angular/common';
 import { Component, OnInit,Inject,PLATFORM_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BehaviorSubject, Observable,of,combineLatest,map, filter, tap, switchMap,startWith } from 'rxjs';
+import { BehaviorSubject, Observable,of,combineLatest,map, filter, tap, switchMap,startWith,shareReplay,take } from 'rxjs';
 import { Product } from '../../../shared/interfaces/product.interface';
 import { ProductService } from '../../../shared/services/product.service';
 import { RouterModule } from '@angular/router';
@@ -35,6 +35,8 @@ import {
         style({
           height: '0',
           opacity: 0,
+          padding: '0px',
+          margin:'0px',
           overflow: 'hidden',
          
         })
@@ -56,7 +58,7 @@ export class ProductsListComponent implements OnInit {
   user:User;
   
   pawnshop:PawnshopProfile;
-  products$:Observable<Product[]>;
+  products$ : Observable<Product[]>;
   filteredProducts$:Observable<Product[]>;
   searchTerm$ = new BehaviorSubject<string>('');
   productBase$:Observable<Product[]>
@@ -90,6 +92,7 @@ export class ProductsListComponent implements OnInit {
     'Watch',
     'Tablet'
   ]
+  selectedHelpItems :string[] = [];
 
   priceFrom: number | null = null;
   priceTo: number | null = null;
@@ -104,124 +107,110 @@ export class ProductsListComponent implements OnInit {
   ){
 
   }
-
   ngOnInit() {
-    console.log('ngOnInit start');
-
     this.isBrowser = isPlatformBrowser(this.platformId);
 
-    // 1. Базовое получение всех продуктов без фильтров
-    const baseProducts$ = combineLatest([
+    // 1. Базовые продукты с учетом пользователя
+    this.products$ = combineLatest([
       this.productService.getProcutsList(),
       this.authService.currentUser$.pipe(startWith(null))
     ]).pipe(
       switchMap(([items, user]) => {
-
-        // Сохраняем юзера
         this.user = user;
-
-        // Если нет авторизации
-        if (!user?._id) {
-          return of(items.filter(p => p.status === 'active'));
-        }
-
-        // Получаем ломбард пользователя
+        if (!user?._id) return of(items.filter(p => p.status === 'active'));
         return this.pawnShopService.getLombardByUserId(user._id).pipe(
           map(pawnshop => {
             this.pawnshop = pawnshop;
-
-            if (pawnshop) {
-              // Убираем товары своего ломбарда
+            if (pawnshop?._id) {
               return items.filter(
-                p => p.status === 'active' && p.ownerId !== pawnshop._id
+                p => p.status === 'active' && (!p.ownerId || p.ownerId !== pawnshop._id)
               );
             }
-
             return items.filter(p => p.status === 'active');
           })
         );
       }),
-      tap(items => console.log('Base products:', items))
+      tap(() => this.isLoading = false)
     );
 
-    this.productBase$ = baseProducts$
-    this.productBase$.pipe(tap(() => this.isLoading = false)).subscribe();
-
-    // 2. products$ с фильтрами цены + сортировкой
-    this.products$ = combineLatest([
-      this.productBase$,
-      this.appliedFilters$
-    ]).pipe(
-      map(([items, _filters]) => {
-        let result = [...items];
+    // 2. Фильтр + поиск + сортировка
+    this.filteredProducts$ = combineLatest([this.products$, this.searchTerm$, this.appliedFilters$]).pipe(
+      map(([products, search, appliedFilters]) => {
+        let result = [...products];
 
         // Фильтр по цене
-        if (this.priceFrom != null) {
-          result = result.filter(p => p.price >= this.priceFrom);
+        const priceFromFilter = appliedFilters.find(f => f.startsWith('Цена от:'));
+        const priceToFilter = appliedFilters.find(f => f.startsWith('Цена до:'));
+        if (priceFromFilter) {
+          const val = parseFloat(priceFromFilter.replace(/\D/g, ''));
+          result = result.filter(p => p.price >= val);
         }
-        if (this.priceTo != null) {
-          result = result.filter(p => p.price <= this.priceTo);
+        if (priceToFilter) {
+          const val = parseFloat(priceToFilter.replace(/\D/g, ''));
+          result = result.filter(p => p.price <= val);
+        }
+
+        // Фильтр по help-items
+        appliedFilters.forEach(f => {
+          if (this.searchHelpItemsList.includes(f)) {
+            const term = f.toLowerCase();
+            result = result.filter(p => p.title.toLowerCase().includes(term));
+          }
+        });
+
+        // Поиск по тексту
+        if (search.trim()) {
+          const term = search.toLowerCase();
+          result = result.filter(p => p.title.toLowerCase().includes(term));
         }
 
         // Сортировка
-        if (this.priceSort === 'asc') {
-          result = result.sort((a, b) => a.price - b.price);
-        }
-        if (this.priceSort === 'desc') {
-          result = result.sort((a, b) => b.price - a.price);
-        }
+        if (this.priceSort === 'asc') result.sort((a, b) => a.price - b.price);
+        if (this.priceSort === 'desc') result.sort((a, b) => b.price - a.price);
 
         return result;
       })
     );
-
-    // 3. Поиск по названию
-    this.filteredProducts$ = combineLatest([
-      this.products$,
-      this.searchTerm$
-    ]).pipe(
-      map(([items, term]) =>
-        items.filter(p =>
-          p.title.toLowerCase().includes(term.toLowerCase())
-        )
-      )
-    );
   }
 
-
-  applyFilters(){
-    const filters: string[] = [];
-
-    if (this.priceFrom != null) {
-      filters.push(`Цена от: ${this.priceFrom.toLocaleString()} ₸`);
-    }
-    if (this.priceTo != null) {
-      filters.push(`Цена до: ${this.priceTo.toLocaleString()} ₸`);
-    }
-    if (this.priceSort) {
-      filters.push(`Сортировка: ${this.priceSort === 'asc' ? 'По возрастанию' : 'По убыванию'}`);
-    }
-    this.appliedFilters$.next(filters)
-
-  }
-
-  clearFilters() {
-    this.priceFrom = null;
-    this.priceTo = null;
-    this.priceSort = '';
-    this.appliedFilters$.next([]);
-    this.onSearchChange(''); 
-    this.applyFilters(); 
-  }
-
-  onHelpItemClick(item:string){
+  // Добавление help-item в фильтр
+  onHelpItemClick(item: string) {
     const current = this.appliedFilters$.value;
     if (!current.includes(item)) {
       this.appliedFilters$.next([...current, item]);
     }
   }
 
-  onSearchChange(value:string){
+  // Удаление фильтра
+  removeFilter(filter: string) {
+    const current = this.appliedFilters$.value;
+    this.appliedFilters$.next(current.filter(f => f !== filter));
+  }
+
+  // Кнопка "Применить" — обновляем appliedFilters$ с ценой и сортировкой
+  updateAppliedFilters() {
+    const filters: string[] = [];
+    if (this.priceFrom != null) filters.push(`Цена от: ${this.priceFrom.toLocaleString()} ₸`);
+    if (this.priceTo != null) filters.push(`Цена до: ${this.priceTo.toLocaleString()} ₸`);
+    if (this.priceSort) filters.push(`Сортировка: ${this.priceSort === 'asc' ? 'По возрастанию' : 'По убыванию'}`);
+
+    // Сохраняем существующие help-items
+    const helpItems = this.appliedFilters$.value.filter(f => this.searchHelpItemsList.includes(f));
+    this.appliedFilters$.next([...filters, ...helpItems]);
+  }
+
+  // Кнопка "Очистить"
+  clearFilters() {
+    this.priceFrom = null;
+    this.priceTo = null;
+    this.priceSort = '';
+    this.searchTerm$.next('');
+    // оставляем help-items или полностью очищаем?
+    this.appliedFilters$.next([]);
+  }
+
+  // Обновление поиска
+  onSearchChange(value: string) {
     this.searchTerm$.next(value);
   }
 

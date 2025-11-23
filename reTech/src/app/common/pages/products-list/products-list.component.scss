@@ -101,7 +101,7 @@
   border-radius: 10px;
   border: 1px solid #e3e3e3;
   display: flex;
-
+  overflow: hidden;
   flex-direction: column;
   gap: 16px;   /* расстояние между элементами */
   width: fit-content; /* контейнер подстраивается под содержимое */
