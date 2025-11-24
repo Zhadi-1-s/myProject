@@ -1,4 +1,4 @@
-import { Component, OnInit ,PLATFORM_ID} from '@angular/core';
+import { Component, OnInit ,PLATFORM_ID,HostListener} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
@@ -78,6 +78,16 @@ export class TopbarComponent implements OnInit {
 
   toggleNotifications() {
     this.isNotificationsOpen = !this.isNotificationsOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    // Проверяем, не кликнули ли по кнопке или дропдауну
+    if (!target.closest('.position-relative')) {
+      this.isNotificationsOpen = false;
+    }
   }
 
   changeLang(lang: string) {

@@ -15,6 +15,8 @@ import { ProductDetailComponent } from '../../components/modals/product-detail/p
 import { EditProductComponent } from '../../components/modals/edit-product/edit-product.component';
 import { PawnshopProfile } from '../../../shared/interfaces/shop-profile.interface';
 import { UserService } from '../../../shared/services/user.service';
+import { NotificationService } from '../../../shared/services/notification.service';
+import { AppNotification } from '../../../shared/interfaces/notification.interface';
 
 @Component({
   selector: 'app-profile',
@@ -39,12 +41,14 @@ export class ProfileComponent implements OnInit {
   inactiveProducts$!: Observable<Product[]>;
   favoritePawnshops$:Observable<PawnshopProfile[]>;
   favoriteProducts$:Observable<Product[]>;
+  notifications$:Observable<AppNotification[]>;
 
   constructor(
               private authService: AuthService, 
               private modalService: NgbModal,
               private productService:ProductService,
-              private userService:UserService
+              private userService:UserService,
+              private notificationService:NotificationService
   ) {
 
   }
@@ -53,6 +57,12 @@ export class ProfileComponent implements OnInit {
     this.user$ = this.authService.currentUser$
     
     this.loading = true;
+
+    this.notifications$ = this.authService.currentUser$.pipe(
+      filter((user): user is User => !!user?._id),
+      switchMap(user => this.notificationService.getUserNotifications(user._id)),
+      tap(notifications => console.log('user notifcaiotn is loaded',notifications))
+    )
 
     this.activeProducts$ = this.authService.currentUser$.pipe(
       filter((user): user is User => !!user?._id),
@@ -117,4 +127,11 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  markAsRead(notification: AppNotification) {
+    if (!notification.isRead) {
+      this.notificationService.markAsRead(notification._id!).subscribe(() => {
+        notification.isRead = true;
+      });
+    }
+  }
 }

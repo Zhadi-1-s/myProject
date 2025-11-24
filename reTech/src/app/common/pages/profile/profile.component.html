@@ -4,14 +4,14 @@
     <div class="col-12">
       <div class="profile-header d-flex align-items-center p-3 mb-3" *ngIf="user$| async as user; else notLoggedIn">
         <!-- Аватар -->
-        <div class="avatar-img position-relative" style="width: 190px; height: 190px;">
+        <div class="avatar-img position-relative" style="width: 140px; height: 120px;">
           <img
             [src]="user?.avatarUrl || 'assets/png/default-avatar.jpg'"
             alt="avatar"
             class="rounded-circle w-100 h-100 object-fit-cover"
           />
 
-          <!-- Оверлей при наведении -->
+         
           <div
             class="avatar-overlay d-flex align-items-center justify-content-center rounded-circle"
             (click)="openEditModal()"
@@ -56,13 +56,43 @@
     </div>
 
     <!-- Нижний ряд -->
-    <div class="col-12">
-      <div class="row align-items-stretch">
-        <!-- Большой блок -->
+     <div class="container-fluid mt-3">
+      <div class="row-mb-3">
+        <div class="col-12">
+          <div class="notifications-panel p-3 rounded shadow-sm">
+            <h5 class="mb-3">{{ 'Notifications' | translate }}</h5>
+
+            <ng-container *ngIf="notifications$ | async as notifications; else noNotifications">
+              <div *ngFor="let n of notifications"
+                  class="notification-item p-2 mb-2 rounded d-flex justify-content-between align-items-start"
+                  [class.unread]="!n.isRead"
+                  (click)="markAsRead(n)">
+                    
+                <div>
+                  <div class="fw-semibold">{{ n.title | translate }}</div>
+                  <div class="text-muted small">{{ n.message | translate }}</div>
+                </div>
+
+                <div class="text-end small text-secondary">
+                  {{ n.createdAt | date:'short' }}
+                </div>
+
+              </div>
+            </ng-container>
+
+            <ng-template #noNotifications>
+              <p class="text-muted text-center mb-0">No notifications</p>
+            </ng-template>
+
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 mt-3">
+        
         <div class="col-md-4 d-flex">
           <div class="profile-content p-3 mb-3">
             <h3 class="mb-3">{{ "My items" | translate }}</h3>
-
+   
             <ul class="nav nav-tabs mb-3 justify-content-between equal-tabs">
               <li class="nav-item flex-fill text-center">
                 <a
@@ -83,8 +113,8 @@
                 </a>
               </li>
             </ul>
-
-
+   
+   
             <!-- Активные -->
             <div *ngIf="selectedTab === 'active'">
               <ng-container *ngIf="(activeProducts$ | async)?.length > 0; else noActive">
@@ -130,8 +160,8 @@
                       </li>
                     </ul>
                   </div>
-
-
+   
+   
                   </div>
                 </div>
               </ng-container>
@@ -141,7 +171,7 @@
                 </p>
               </ng-template>
             </div>
-
+   
             <!-- Неактивные -->
             <div *ngIf="selectedTab === 'inactive'">
               <ng-container *ngIf="(inactiveProducts$ | async)?.length > 0; else noInactive">
@@ -154,13 +184,13 @@
                     <div class="status-badge">
                       {{ item.status| translate }}
                     </div>
-
+   
                     <img
                       [src]="item.photos?.[0] || 'assets/png/no-photo.png'"
                       alt="product"
                       class="img-fluid product-image"
                     />
-
+   
                     <div class="card-body">
                       <h6 class="card-title mb-1 text-truncate">{{ item.title }}</h6>
                       <p class="card-text text-muted small mb-1">{{ item.category }}</p>
@@ -175,17 +205,17 @@
                   </div>
                 </div>
               </ng-container>
-
+   
               <ng-template #noInactive>
                 <p class="text-muted text-center mb-0">
                   {{ 'You have no inactive items' | translate }}
                 </p>
               </ng-template>
             </div>
-
+   
           </div>
         </div>
-
+        
         <div class="col-md-4 d-flex flex-column">
           <!-- Заголовок -->
           <div class="small-block p-3 mb-3 fw-semibold flex-fill" >
@@ -214,11 +244,11 @@
                       <i class="fa-solid fa-store text-secondary"></i>
                     </div>
                   </ng-template>
-  
+   
                   <!-- Название и рейтинг -->
                   <div class="flex-grow-1 d-flex justify-content-between align-items-center">
                       <span class="fw-medium">{{ item.name }}</span>
-  
+   
                       <!-- ⭐️ Шкала рейтинга -->
                       <div class="d-flex align-items-center ms-2">
                         <ng-container *ngFor="let star of [1,2,3,4,5]">
@@ -233,7 +263,7 @@
                         </ng-container>
                       </div>
                     </div>
-  
+   
                 </div>
               </div>
             </ng-container>
@@ -249,7 +279,7 @@
         <div class="col-md-4 d-flex">
           <div class="small-block p-3 fw-semibold flex-fill">
             {{ 'Избранные товары' | translate }}
-
+   
             <ng-container *ngIf="favoriteProducts$ | async as favoriteProducts; else noFavoriteProducts">
               <div *ngIf="favoriteProducts.length > 0; else noFavoriteProducts" class="d-flex flex-column gap-2 mt-2">
                 <div *ngFor="let product of favoriteProducts" class="card favorite-card d-flex flex-row align-items-center p-2" (click)="openProductDetails(product)">
@@ -267,18 +297,18 @@
                       <i class="fa-solid fa-box text-secondary"></i>
                     </div>
                   </ng-template>
-
+   
                   <!-- Контент карточки -->
                   <div class="product-info d-flex flex-column justify-content-center flex-grow-1">
                     <span class="product-title fw-semibold text-truncate">{{ product.title }}</span>
                     <span class="product-category text-muted small">{{ product.category }}</span>
                     <span class="product-price fw-bold">{{ product.price | number }} ₸</span>
                   </div>
-
+   
                 </div>
               </div>
             </ng-container>
-
+   
             <ng-template #noFavoriteProducts>
               <div class="text-muted text-center py-3">
                 <i class="fa-regular fa-heart fs-3 mb-2 d-block"></i>
@@ -287,9 +317,8 @@
             </ng-template>
           </div>
         </div>
-
-
       </div>
-    </div>
+     </div>
+  
   </div>
 </div>

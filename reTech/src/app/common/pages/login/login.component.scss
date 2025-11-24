@@ -8,7 +8,7 @@
   font-family: 'Roboto', sans-serif;
   overflow: hidden;
   background: #fff;
-  z-index: 10;
+  z-index: 0;
   padding: 0;
 }
 .login-page::before {
@@ -28,7 +28,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  height: 20vh;
+  
   background: linear-gradient(0deg, #EBEBEB 0%, rgba(235,235,235,0) 100%);
   z-index: 0;
 }
@@ -75,6 +75,8 @@
   width: 600px;          /* ← Увеличил ширину */
   max-width: 90%;        /* ← Чтобы не ломалось на телефонах */
   box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+  position: relative;       /* добавлено */
+  z-index: 10;   
 }
 
 .login-box input.form-control {
@@ -94,12 +96,15 @@
 
 .logo {
   position: absolute;
-  top: 20px;   /* отступ сверху */
-  left: 30px;  /* отступ слева */
+  top: 0px;   /* отступ сверху */
+  left: 20px;  /* отступ слева */
 }
 
 .brand-name {
   font-size: 1.5rem;
   font-weight: bold;
   color: #000; /* или твой цвет */
+}
+input:focus{
+  outline: none;
 }

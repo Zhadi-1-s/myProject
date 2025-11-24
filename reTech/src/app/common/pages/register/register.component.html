@@ -1,5 +1,9 @@
 <div class="login-page d-flex vh-100">
 
+   <div class="logo">
+    <h2 class="brand-name" routerLink="/dashboard" style="cursor: pointer;">TechLombard</h2>
+  </div>
+
   <div class="squares-container">
     <div class="square"></div>
     <div class="square"></div>
@@ -127,9 +131,9 @@
          </form>
    
          <!-- Link to login -->
-         <p class="text-center text-muted">
+         <p class="text-center text-muted" style="cursor: pointer;">
            {{'Already have an account?'|translate}}
-           <a class="text-decoration-none" (click)="signIn()">{{'Sign in'|translate}}</a>
+           <a class="text-decoration-none" routerLink="/login">{{'Sign in'|translate}}</a>
          </p>
        </div>
      </div>

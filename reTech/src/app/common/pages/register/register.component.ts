@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormsModule,FormBuilder,Validators  } from '@angular/forms';
 
 import { AuthService } from '../../../shared/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RegisterDto } from '../../../shared/interfaces/auth.interface';
 import { TranslateModule } from '@ngx-translate/core';
@@ -12,7 +12,7 @@ import { CloudinaryService } from '../../../shared/services/cloudinary.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule,CommonModule,ReactiveFormsModule,TranslateModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, TranslateModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -99,9 +99,6 @@ export class RegisterComponent {
     console.log('Google signup not yet implemented');
   }
 
-  signIn(): void {
-    this.router.navigate(['/login']);
-  }
 
   forgotPassword(): void {
     console.log('Forgot password not implemented yet');

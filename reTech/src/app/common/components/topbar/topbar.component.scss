@@ -3,8 +3,9 @@
   justify-content: flex-end;
   align-items: center;
   padding: 8px 20px;
-  background-color: #f8f9fa; // мягкий светло-серый фон
-  border-bottom: 1px solid #dee2e6; // лёгкая граница для отделения
+  background-color: inherit;
+  // background-color: #f8f9fa;
+  // border-bottom: 1px solid #dee2e6; 
   // need to remove in future 
   height: 60px;
 
@@ -23,7 +24,7 @@
 }
 .notifications-dropdown {
   position: absolute;
-  top: 50px;
+  top: 40px;
   right: 0;
   width: 260px;
   background: white;
@@ -72,4 +73,7 @@
   text-align: center;
   padding: 20px;
   color: #777;
+}
+.btn:focus{
+  outline: none!important;
 }

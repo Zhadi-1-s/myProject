@@ -57,7 +57,6 @@ export class ProductService {
       .findByIdAndUpdate(id, dto, { new: true })
       .exec();
 
-    // после обновления документ уже точно существует
     if (!updated) {
       throw new NotFoundException('Product not found');
     }

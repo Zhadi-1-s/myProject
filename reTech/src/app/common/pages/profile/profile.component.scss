@@ -215,6 +215,31 @@
   font-size: 14px;
   color: #007bff;
 }
+.notifications-panel {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 12px 14px;
+  border-radius: 10px;
+  transition: background .2s;
+
+  &.unread {
+    background: #f6f7f9;
+  }
+
+  &:hover {
+    background: #eceff1;
+  }
+}
+
+
 
 
 

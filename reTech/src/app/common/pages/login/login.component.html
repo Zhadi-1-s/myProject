@@ -1,8 +1,8 @@
 <div class="login-page d-flex vh-100">
 
-   <!-- <div class="logo">
+   <div class="logo">
     <h2 class="brand-name" routerLink="/dashboard" style="cursor: pointer;">TechLombard</h2>
-  </div> -->
+  </div>
 
    <div class="squares-container">
     <div class="square"></div>
@@ -69,9 +69,9 @@
           {{ serverError }}
         </div>
 
-        <p class="text-center text-muted mt-3">
+        <p class="text-center text-muted mt-3" style="cursor: pointer;">
           {{'Don’t have an account?' | translate}}
-          <a class="text-decoration-none" (click)="register()">{{'Sign up' | translate}}</a>
+          <a class="text-decoration-none" routerLink="/register">{{'Sign up' | translate}}</a>
         </p>
 
       </div>
