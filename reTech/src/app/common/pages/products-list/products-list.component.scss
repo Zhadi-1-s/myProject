@@ -278,3 +278,18 @@
   font-size: 0.75rem;
   padding: 0.35em 0.5em;
 }
+.favorite-btn {
+  top: 8px;
+  right: 8px;
+  position: absolute;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn i {
+  font-size: 1.2rem; /* увеличиваем размер */
+}

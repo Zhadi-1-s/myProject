@@ -136,7 +136,11 @@
     "Dashboard":"Dashboard",
     "Help":"Help",
     "Apllied filters":"Applied filters",
-    "View all pawnshops":"View all pawnshops"
-
+    "View all pawnshops":"View all pawnshops",
+    "Offers":"Offers",
+    "System":"Название",
+    "Others":"Others",
+    "Chats":"Chats"
+    
     
 }

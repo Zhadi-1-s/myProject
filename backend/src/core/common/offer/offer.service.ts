@@ -27,7 +27,7 @@ export class OfferService {
       userId: dto.productOwnerId, // кому отправляем уведомление
       type: 'new-offer',
       title: 'New offer received',
-      message: `${pawnshopName} offered on your product.`,
+      message: `${pawnshopName} отправил предложение вашему товару.`,
       refId: offer._id?.toString(),
       isRead:false
     });

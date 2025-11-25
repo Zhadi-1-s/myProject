@@ -8,7 +8,7 @@ import { EditModalComponent } from '../../components/modals/edit-modal/edit-moda
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProductService } from '../../../shared/services/product.service';
-import { Observable,map,pipe ,filter, switchMap, tap,firstValueFrom} from 'rxjs';
+import { Observable,map,pipe ,filter, switchMap, tap,firstValueFrom,of, forkJoin} from 'rxjs';
 import { Product } from '../../../shared/interfaces/product.interface';
 import { CreateProductComponent } from '../../components/modals/create-product/create-product.component';
 import { ProductDetailComponent } from '../../components/modals/product-detail/product-detail.component';
@@ -35,6 +35,8 @@ export class ProfileComponent implements OnInit {
   currentTime: Date = new Date();
 
   selectedTab: 'active' | 'inactive' = 'active';
+  activeSection: 'offers' | 'system' | 'chats' | 'others' = 'offers';
+
 
   products$:Observable<Product[]>;
   activeProducts$!: Observable<Product[]>;
@@ -42,6 +44,19 @@ export class ProfileComponent implements OnInit {
   favoritePawnshops$:Observable<PawnshopProfile[]>;
   favoriteProducts$:Observable<Product[]>;
   notifications$:Observable<AppNotification[]>;
+  product$:Observable<Product>;
+
+  notificationsList:AppNotification[];
+  product:Product;
+  
+  productsById: Record<string, Product> = {};
+
+  sections = [
+    { id: 'offers', label: 'Offers' },
+    { id: 'system', label: 'System' },
+    { id: 'chats', label: 'Chats', disabled: true },
+    { id: 'others', label: 'Others' },
+  ];
 
   constructor(
               private authService: AuthService, 
@@ -61,7 +76,27 @@ export class ProfileComponent implements OnInit {
     this.notifications$ = this.authService.currentUser$.pipe(
       filter((user): user is User => !!user?._id),
       switchMap(user => this.notificationService.getUserNotifications(user._id)),
-      tap(notifications => console.log('user notifcaiotn is loaded',notifications))
+      tap(notifications => {this.notificationsList = notifications,console.log(notifications)}),
+      switchMap(notifcations => {
+        const productIds = notifcations.map((n=> n.refId)).filter(id => !!id);
+
+        if(productIds.length === 0) return of([])
+
+          return forkJoin(productIds.map(id => this.productService.getProductById(id)));
+      }),
+      tap(products => {
+        this.productsById = Object.fromEntries(products.map(p => [p._id,p]))
+        console.log(this.productsById,'products from notification')
+      })
+    )
+
+    this.product$ = this.notifications$.pipe(
+      filter(n => n.length > 0),
+      switchMap(notifications => this.productService.getProductById(notifications[0].refId)),
+      tap(product => {
+        this.product = product,
+        console.log('product from notificaiotn',product)
+      })
     )
 
     this.activeProducts$ = this.authService.currentUser$.pipe(
@@ -134,4 +169,24 @@ export class ProfileComponent implements OnInit {
       });
     }
   }
+  get offerNotifications() {
+    return (this.notificationsList || []).filter(n =>
+      ['new-offer','offer-accepted','offer-rejected','product-sold','price-changed'].includes(n.type)
+    );
+  }
+
+  get systemNotifications() {
+    return (this.notificationsList || []).filter(n => n.type === 'system');
+  }
+
+  get chatNotifications() {
+    return (this.notificationsList || []).filter(n => n.type === 'chat-opened');
+  }
+
+  get otherNotifications() {
+    return (this.notificationsList || []).filter(n =>
+      !['new-offer','offer-accepted','offer-rejected','product-sold','price-changed','system','chat-opened'].includes(n.type)
+    );
+  }
+
 }

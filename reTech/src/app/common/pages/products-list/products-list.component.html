@@ -119,6 +119,16 @@
                             </div>
                         </ng-template>
     
+                        <button
+                            class="favorite-btn position-absolute top-2 end-2 border-0 bg-transparent"
+                            (click)="toggleFavorite(product, $event)"
+                            >
+                            <i 
+                                class="fa-solid"
+                                [ngClass]="isFavorite(product._id, favitems) ? 'fa-heart text-danger' : 'fa-heart text-white'"
+                            ></i>
+                        </button>
+
                         <div class="card-body">
                             <h5 class="card-title fw-semibold mb-1">{{ product.title }}</h5>
                             <p class="card-text text-muted mb-1">

@@ -1,13 +1,15 @@
-<div class="app-layout" [class.with-sidebar]="!isAuthPage()">
-  <div class="sidebar" *ngIf="!isAuthPage()">
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside *ngIf="!isAuthPage()" class="flex-shrink-0 w-64">
     <app-navbar></app-navbar>
-  </div>
+  </aside>
 
-  <div class="main">
+  <!-- Main content -->
+  <div class="flex-1 flex flex-col">
     <app-topbar *ngIf="!isAuthPage()"></app-topbar>
-    <div class="content">
+    <main class="flex-1 overflow-auto p-4">
       <router-outlet></router-outlet>
-    </div>
+    </main>
     <app-footer *ngIf="!isAuthPage()"></app-footer>
   </div>
 </div>

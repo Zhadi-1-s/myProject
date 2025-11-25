@@ -21,6 +21,7 @@ import {
   transition,
   animate
 } from '@angular/animations';
+import { UserService } from '../../../shared/services/user.service';
 
 @Component({
   selector: 'app-products-list',
@@ -65,6 +66,8 @@ export class ProductsListComponent implements OnInit {
 
   appliedFilters$ = new BehaviorSubject<string[]>([])
 
+  favoriteItems$:Observable<Product[]>;
+  favitems:Product[];
   isBrowser = false;
   isLoading = true;
 
@@ -103,6 +106,7 @@ export class ProductsListComponent implements OnInit {
     private modalService: NgbModal,
     private authService:AuthService,
     private pawnShopService :LombardService,
+    private userService:UserService,
     @Inject(PLATFORM_ID) private platformId: Object
   ){
 
@@ -110,6 +114,13 @@ export class ProductsListComponent implements OnInit {
   ngOnInit() {
     this.isBrowser = isPlatformBrowser(this.platformId);
 
+    this.loadFavorites();
+    this.authService.currentUser$.pipe(
+      filter((user): user is User => !!user?._id),
+      switchMap(user => this.userService.getFavoriteItems(user._id))
+    ).subscribe(favorites => {
+      this.favitems = favorites;  // сразу массив
+    });
     // 1. Базовые продукты с учетом пользователя
     this.products$ = combineLatest([
       this.productService.getProcutsList(),
@@ -117,6 +128,7 @@ export class ProductsListComponent implements OnInit {
     ]).pipe(
       switchMap(([items, user]) => {
         this.user = user;
+
         if (!user?._id) return of(items.filter(p => p.status === 'active'));
         return this.pawnShopService.getLombardByUserId(user._id).pipe(
           map(pawnshop => {
@@ -132,7 +144,7 @@ export class ProductsListComponent implements OnInit {
       }),
       tap(() => this.isLoading = false)
     );
-
+    
     // 2. Фильтр + поиск + сортировка
     this.filteredProducts$ = combineLatest([this.products$, this.searchTerm$, this.appliedFilters$]).pipe(
       map(([products, search, appliedFilters]) => {
@@ -221,5 +233,41 @@ export class ProductsListComponent implements OnInit {
     modalRef.componentInstance.user = this.user;
     modalRef.componentInstance.pawnshop = this.pawnshop;
   }
+
+  loadFavorites(){
+    this.favoriteItems$ = this.authService.currentUser$.pipe(
+      filter((user): user is User => !!user?._id),
+      switchMap(user => this.userService.getFavoriteItems(user._id)),
+      tap(favorites => this.favitems = favorites)
+    )
+  }
+
+  isFavorite(productId: string, favorites: Product[]): boolean {
+    return favorites?.some(f => f._id === productId) ?? false;
+  }
+
+  toggleFavorite(product: Product, event: MouseEvent) {
+    console.log(product)
+    event.stopPropagation();
+    if (!this.user?._id) return;
+
+    const isFav = this.favitems?.some(f => f._id === product._id);
+
+    const req$ = isFav
+      ? this.userService.removeFavoriteItem(this.user._id, product._id)
+      : this.userService.addFavoriteItem(this.user._id, product._id);
+
+    req$.subscribe({
+      next: () => {
+        if (isFav) {
+          this.favitems = this.favitems.filter(f => f._id !== product._id);
+        } else {
+          this.favitems = [...(this.favitems || []), product];
+        }
+      },
+      error: (err) => console.error('Ошибка при обновлении избранного:', err)
+    });
+  }
+
 
 }
