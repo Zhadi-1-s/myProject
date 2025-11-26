@@ -37,4 +37,18 @@ export class DashboardComponent implements OnInit{
       })
   }
 
+  scrollToPawnshops() {
+    const el = document.getElementById('Pawnshops');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  scrollToHowItWorks() {
+    const el = document.getElementById('HowItWorks');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
 }
