@@ -24,12 +24,12 @@ export class NavbarComponent implements OnInit {
   currentLang = 'en';
   user: User | null = null;
  
-  @Input() sidebarOpen: boolean = true; 
+  sidebarOpen: boolean = true; 
   @Output() sidebarToggled = new EventEmitter<boolean>();
 
   toggleSidebar() {
- 
-    this.sidebarToggled.emit(!this.sidebarOpen);
+    this.sidebarOpen = !this.sidebarOpen
+    this.sidebarToggled.emit(this.sidebarOpen);
   }
   private platformId = inject(PLATFORM_ID);
 
@@ -81,6 +81,10 @@ export class NavbarComponent implements OnInit {
         this.filteredItems = this.navItemsUser;
       }
     });
+     if (typeof window !== "undefined") {
+      this.sidebarOpen = window.innerWidth >= 1024 // Open on desktop, closed on mobile
+      this.sidebarToggled.emit(this.sidebarOpen) 
+    }
   }
 
 

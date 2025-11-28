@@ -37,6 +37,7 @@ export class ProfileComponent implements OnInit {
   selectedTab: 'active' | 'inactive' = 'active';
   activeSection: 'offers' | 'system' | 'chats' | 'others' = 'offers';
 
+  user:User;
 
   products$:Observable<Product[]>;
   activeProducts$!: Observable<Product[]>;
@@ -69,14 +70,16 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user$ = this.authService.currentUser$
-    
+    this.user$ = this.authService.currentUser$.pipe(
+      tap(user => {this.user = user,console.log(user,'current user')})
+    );
+  
     this.loading = true;
 
     this.notifications$ = this.authService.currentUser$.pipe(
       filter((user): user is User => !!user?._id),
       switchMap(user => this.notificationService.getUserNotifications(user._id)),
-      tap(notifications => {this.notificationsList = notifications,console.log(notifications)}),
+      tap(notifications => {this.notificationsList = notifications,console.log(notifications,'loaded notifications')}),
       switchMap(notifcations => {
         const productIds = notifcations.map((n=> n.refId)).filter(id => !!id);
 
