@@ -1,13 +1,13 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit,PLATFORM_ID,inject ,Output,EventEmitter,Input} from '@angular/core';
 import { NavItem } from '../../../shared/interfaces/navbar.interface';
-import { CommonModule } from '@angular/common';
+import { CommonModule,isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../shared/services/auth.service';
 import { User } from '../../../shared/interfaces/user.interface';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { Router } from '@angular/router';
 
@@ -19,10 +19,19 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
-
+  
   isLoggedIn: boolean;
-
+  currentLang = 'en';
   user: User | null = null;
+ 
+  @Input() sidebarOpen: boolean = true; 
+  @Output() sidebarToggled = new EventEmitter<boolean>();
+
+  toggleSidebar() {
+ 
+    this.sidebarToggled.emit(!this.sidebarOpen);
+  }
+  private platformId = inject(PLATFORM_ID);
 
   navItemsUser: NavItem[] = [
     { label: 'Dashboard', icon: 'fa-regular fa-house', route: '/dashboard' },
@@ -37,11 +46,21 @@ export class NavbarComponent implements OnInit {
     { label: 'Help', icon: 'fa-solid fa-circle-question', route: '/calendar' }
   ];
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+      private authService: AuthService,
+      private router: Router,
+      private translate:TranslateService)
+    {
+      if(isPlatformBrowser(this.platformId)) {
+              const savedLang = localStorage.getItem('lang') || 'en';
+              this.translate.use(savedLang);
+              this.currentLang = savedLang;
+            }
+    }
 
   searchTerm: string = '';
   filteredItems: NavItem[] = [];
-
+  langOpen: boolean = false;
   isPawnShop:boolean = false;
 
   ngOnInit() {
@@ -75,4 +94,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/login']);
   }
   
+   changeLang(lang: string) {
+      this.translate.use(lang);
+      localStorage.setItem('lang', lang);
+      this.currentLang = lang;
+    }
+
 }

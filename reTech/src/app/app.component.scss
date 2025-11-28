@@ -1,29 +1,26 @@
-.content {
-  margin-left: 0;
-
-
-  &.with-sidebar {
-    margin-left: 290px; // ширина navbar
-  }
-}
 .app-layout {
   display: flex;
+  min-height: 100vh;
 
-  &.with-sidebar {
-    .main {
-      margin-left: 290px; // ширина sidebar
-      width: calc(100% - 250px);
-    }
+  .sidebar {
+    flex-shrink: 0;
+    width: 255px;
+    transition: width 0.3s;
+  }
+
+  .sidebar.collapsed {
+    width: 64px; // ширина свернутого sidebar
   }
 
   .main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    transition: margin-left 0.3s;
 
     .content {
-      flex: 1; // чтобы футер всегда внизу
+      flex: 1;
+      margin-left: 0;
     }
   }
 }

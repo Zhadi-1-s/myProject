@@ -18,10 +18,20 @@ export class AppComponent {
 
   constructor(private router: Router) {}
 
+  sidebarOpen:boolean = true;
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
   isAuthPage(): boolean {
     const url = this.router.url;
     return url.includes('/login') || url.includes('/register');
   }
+
+    onSidebarToggle(isOpen: boolean): void {
+      this.sidebarOpen = isOpen
+    }
 
 
 }

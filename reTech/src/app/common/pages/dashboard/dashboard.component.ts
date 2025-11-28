@@ -50,5 +50,6 @@ export class DashboardComponent implements OnInit{
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+  mobileMenuOpen: boolean = false;
 
 }
