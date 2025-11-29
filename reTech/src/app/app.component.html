@@ -2,7 +2,7 @@
 <div *ngIf="!isAuthPage()" class="flex min-h-screen">
   <aside class="flex-shrink-0">
     <!-- Added event listener for sidebar toggle -->
-    <app-navbar (sidebarToggled)="onSidebarToggle($event)" ></app-navbar>
+    <app-navbar (sidebarToggled)="onSidebarToggle($event)"></app-navbar>
   </aside>
   <!-- Main content adjusts margin based on sidebar state -->
   <div 

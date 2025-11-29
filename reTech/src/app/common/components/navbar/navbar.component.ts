@@ -1,4 +1,4 @@
-import { Component,OnInit,PLATFORM_ID,inject ,Output,EventEmitter,Input} from '@angular/core';
+import { Component,OnInit,PLATFORM_ID,inject ,Output,EventEmitter,HostListener} from '@angular/core';
 import { NavItem } from '../../../shared/interfaces/navbar.interface';
 import { CommonModule,isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -32,6 +32,21 @@ export class NavbarComponent implements OnInit {
     this.sidebarToggled.emit(this.sidebarOpen);
   }
   private platformId = inject(PLATFORM_ID);
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: UIEvent) {
+    const width = (event.target as Window).innerWidth;
+
+    if (width < 1024 && this.sidebarOpen) {
+      this.sidebarOpen = false;
+      this.sidebarToggled.emit(false);
+    }
+
+    if (width >= 1024 && !this.sidebarOpen) {
+      this.sidebarOpen = true;
+      this.sidebarToggled.emit(true);
+    }
+  }
 
   navItemsUser: NavItem[] = [
     { label: 'Dashboard', icon: 'fa-regular fa-house', route: '/dashboard' },
@@ -81,10 +96,12 @@ export class NavbarComponent implements OnInit {
         this.filteredItems = this.navItemsUser;
       }
     });
-     if (typeof window !== "undefined") {
-      this.sidebarOpen = window.innerWidth >= 1024 // Open on desktop, closed on mobile
-      this.sidebarToggled.emit(this.sidebarOpen) 
+
+    if(typeof window !== 'undefined' && window.innerWidth < 1024) {
+      this.toggleSidebar()
+      console.log(window.innerWidth)
     }
+
   }
 
 

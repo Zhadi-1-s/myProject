@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { app } from '../../server';
 import { NavbarComponent } from './common/components/navbar/navbar.component';
@@ -18,7 +18,7 @@ export class AppComponent {
 
   constructor(private router: Router) {}
 
-  sidebarOpen = true;
+  sidebarOpen :boolean = true;
 
   isAuthPage(): boolean {
     const url = this.router.url;

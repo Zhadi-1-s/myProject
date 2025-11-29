@@ -1,273 +1,339 @@
-<div class="container-fluid mt-3">
-    <div class="row justify-content-center">
-        <div class="col-12">
-            <div class="profile-header d-flex align-items-start p-3 mb-3" *ngIf="pawnShop$| async as profile; else notLoggedIn">
-                <!-- Pawnshop Logo -->
-                <div class="avatar-img me-4">
-                    <img [src]="profile?.logoUrl || 'assets/png/default-pawnshop.jpg'"
-                        alt="pawnshop-logo"
-                        class="rounded-circle me-3"
-                        width="190"
-                        height="190" />
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Profile Header -->
+        <div *ngIf="pawnShop$ | async as profile; else notLoggedIn" 
+             class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden mb-8">
+            
+            <!-- Header Section with gradient background -->
+            <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-8">
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
                     
-                </div>
-
-                <!-- Pawnshop Info -->
-                <div class="flex-grow-1 ms-5 profile-info" *ngIf="profile">
-
-                    <div class="info-block">
-                        <div class="d-flex align-items-center flex-wrap gap-5">
-                        <!-- Название -->
-                        <h3 class="mb-0 me-3">{{ profile?.name || 'Pawnshop name' }}</h3>
-                            
-                        <!-- 🕒 Время -->
-                        <p class="text-muted mb-0 small fw-semibold d-flex align-items-center">
-                            <i class="fa-regular fa-clock me-1"></i>
-                            {{ profile?.openTime }} – {{ profile?.closeTime }}
-                            <span
-                            [ngClass]="{
-                                'text-success': isOpenNow,
-                                'text-danger': !isOpenNow
-                            }"
-                            class="ms-2 fw-bold"
-                            >
-                            {{ isOpenNow ? 'Открыто' : 'Закрыто' }}
-                            </span>
-                        </p>
-
-                        <!-- ⏰ Текущее время -->
-                        <p class="text-muted mb-0 small fw-semibold d-flex align-items-center">
-                            <i class="fa-regular fa-clock me-1"></i>
-                            {{ currentTime | date:'shortTime' }}
-                        </p>
-
-                        <!-- ⭐ Рейтинг -->
-                        <div class="d-flex align-items-center">
-                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                            <i
-                                class="fa-star"
-                                [ngClass]="{
-                                'fa-solid text-warning': profile.rating >= star,
-                                'fa-regular text-muted': profile.rating < star
-                                }"
-                                style="font-size: 16px; margin-right: 3px;"
-                            ></i>
-                            </ng-container>
-                            
-                        </div>
-                        
-                        </div>
-                        <hr class="my-4 divider-custom" />
+                    <!-- Avatar with modern styling and border -->
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-white rounded-full blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
+                        <img [src]="profile?.logoUrl || 'assets/png/default-pawnshop.jpg'"
+                             alt="pawnshop-logo"
+                             class="relative rounded-full w-32 h-32 md:w-48 md:h-48 object-cover border-4 border-white shadow-2xl" />
                     </div>
 
-                    <!-- Описание -->
-                    <div class="description-block">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
+                    <!-- Info section with improved typography -->
+                    <div class="flex-1 text-center md:text-left" *ngIf="profile">
+                        <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                            {{ profile?.name || 'Pawnshop name' }}
+                        </h1>
 
-                            <!-- О НАС -->
-                            <h6 class="fw-semibold mb-0 d-flex align-items-center">
-                                <i class="fa-regular fa-file-lines me-2 text-primary"></i>
-                                О нас
-                            </h6>
-
-                            <!-- УСЛОВИЯ СДЕЛКИ (в ряд!) -->
-                            <div class="terms-block" *ngIf="profile?.terms">
-                                <span 
-                                    class="text-primary fw-semibold d-flex align-items-center terms-toggle"
-                                    (click)="openTermsModal()"
-                                    style="cursor:pointer;"
-                                >
-                                    Условия сделки
-                    
+                        <!-- Status badges in a flex container -->
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 mb-4">
+                            <!-- Time badge -->
+                            <div class="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <i class="fa-regular fa-clock text-white"></i>
+                                <span class="text-white font-medium text-sm">
+                                    {{ profile?.openTime }} – {{ profile?.closeTime }}
+                                </span>
+                                <span [ngClass]="{
+                                    'bg-green-500': isOpenNow,
+                                    'bg-red-500': !isOpenNow
+                                }" class="px-3 py-1 rounded-full text-white text-xs font-bold">
+                                    {{ isOpenNow ? 'Открыто' : 'Закрыто' }}
                                 </span>
                             </div>
 
+                            <!-- Current time badge -->
+                            <div class="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <i class="fa-regular fa-clock text-white"></i>
+                                <span class="text-white font-medium text-sm">
+                                    {{ currentTime | date:'shortTime' }}
+                                </span>
+                            </div>
+
+                            <!-- Rating -->
+                            <div class="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                                    <i class="fa-star text-yellow-300"
+                                       [ngClass]="{
+                                           'fa-solid': profile.rating >= star,
+                                           'fa-regular opacity-50': profile.rating < star
+                                       }"></i>
+                                </ng-container>
+                                <span class="text-white font-semibold text-sm ml-1">{{ profile.rating?.toFixed(1) }}</span>
+                            </div>
                         </div>
-
-                        <!-- Раскрывающийся блок условий -->
-                        <div class="mt-3 p-3 border rounded bg-light" *ngIf="showTerms">
-                            <h6 class="fw-semibold mb-3 d-flex align-items-center">
-                                <i class="fa-solid fa-scale-balanced me-2 text-primary"></i>
-                                Условия ломбарда
-                            </h6>
-
-                            <ul class="list-unstyled mb-0">
-                                <li *ngIf="profile.terms.interestRate">
-                                    <strong>Процентная ставка:</strong> {{ profile.terms.interestRate }}%
-                                </li>
-
-                                <li *ngIf="profile.terms.minTermDays">
-                                    <strong>Минимальный срок:</strong> {{ profile.terms.minTermDays }} дней
-                                </li>
-
-                                <li *ngIf="profile.terms.maxAmount">
-                                    <strong>Максимальная сумма:</strong> {{ profile.terms.maxAmount | number:'1.0-0' }} ₸
-                                </li>
-
-                                <li *ngIf="profile.terms.fees">
-                                    <strong>Комиссия:</strong> {{ profile.terms.fees }} ₸
-                                </li>
-
-                                <li *ngIf="profile.terms.additional">
-                                    <strong>Дополнительно:</strong> {{ profile.terms.additional }}
-                                </li>
-                            </ul>
-                        </div>
-
-                        <!-- Описание -->
-                        <p class="text-muted mb-0">
-                            {{ profile?.description || 'Описание пока отсутствует' }}
-                        </p>
                     </div>
 
                 </div>
-                <!-- УСЛОВИЯ ЛОМБАРДА -->
-
-
             </div>
 
-            <ng-template #notLoggedIn>
-                <div class="alert alert-warning d-flex align-items-center p-4 mb-3" role="alert">
-                <i class="fa-solid fa-profile-lock me-3 fs-4"></i>
-                <div>
-                    <h5 class="mb-1 fw-bold">{{ 'You are not logged in' | translate }}</h5>
-                    <p class="mb-0">
-                    {{ 'Please' | translate }}
-                    <a routerLink="/login" class="text-primary fw-semibold">{{ 'log in' | translate }}</a>
-                    {{ 'or' | translate }}
-                    <a routerLink="/register" class="text-primary fw-semibold">{{ 'register' | translate }}</a>.
-                    </p>
+            <!-- Description and Terms Section with better layout -->
+            <div class="p-6 md:p-8">
+                <!-- Header with About Us and Terms -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fa-regular fa-file-lines text-blue-600"></i>
+                        О нас
+                    </h3>
+
+                    <button *ngIf="profile?.terms"
+                            (click)="openTermsModal()"
+                            class="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        Условия сделки
+                    </button>
                 </div>
-                </div>
-            </ng-template>
 
-            
-        </div>
+                <!-- Terms expandable section with modern card styling -->
+                <div *ngIf="showTerms" class="mb-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200 shadow-sm">
+                    <h4 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4">
+                        <i class="fa-solid fa-scale-balanced text-blue-600"></i>
+                        Условия ломбарда
+                    </h4>
 
-        <div class="row align-items-stretch mt-4">
-  <!-- ФОТО ЛОМБАРДА -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="image-gallery" *ngIf="pawnShop$ | async as profile; else notLoggedIn">
-                <h5 class="fw-semibold mb-3">
-                    <i class="fa-regular fa-images me-2 text-primary"></i>
-                    Фотографии ломбарда
-                </h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div *ngIf="profile.terms.interestRate" class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i class="fa-solid fa-percent text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Процентная ставка</p>
+                                <p class="text-sm font-bold text-gray-800">{{ profile.terms.interestRate }}%</p>
+                            </div>
+                        </div>
 
-                <div class="gallery-grid">
-                    <div *ngFor="let photo of profile.photos" class="gallery-item">
-                    <img [src]="photo" alt="Фото ломбарда" />
-                    </div>
-                </div>
-                </div>
-            </div>
+                        <div *ngIf="profile.terms.minTermDays" class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+                                <i class="fa-solid fa-calendar-days text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Минимальный срок</p>
+                                <p class="text-sm font-bold text-gray-800">{{ profile.terms.minTermDays }} дней</p>
+                            </div>
+                        </div>
 
-        <!-- ТОВАРЫ ЛОМБАРДА -->
-            <div class="col-lg-8 col-md-6 mb-4">
-                <div class="pawnshop-products" *ngIf="products$ | async as products">
-                    <h5 class="fw-semibold mb-3">
-                        <i class="fa-solid fa-box-open me-2 text-primary"></i>
-                        Товары ломбарда на продаже
-                    </h5>
+                        <div *ngIf="profile.terms.maxAmount" class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                <i class="fa-solid fa-money-bill-wave text-green-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Максимальная сумма</p>
+                                <p class="text-sm font-bold text-gray-800">{{ profile.terms.maxAmount | number:'1.0-0' }} ₸</p>
+                            </div>
+                        </div>
 
-                <div *ngIf="products.length > 0; else noProducts" class="product-container">
-                    <div class="mb-3" *ngFor="let product of products">
-                        <div class="product-card" (click)="openProductDetail(product)" style="position: relative;">
-                            <img [src]="product.photos[0]" alt="main-photo" class="main-photo">
+                        <div *ngIf="profile.terms.fees" class="flex items-center gap-3 p-3 bg-white rounded-lg">
+                            <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                                <i class="fa-solid fa-coins text-yellow-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Комиссия</p>
+                                <p class="text-sm font-bold text-gray-800">{{ profile.terms.fees }} ₸</p>
+                            </div>
+                        </div>
 
-                                <i 
-                                class="fa-solid fa-heart" 
-                                style="position: absolute; top: 10px; right: 10px; font-size: 1.2rem; cursor: pointer;"
-                                [ngClass]="{
-                                    'text-danger': user?.favoriteItems?.includes(product._id),
-                                    'text-white': !user?.favoriteItems?.includes(product._id)
-                                }"
-                                (click)="toggleFavoriteItem(product._id, $event)">
-                                </i>
-
-                            <div class="info-block">
-                                <span class="product-title">{{ product.title }}</span>
-                                <span class="product-price">{{ product.price | number }} ₸</span>
-                                <span class="product-date">{{ product.createdAt | date: 'd MMMM' }}</span>
+                        <div *ngIf="profile.terms.additional" class="col-span-1 md:col-span-2 flex items-start gap-3 p-3 bg-white rounded-lg">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-info-circle text-purple-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Дополнительно</p>
+                                <p class="text-sm text-gray-700">{{ profile.terms.additional }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <ng-template #noProducts>
-                    <p class="text-muted">Пока нет товаров на продаже</p>
-                </ng-template>
-                </div>
+                <!-- Description with better typography -->
+                <p class="text-gray-600 leading-relaxed text-base">
+                    {{ profile?.description || 'Описание пока отсутствует' }}
+                </p>
+            </div>
+        </div>
 
-                <!-- Блок отзывов -->
-            </div>
-            <div class="pawnshop-reviews mt-4" *ngIf="pawnShop$ | async as profile">
-                <h5 class="fw-semibold mb-3">
-                    <i class="fa-regular fa-comment-dots me-2 text-primary"></i>
-                    Отзывы
-                    <span class="text-muted small">({{ profile.reviews?.length || 0 }})</span>
-                </h5>
-    
-            <!-- Средний рейтинг -->
-            <div class="mb-3">
-                <ng-container *ngFor="let star of [1,2,3,4,5]">
-                <i
-                    class="fa-star"
-                    [ngClass]="{
-                    'fa-solid text-warning': (profile.rating || 0) >= star,
-                    'fa-regular text-muted': (profile.rating || 0) < star
-                    }"
-                ></i>
-                </ng-container>
-                <span class="ms-2">{{ profile.rating?.toFixed(1) || 0 }}/5</span>
-            </div>
-    
-            <!-- Список последних 3 отзывов -->
-            <div *ngIf="profile.reviews?.length > 0; else noReviews">
-                <div *ngFor="let review of profile.reviews | slice:-3" class="review-item mb-2 border-bottom pb-2">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="fw-semibold">{{ review.userName || 'Пользователь' }}</span>
-                    <small class="text-muted">{{ review.createdAt | date:'dd MMM yyyy' }}</small>
-                </div>
-                <div class="mb-1">
-                    <ng-container *ngFor="let star of [1,2,3,4,5]">
-                    <i
-                        class="fa-star"
-                        style="font-size: 10px;"
-                        [ngClass]="{
-                        'fa-solid text-warning': review.rating >= star,
-                        'fa-regular text-muted': review.rating < star
-                        }"
-                    ></i>
-                    </ng-container>
-                </div>
-                <p class="mb-0 text-muted">{{ review.comment }}</p>
-                </div>
-            </div>
-    
-            <ng-template #noReviews>
-                <p class="text-muted mb-0">Пока нет отзывов</p>
-            </ng-template>
-    
-            <!-- Форма добавления отзыва -->
-                <div class="mt-3">
-                    <h6>Оставить отзыв</h6>
-                    <div class="d-flex align-items-center mb-2">
-                        <ng-container *ngFor="let star of [1,2,3,4,5]">
-                            <i
-                            class="fa-star me-1"
-                            [ngClass]="{'fa-solid text-warning': star <= newRating, 'fa-regular text-muted': star > newRating}"
-                            style="cursor:pointer; font-size: 20px;"
-                            (click)="newRating = star"
-                            ></i>
-                        </ng-container>
+        <!-- Not logged in alert with modern styling -->
+        <ng-template #notLoggedIn>
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 rounded-lg p-6 shadow-md mb-8">
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0">
+                        <i class="fa-solid fa-lock text-yellow-500 text-3xl"></i>
                     </div>
-                        <textarea [(ngModel)]="newComment" class="form-control mb-2" rows="2" placeholder="Ваш отзыв..."></textarea>
-                    <button class="btn btn-primary btn-sm" (click)="addReview(profile._id)">Отправить</button>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">{{ 'You are not logged in' | translate }}</h3>
+                        <p class="text-gray-600">
+                            {{ 'Please' | translate }}
+                            <a routerLink="/login" class="text-blue-600 font-semibold hover:text-blue-800 transition-colors">{{ 'log in' | translate }}</a>
+                            {{ 'or' | translate }}
+                            <a routerLink="/register" class="text-blue-600 font-semibold hover:text-blue-800 transition-colors">{{ 'register' | translate }}</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+
+        <!-- Main content grid with responsive layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+            
+            <!-- Photo Gallery with modern card -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6" 
+                     *ngIf="pawnShop$ | async as profile">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
+                        <i class="fa-regular fa-images text-blue-600"></i>
+                        Фотографии ломбарда
+                    </h3>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div *ngFor="let photo of profile.photos" 
+                             class="relative aspect-square rounded-xl overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
+                            <img [src]="photo" 
+                                 alt="Фото ломбарда"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Section with modern design -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6" 
+                     *ngIf="products$ | async as products">
+                    <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
+                        <i class="fa-solid fa-box-open text-blue-600"></i>
+                        Товары ломбарда на продаже
+                    </h3>
+
+                    <div *ngIf="products.length > 0; else noProducts" 
+                         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div *ngFor="let product of products" 
+                             (click)="openProductDetail(product)"
+                             class="group relative bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer hover:-translate-y-1">
+                            
+                            <!-- Product Image -->
+                            <div class="relative aspect-square overflow-hidden bg-gray-100">
+                                <img [src]="product.photos[0]" 
+                                     alt="product photo"
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                                
+                                <!-- Favorite Button -->
+                                <button (click)="toggleFavoriteItem(product._id, $event)"
+                                        class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-lg hover:scale-110 transition-all duration-300 z-10">
+                                    <i class="fa-solid fa-heart"
+                                       [ngClass]="{
+                                           'text-red-500': user?.favoriteItems?.includes(product._id),
+                                           'text-gray-400': !user?.favoriteItems?.includes(product._id)
+                                       }"></i>
+                                </button>
+                            </div>
+
+                            <!-- Product Info -->
+                            <div class="p-4">
+                                <h4 class="font-semibold text-gray-800 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                    {{ product.title }}
+                                </h4>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg font-bold text-blue-600">{{ product.price | number }} ₸</span>
+                                    <span class="text-xs text-gray-500">{{ product.createdAt | date: 'd MMMM' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-template #noProducts>
+                        <div class="text-center py-12">
+                            <i class="fa-solid fa-box-open text-gray-300 text-5xl mb-4"></i>
+                            <p class="text-gray-500">Пока нет товаров на продаже</p>
+                        </div>
+                    </ng-template>
                 </div>
             </div>
         </div>
 
+        <!-- Reviews Section with modern card design -->
+        <div class="mt-8 bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 md:p-8" 
+             *ngIf="pawnShop$ | async as profile">
+            <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2 mb-6">
+                <i class="fa-regular fa-comment-dots text-blue-600"></i>
+                Отзывы
+                <span class="ml-2 px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">
+                    {{ profile.reviews?.length || 0 }}
+                </span>
+            </h3>
 
+            <!-- Average Rating Display -->
+            <div class="flex items-center gap-4 mb-6 p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl">
+                <div class="flex items-center gap-1">
+                    <ng-container *ngFor="let star of [1,2,3,4,5]">
+                        <i class="fa-star text-2xl"
+                           [ngClass]="{
+                               'fa-solid text-yellow-400': (profile.rating || 0) >= star,
+                               'fa-regular text-gray-300': (profile.rating || 0) < star
+                           }"></i>
+                    </ng-container>
+                </div>
+                <span class="text-2xl font-bold text-gray-800">{{ profile.rating?.toFixed(1) || 0 }}<span class="text-gray-400 text-lg">/5</span></span>
+            </div>
+
+            <!-- Reviews List with modern card styling -->
+            <div *ngIf="profile.reviews?.length > 0; else noReviews" class="space-y-4 mb-8">
+                <div *ngFor="let review of profile.reviews | slice:-3" 
+                     class="p-5 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition-all duration-300">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">
+                                {{ (review.userName || 'Пользователь').charAt(0).toUpperCase() }}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">{{ review.userName || 'Пользователь' }}</p>
+                                <div class="flex items-center gap-1 mt-1">
+                                    <ng-container *ngFor="let star of [1,2,3,4,5]">
+                                        <i class="fa-star text-xs"
+                                           [ngClass]="{
+                                               'fa-solid text-yellow-400': review.rating >= star,
+                                               'fa-regular text-gray-300': review.rating < star
+                                           }"></i>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="text-xs text-gray-500">{{ review.createdAt | date:'dd MMM yyyy' }}</span>
+                    </div>
+                    <p class="text-gray-700 leading-relaxed">{{ review.comment }}</p>
+                </div>
+            </div>
+
+            <ng-template #noReviews>
+                <div class="text-center py-8 mb-8">
+                    <i class="fa-regular fa-comment text-gray-300 text-4xl mb-3"></i>
+                    <p class="text-gray-500">Пока нет отзывов</p>
+                </div>
+            </ng-template>
+
+            <!-- Add Review Form with modern styling -->
+            <div class="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200">
+                <h4 class="text-lg font-bold text-gray-800 mb-4">Оставить отзыв</h4>
+                
+                <!-- Star Rating Input -->
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="text-sm font-medium text-gray-600">Ваша оценка:</span>
+                    <ng-container *ngFor="let star of [1,2,3,4,5]">
+                        <i class="fa-star text-2xl cursor-pointer transition-all duration-200 hover:scale-110"
+                           [ngClass]="{'fa-solid text-yellow-400': star <= newRating, 'fa-regular text-gray-300': star > newRating}"
+                           (click)="newRating = star"></i>
+                    </ng-container>
+                </div>
+
+                <!-- Comment Textarea -->
+                <textarea [(ngModel)]="newComment" 
+                          class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 resize-none bg-white" 
+                          rows="4" 
+                          placeholder="Поделитесь своим опытом..."></textarea>
+
+                <!-- Submit Button -->
+                <button (click)="addReview(profile._id)"
+                        class="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Отправить отзыв
+                </button>
+            </div>
+        </div>
 
     </div>
 </div>

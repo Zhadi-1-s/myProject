@@ -1,389 +1,477 @@
-<div class="container-fluid mt-3">
-  <div class="row justify-content-center">
-    <!-- Top Section -->
-    <div class="col-12">
-      <div class="profile-header d-flex align-items-center p-3 mb-3" *ngIf="profile$ | async as profile; else notLoggedIn">
-        <!-- Pawnshop Logo -->
-        <div class="avatar-img">
-          <img [src]="profile?.logoUrl || 'assets/png/default-pawnshop.jpg'"
-               alt="pawnshop-logo"
-               class="rounded-circle me-3"
-               width="190"
-               height="190" />
-               
-          <!-- <div class="avatar-overlay" [class.show]="hover" (click)="changeProfilePhoto()">
-            <span>Изменить фото профиля</span>
-          </div> -->
-        </div>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-6 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto">
+    <!-- Top Section - Profile Header -->
+    <div class="mb-6">
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300" 
+           *ngIf="profile$ | async as profile; else notLoggedIn">
+        <!-- Modern gradient header with better layout -->
+        <div class="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 h-32 sm:h-40"></div>
+        
+        <div class="px-6 pb-6 sm:px-8 sm:pb-8">
+          <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between -mt-16 sm:-mt-20">
+            <!-- Avatar and Info -->
+            <div class="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-6">
+              <!-- Floating avatar with shadow -->
+              <div class="relative group">
+                <img [src]="profile?.logoUrl || 'assets/png/default-pawnshop.jpg'"
+                     alt="pawnshop-logo"
+                     class="w-32 h-32 sm:w-40 sm:h-40 rounded-2xl border-4 border-white shadow-xl object-cover 
+                            group-hover:scale-105 transition-transform duration-300" />
+              </div>
 
-        <!-- Pawnshop Info -->
-        <div class="flex-grow-1 ms-5" *ngIf="profile">
-          <h3 class="mb-1">{{ profile?.name || 'Pawnshop name' }}</h3>
-          <!-- <p class="text-muted mb-2">{{ profile?.description || 'Pawnshop description' }}</p> -->
-          <div class="d-flex gap-3 mt-3">
-            <p class="text-muted mb-1 small fw-semibold">
-              <i class="fa-regular fa-clock me-1"></i>
-              {{ profile?.openTime }} – {{ profile?.closeTime }}
-              <span
-                [ngClass]="{
-                  'text-success': isOpenNow,
-                  'text-danger': !isOpenNow
-                }"
-                class="ms-2 fw-bold"
-              >
-                {{ isOpenNow ? 'Открыто' : 'Закрыто' }}
-              </span>
-            </p>
-            <p class="text-muted mb-1 small fw-semibold">
-              <i class="fa-regular fa-clock me-1"></i> {{ currentTime | date:'shortTime' }}
-            </p>
-            <!-- <p class="text-muted mb-0 small fw-semibold">
-              <i class="fa-regular fa-envelope"></i> {{ profile?.email }}
-            </p> -->
+              <!-- Improved info layout with better spacing -->
+              <div class="flex-grow text-center sm:text-left mb-4 sm:mb-0" *ngIf="profile">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  {{ profile?.name || 'Pawnshop name' }}
+                </h1>
+                
+                <div class="flex flex-wrap gap-3 sm:gap-4 justify-center sm:justify-start">
+                  <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg">
+                    <i class="fa-regular fa-clock text-blue-600"></i>
+                    <span>{{ profile?.openTime }} – {{ profile?.closeTime }}</span>
+                    <span
+                      [ngClass]="{
+                        'text-green-600 bg-green-50': isOpenNow,
+                        'text-red-600 bg-red-50': !isOpenNow
+                      }"
+                      class="px-2 py-0.5 rounded-full text-xs font-semibold ml-1"
+                    >
+                      {{ isOpenNow ? 'Открыто' : 'Закрыто' }}
+                    </span>
+                  </div>
+                  
+                  <div class="flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg">
+                    <i class="fa-regular fa-clock text-blue-600"></i>
+                    <span>{{ currentTime | date:'shortTime' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action buttons with modern styling -->
+            <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+              <button class="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg 
+                           hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 
+                           shadow-md hover:shadow-lg font-medium flex items-center justify-center gap-2"
+                      (click)="openEditLombard()">
+                <i class="fa-solid fa-building"></i>
+                <span>{{ 'Edit details of shop' | translate }}</span>
+              </button>
+              <button class="px-4 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg 
+                           hover:bg-blue-50 transition-all duration-200 font-medium 
+                           flex items-center justify-center gap-2"
+                      (click)="openEditModal()">
+                <i class="fa-regular fa-pen-to-square"></i>
+                <span>{{ 'Edit profile' | translate }}</span>
+              </button>
+            </div>
           </div>
         </div>
-
-
-        <div class="d-flex gap-2 align-self-end">
-          <button class="btn btn-lombard btn-lombard-edit" (click)="openEditLombard()">
-            <i class="fa-solid fa-building me-2"></i>{{ 'Edit details of shop' | translate }}
-          </button>
-          <button class="btn btn-lombard btn-outline-primary" (click)="openEditModal()">
-            <i class="fa-regular fa-pen-to-square me-1"></i>{{ 'Edit profile' | translate }}
-          </button>
-        </div>
-
       </div>
 
       <ng-template #notLoggedIn>
-        <div class="alert alert-warning d-flex align-items-center p-4 mb-3" role="alert">
-          <i class="fa-solid fa-profile-lock me-3 fs-4"></i>
-          <div>
-            <h5 class="mb-1 fw-bold">{{ 'You are not logged in' | translate }}</h5>
-            <p class="mb-0">
-              {{ 'Please' | translate }}
-              <a routerLink="/login" class="text-primary fw-semibold">{{ 'log in' | translate }}</a>
-              {{ 'or' | translate }}
-              <a routerLink="/register" class="text-primary fw-semibold">{{ 'register' | translate }}</a>.
-            </p>
+        <!-- Modern alert design -->
+        <div class="bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-amber-500 rounded-xl p-6 shadow-md" role="alert">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0">
+              <i class="fa-solid fa-lock text-amber-600 text-3xl"></i>
+            </div>
+            <div>
+              <h5 class="text-lg font-bold text-gray-900 mb-2">{{ 'You are not logged in' | translate }}</h5>
+              <p class="text-gray-700">
+                {{ 'Please' | translate }}
+                <a routerLink="/login" class="text-blue-600 hover:text-blue-700 font-semibold underline">{{ 'log in' | translate }}</a>
+                {{ 'or' | translate }}
+                <a routerLink="/register" class="text-blue-600 hover:text-blue-700 font-semibold underline">{{ 'register' | translate }}</a>.
+              </p>
+            </div>
           </div>
         </div>
       </ng-template>
     </div>
 
-    <!-- Bottom Section -->
-    <div class="col-12" *ngIf="profile$ | async as profile">
-      <div class="profile-section d-flex gap-3">
-  
-        <div class="description-content p-4 shadow-sm rounded-3 bg-light position-relative">
-  <!-- Кнопка редактирования -->
-          <button
-            class="edit-icon position-absolute top-0 end-0 m-3 btn btn-light border-0"
-            title="Edit description"
-            (click)="toggleEdit()"
-          >
-            <i class="far fa-edit"></i>
-          </button>
+    <!-- Bottom Section - Main Content -->
+    <div class="space-y-6" *ngIf="profile$ | async as profile">
+      <!-- Grid layout for description, stats, and reviews -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Description Section (spans 2 columns on large screens) -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6 relative h-full">
+            <!-- Modern edit button -->
+            <button
+              class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-lg 
+                     bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors duration-200"
+              title="Edit description"
+              (click)="toggleEdit()"
+            >
+              <i class="far fa-edit"></i>
+            </button>
 
-          <!-- Заголовок -->
-          <div class="d-flex align-items-center mb-3">
-            <i class="fa-solid fa-circle-info text-primary me-2 fs-5"></i>
-            <h4 class="m-0 fw-semibold">{{ "Description" | translate }}</h4>
-          </div>
-
-          <!-- Текст / Поле редактирования -->
-          <div class="description-text">
-            <!-- Если редактирование включено -->
-            <div *ngIf="isEditing; else viewMode">
-              <textarea
-                class="form-control"
-                [(ngModel)]="editableDescription"
-                rows="6"
-                placeholder="{{ 'Enter description...' | translate }}"
-              ></textarea>
-
-              <div class="mt-2 d-flex justify-content-end gap-2">
-                <button class="btn btn-sm btn-secondary" (click)="cancelEdit()">
-                  {{ 'Cancel' | translate }}
-                </button>
-                <button class="btn btn-sm btn-success" (click)="saveDescription()">
-                  {{ 'Save' | translate }}
-                </button>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 
+                        flex items-center justify-center text-white">
+                <i class="fa-solid fa-circle-info text-lg"></i>
               </div>
+              <h4 class="text-xl font-bold text-gray-900">{{ "Description" | translate }}</h4>
             </div>
 
-            <!-- Если просто просмотр -->
-            <ng-template #viewMode>
-              <span *ngIf="profile?.description; else noDescription">
-                {{ profile.description }}
-              </span>
-              <ng-template #noDescription>
-                <span class="text-muted fst-italic">
-                  {{ "No description provided yet." | translate }}
-                </span>
+            <div class="description-text">
+              <div *ngIf="isEditing; else viewMode">
+                <textarea
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 
+                       focus:ring-2 focus:ring-blue-200 transition-all duration-200 resize-none"
+                  [(ngModel)]="editableDescription"
+                  rows="6"
+                  placeholder="{{ 'Enter description...' | translate }}"
+                ></textarea>
+
+                <div class="mt-3 flex justify-end gap-2">
+                  <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg 
+                               transition-colors duration-200 font-medium" 
+                          (click)="cancelEdit()">
+                    {{ 'Cancel' | translate }}
+                  </button>
+                  <button class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 
+                               hover:to-emerald-700 text-white rounded-lg transition-all duration-200 
+                               font-medium shadow-md hover:shadow-lg" 
+                          (click)="saveDescription()">
+                    {{ 'Save' | translate }}
+                  </button>
+                </div>
+              </div>
+
+              <ng-template #viewMode>
+                <p class="text-gray-700 leading-relaxed" *ngIf="profile?.description; else noDescription">
+                  {{ profile.description }}
+                </p>
+                <ng-template #noDescription>
+                  <p class="text-gray-400 italic">
+                    {{ "No description provided yet." | translate }}
+                  </p>
+                </ng-template>
               </ng-template>
-            </ng-template>
-          </div>
-        </div>
-
-
-     
-        <div class="pawnshop-stats p-4 shadow-sm bg-white rounded">
-          <div class="d-flex align-items-center mb-3">
-            <i class="fa-solid fa-chart-simple text-success me-2 fs-5"></i>
-            <h4 class="m-0 fw-semibold">{{ "Pawnshop summary" | translate }}</h4>
-          </div>
-
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-value">{{ (profile$ | async)?.activeSlots?.length || 0 }}</span>
-              <span class="stat-label">{{ "Active slots" | translate }}</span>
-            </div>
-
-            <div class="stat-item">
-              <span class="stat-value">
-                {{ (products$ | async)?.length || (products$ | async) || 0 }}
-              </span>
-              <span class="stat-label">{{ "Items for sale" | translate }}</span>
-            </div>
-
-            <div class="stat-item" (click)="scrollToTableItem()" style="cursor: pointer;">
-              <span class="stat-value">{{ (products$ | async)?.length || 0 }}</span>
-              <span class="stat-label">{{ "Total items" | translate }}</span>
-            </div>
-
-            <div class="stat-item">
-              <span class="stat-value">
-                {{ computeSlotUsagePercent(profile$ | async, products$ | async) }}%
-              </span>
-              <span class="stat-label">{{ "Slot usage" | translate }}</span>
             </div>
           </div>
         </div>
 
-        <!-- Правая колонка -->
-        <div class="extra-content" *ngIf="profile$ | async as profile">
-          <div class="small-block text-center">
+        <!-- Right Column: Stats and Reviews -->
+        <div class="space-y-6">
+          <!-- Stats card with modern design -->
+          <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6">
+            <div class="flex items-center gap-3 mb-5">
+              <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 
+                        flex items-center justify-center text-white">
+                <i class="fa-solid fa-chart-simple text-lg"></i>
+              </div>
+              <h4 class="text-xl font-bold text-gray-900">{{ "Pawnshop summary" | translate }}</h4>
+            </div>
 
-            <i class="fa-solid fa-star text-warning fs-4 mb-2"></i>
-            <h6 class="fw-semibold mb-3">{{ 'Rating and reviews' | translate }}</h6>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 
+                        hover:shadow-md transition-shadow duration-200">
+                <div class="text-2xl font-bold text-blue-600 mb-1">
+                  {{ (profile$ | async)?.activeSlots?.length || 0 }}
+                </div>
+                <div class="text-sm text-gray-600 font-medium">{{ "Active slots" | translate }}</div>
+              </div>
 
-            <!-- Средний рейтинг -->
-            <div class="mb-3">
-              <span class="fs-5 fw-bold text-dark">
-                {{ profile.rating || 0 }}
-              </span>
-              <span class="text-muted small">/ 5.0</span>
+              <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 
+                        hover:shadow-md transition-shadow duration-200">
+                <div class="text-2xl font-bold text-purple-600 mb-1">
+                  {{ (products$ | async)?.length || (products$ | async) || 0 }}
+                </div>
+                <div class="text-sm text-gray-600 font-medium">{{ "Items for sale" | translate }}</div>
+              </div>
 
-              <div class="stars text-warning mt-1">
-                {{ getStars(profile.rating) }}
+              <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 
+                        hover:shadow-md transition-shadow duration-200 cursor-pointer"
+                   (click)="scrollToTableItem()">
+                <div class="text-2xl font-bold text-green-600 mb-1">
+                  {{ (products$ | async)?.length || 0 }}
+                </div>
+                <div class="text-sm text-gray-600 font-medium">{{ "Total items" | translate }}</div>
+              </div>
+
+              <div class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-lg p-4 
+                        hover:shadow-md transition-shadow duration-200">
+                <div class="text-2xl font-bold text-amber-600 mb-1">
+                  {{ computeSlotUsagePercent(profile$ | async, products$ | async) }}%
+                </div>
+                <div class="text-sm text-gray-600 font-medium">{{ "Slot usage" | translate }}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviews card with modern design -->
+          <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6" 
+               *ngIf="profile$ | async as profile">
+            <div class="text-center mb-4">
+              <div class="w-12 h-12 mx-auto rounded-full bg-gradient-to-br from-amber-400 to-yellow-500 
+                        flex items-center justify-center text-white mb-3">
+                <i class="fa-solid fa-star text-xl"></i>
+              </div>
+              <h6 class="text-lg font-bold text-gray-900 mb-3">{{ 'Rating and reviews' | translate }}</h6>
+
+              <div class="mb-4">
+                <div class="text-4xl font-bold text-gray-900 mb-1">
+                  {{ profile.rating || 0 }}
+                </div>
+                <div class="text-gray-500 text-sm mb-2">/ 5.0</div>
+
+                <div class="flex justify-center gap-1 text-amber-400 text-xl">
+                  <span>{{ getStars(profile.rating) }}</span>
+                </div>
               </div>
             </div>
 
-            <!-- Реальные отзывы -->
-            <div class="reviews text-start px-3" *ngIf="profile.reviews?.length; else noReviews">
-              <div class="review mb-2" *ngFor="let r of profile.reviews">
-                <p class="mb-1 fw-semibold">{{ r.userName || 'User' }}</p>
-                <p class="text-muted small fst-italic">
-                  “{{ r.comment }}”
+            <div class="space-y-3 max-h-64 overflow-y-auto" 
+                 *ngIf="profile.reviews?.length; else noReviews">
+              <div class="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors duration-200" 
+                   *ngFor="let r of profile.reviews">
+                <p class="font-semibold text-gray-900 text-sm mb-1">{{ r.userName || 'User' }}</p>
+                <p class="text-gray-600 text-sm italic">
+                  "{{ r.comment }}"
                 </p>
               </div>
             </div>
 
             <ng-template #noReviews>
-              <p class="text-muted small fst-italic text-center">
+              <p class="text-gray-400 text-sm italic text-center py-4">
                 {{ 'No reviews yet' | translate }}
               </p>
             </ng-template>
+          </div>
+        </div>
+      </div>
 
+      <!-- Items List Table with modern design -->
+      <div #itemsTable id="itemsTable" 
+           class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6" 
+           *ngIf="profile$ && products$ | async">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 
+                      flex items-center justify-center text-white">
+              <i class="fa-solid fa-box text-lg"></i>
+            </div>
+            <h4 class="text-xl font-bold text-gray-900">{{ 'Items list' | translate }}</h4>
+          </div>
+
+          <button class="px-5 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 
+                       hover:to-emerald-700 text-white rounded-lg transition-all duration-200 
+                       shadow-md hover:shadow-lg font-medium flex items-center justify-center gap-2"
+                  (click)="openAddOfferModal()">
+            <i class="fa-solid fa-plus"></i>
+            <span>{{ 'Add item' | translate }}</span>
+          </button>
+        </div>
+
+        <div *ngIf="products$ | async; else noItems">
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full">
+              <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                <tr>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    {{ 'Photo' | translate }}
+                  </th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    {{ 'Title' | translate }}
+                  </th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider hidden sm:table-cell">
+                    {{ 'Category' | translate }}
+                  </th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    {{ 'Price' | translate }}
+                  </th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider hidden md:table-cell">
+                    {{ 'Status' | translate }}
+                  </th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider hidden lg:table-cell">
+                    {{ 'Created' | translate }}
+                  </th>
+                  <th class="px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    {{ 'Action' | translate }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <tr class="hover:bg-blue-50 transition-colors duration-150" *ngFor="let item of products$ | async">
+                  <td class="px-4 py-3">
+                    <img
+                      [src]="item.photos?.[0] || 'assets/png/default-product.png'"
+                      alt="{{ item.title }}"
+                      class="w-14 h-14 rounded-lg object-cover shadow-sm"
+                    />
+                  </td>
+                  <td class="px-4 py-3 font-semibold text-gray-900">{{ item.title }}</td>
+                  <td class="px-4 py-3 text-gray-600 hidden sm:table-cell">{{ item.category }}</td>
+                  <td class="px-4 py-3 text-green-600 font-bold">${{ item.price }}</td>
+                  <td class="px-4 py-3 hidden md:table-cell">
+                    <span
+                      class="px-3 py-1 rounded-full text-xs font-semibold"
+                      [ngClass]="{
+                        'bg-green-100 text-green-700': item.status === 'sold',
+                        'bg-amber-100 text-amber-700': item.status === 'active',
+                        'bg-gray-100 text-gray-700': item.status === 'closed'
+                      }"
+                    >
+                      {{ item.status | titlecase }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 text-gray-600 text-sm hidden lg:table-cell">
+                    {{ item.createdAt | date: 'short' }}
+                  </td>
+                  <td class="px-4 py-3">
+                    <div class="flex gap-2">
+                      <button 
+                          class="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-50 
+                                 hover:bg-blue-100 text-blue-600 transition-colors duration-200" 
+                          (click)="editProduct(item)"
+                          ngbTooltip="{{ 'Edit product' | translate }}"
+                          container="body">
+                        <i class="fa-solid fa-pen text-sm"></i>
+                      </button>
+                      <button 
+                          class="w-8 h-8 flex items-center justify-center rounded-lg bg-red-50 
+                                 hover:bg-red-100 text-red-600 transition-colors duration-200"
+                          (click)="deleteProduct()"
+                          ngbTooltip="{{ 'Delete product' | translate }}"
+                          container="body">
+                        <i class="fa-solid fa-trash text-sm"></i>
+                      </button>
+                      <button 
+                          class="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-50 
+                                 hover:bg-gray-100 text-gray-600 transition-colors duration-200" 
+                          (click)="openProductDetail(item)"
+                          ngbTooltip="{{ 'View details' | translate }}"
+                          container="body">
+                        <i class="fa-solid fa-file-lines text-sm"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        
-      </div>
-    </div>
-
-    <!--Это таблица список продуктов кампании-->
-    <div  #itemsTable id="itemsTable" class="items-list mt-4 shadow-sm rounded bg-white p-3" *ngIf="profile$ && products$ | async">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-semibold mb-0">
-          <i class="fa-solid fa-box me-2 text-primary"></i>
-          {{ 'Items list' | translate }}
-        </h4>
-
-        <button class="btn btn-lombard btn-success" (click)="openAddOfferModal()">
-          <i class="fa-solid fa-plus me-1"></i>{{ 'Add item' | translate }}
-        </button>
+        <ng-template #noItems>
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+            <i class="fa-solid fa-box-open text-blue-400 text-4xl mb-3"></i>
+            <p class="text-blue-700 font-medium">
+              {{ 'No items found for this pawnshop.' | translate }}
+            </p>
+          </div>
+        </ng-template>
       </div>
 
-      <div *ngIf="products$ | async; else noItems">
-        <div class="table-responsive">
-          <table class="table align-middle table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>{{ 'Photo' | translate }}</th>
-                <th>{{ 'Title' | translate }}</th>
-                <th>{{ 'Category' | translate }}</th>
-                <th>{{ 'Price' | translate }}</th>
-                <th>{{ 'Status' | translate }}</th>
-                <th>{{ 'Created' | translate }}</th>
-                <th>{{ 'Action' | translate }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of products$ | async">
-                <td>
-                  <img
-                    [src]="item.photos?.[0] || 'assets/png/default-product.png'"
-                    alt="{{ item.title }}"
-                    class="item-photo rounded"
-                    width="60"
-                    height="60"
-                  />
-                </td>
-                <td class="fw-semibold">{{ item.title }}</td>
-                <td>{{ item.category }}</td>
-                <td class="text-success fw-bold">${{ item.price }}</td>
-                <td>
-                  <span
-                    class="badge"
-                    [ngClass]="{
-                      'bg-success': item.status === 'sold',
-                      'bg-warning text-dark': item.status === 'active',
-                      'bg-secondary': item.status === 'closed'
-                    }"
-                  >
-                    {{ item.status | titlecase }}
+      <!-- Active Slots Section with modern card design -->
+      <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6" 
+           *ngIf="slotsWithProducts$ | async; else noActiveSlots">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 
+                      flex items-center justify-center text-white">
+              <i class="fa-solid fa-hand-holding-dollar text-lg"></i>
+            </div>
+            <h4 class="text-xl font-bold text-gray-900">{{ 'Active slots' | translate }}</h4>
+          </div>
+
+          <button class="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 
+                       hover:to-yellow-600 text-white rounded-lg transition-all duration-200 
+                       shadow-md hover:shadow-lg font-medium flex items-center justify-center gap-2"
+                  (click)="openCreateSlotModal()">
+            <i class="fa-solid fa-vault"></i>
+            <span>{{ 'Create slot' | translate }}</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border-2 border-green-200 
+                    hover:border-green-300 hover:shadow-lg transition-all duration-300 p-5" 
+               *ngFor="let item of slotsWithProducts$ | async">
+            
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex items-center gap-3">
+                <img
+                  [src]="item.product?.photos?.[0] || 'assets/png/default-product.png'"
+                  alt="{{ item.product?.title }}"
+                  class="w-16 h-16 rounded-lg object-cover shadow-md"
+                />
+                <div>
+                  <h6 class="font-bold text-gray-900 mb-1">{{ item.product?.title }}</h6>
+                  <span class="px-3 py-1 bg-green-600 text-white text-xs font-semibold rounded-full">
+                    {{ item.slot.status | titlecase }}
                   </span>
-                </td>
-                <td>{{ item.createdAt | date: 'short' }}</td>
-                <td>
-                  <button 
-                      class="btn btn-sm me-2" 
-                      (click)="editProduct(item)"
-                      ngbTooltip="{{ 'Edit product' | translate }}"
-                      container="body">
-                    <i class="fa-solid fa-pen"></i>
-                  </button>
-                  <button 
-                      class="btn btn-sm"
-                      (click)="deleteProduct()"
-                      ngbTooltip="{{ 'Delete product' | translate }}"
-                      container="body">
-                    <i class="fa-solid fa-trash"></i>
-                  </button>
-                  <button 
-                      class="btn btn-sm" 
-                      (click)="openProductDetail(item)"
-                      ngbTooltip="{{ 'View details' | translate }}"
-                      container="body">
-                    <i class="fa-solid fa-file-lines"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </div>
+              </div>
+
+              <div class="relative">
+                <button
+                  class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/50 
+                         text-gray-600 transition-colors duration-200"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <button class="dropdown-item" (click)="openSlotDetails(item.slot)">
+                      {{ 'Details' | translate }}
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item" (click)="editSlot(item.slot)">
+                      {{ 'Edit' | translate }}
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown-item text-danger" (click)="deleteSlot(item.slot._id)">
+                      {{ 'Delete' | translate }}
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="space-y-2 mb-4">
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-600 font-medium">{{ 'Loan amount' | translate }}:</span>
+                <span class="font-bold text-green-700">${{ item.slot.loanAmount }}</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-600 font-medium">{{ 'Interest rate' | translate }}:</span>
+                <span class="font-bold text-blue-700">{{ item.slot.interestRate }}%</span>
+              </div>
+              <div class="flex justify-between items-center text-sm">
+                <span class="text-gray-600 font-medium">{{ 'End date' | translate }}:</span>
+                <span class="font-bold text-purple-700">{{ item.slot.endDate | date:'shortDate' }}</span>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t border-green-200">
+              <div class="text-xs text-gray-500 flex items-center gap-1">
+                <i class="fa-regular fa-clock"></i>
+                <span>{{ item.slot.createdAt | date:'short' }}</span>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 
-      <ng-template #noItems>
-        <div class="alert alert-info text-center m-0">
-          {{ 'No items found for this pawnshop.' | translate }}
+      <ng-template #noActiveSlots>
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
+          <i class="fa-solid fa-inbox text-gray-300 text-5xl mb-4"></i>
+          <p class="text-gray-500 font-medium text-lg">
+            {{ 'No active slots at the moment' | translate }}
+          </p>
         </div>
       </ng-template>
-    </div>
-
-    <div class="active-slots mt-5" *ngIf="slotsWithProducts$ | async; else noActiveSlots">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-semibold mb-0">
-          <i class="fa-solid fa-hand-holding-dollar text-success me-2"></i>
-          {{ 'Active slots' | translate }}
-        </h4>
-
-        <button class="btn btn-lombard btn-warning" (click)="openCreateSlotModal()">
-          <i class="fa-solid fa-vault me-1"></i>{{ 'Create slot' | translate }}
-        </button>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-md-4" *ngFor="let item of slotsWithProducts$ | async">
-          <div class="card shadow-sm border-success h-100 position-relative">
-            <div class="card-body d-flex flex-column">
-
-              <!-- Верхняя часть -->
-              <div class="d-flex justify-content-between align-items-start mb-2">
-                <div class="d-flex align-items-center">
-                  <img
-                    [src]="item.product?.photos?.[0] || 'assets/png/default-product.png'"
-                    alt="{{ item.product?.title }}"
-                    class="rounded me-3"
-                    style="object-fit: cover;"
-                    width="60"
-                    height="60"
-                  />
-                  <div>
-                    <h6 class="mb-1 fw-bold">{{ item.product?.title }}</h6>
-                    <span class="badge bg-success">{{ item.slot.status | titlecase }}</span>
-                  </div>
-                </div>
-
-                <!-- Меню действий -->
-                <div class="dropdown">
-                  <button
-                    class="btn btn-link text-muted p-0"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <i class="fa-solid fa-ellipsis-vertical fs-5"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <button class="dropdown-item" (click)="openSlotDetails(item.slot)">
-                        {{ 'Details' | translate }}
-                      </button>
-                    </li>
-                    <li>
-                      <button class="dropdown-item" (click)="editSlot(item.slot)">
-                        {{ 'Edit' | translate }}
-                      </button>
-                    </li>
-                    <li>
-                      <button class="dropdown-item text-danger" (click)="deleteSlot(item.slot._id)">
-                        {{ 'Delete' | translate }}
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <!-- Данные по слоту -->
-              <div class="flex-grow-1">
-                <p class="mb-1"><strong>{{ 'Loan amount' | translate }}:</strong> ${{ item.slot.loanAmount }}</p>
-                <p class="mb-1"><strong>{{ 'Interest rate' | translate }}:</strong> {{ item.slot.interestRate }}%</p>
-                <p class="mb-1"><strong>{{ 'End date' | translate }}:</strong> {{ item.slot.endDate | date:'shortDate' }}</p>
-              </div>
-
-              <!-- Нижняя часть -->
-              <div class="mt-3 text-muted small d-flex justify-content-end">
-                {{ item.slot.createdAt | date:'short' }}
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
 
     </div>
-
-
-
-    <ng-template #noActiveSlots>
-      <div class="alert alert-secondary mt-3 text-center">
-        {{ 'No active slots at the moment' | translate }}
-      </div>
-    </ng-template>
-
   </div>
 </div>

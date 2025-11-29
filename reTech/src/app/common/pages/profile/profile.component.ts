@@ -174,7 +174,7 @@ export class ProfileComponent implements OnInit {
   }
   get offerNotifications() {
     return (this.notificationsList || []).filter(n =>
-      ['new-offer','offer-accepted','offer-rejected','product-sold','price-changed'].includes(n.type)
+      ['new-offer','offer-accepted','offer-rejected'].includes(n.type)
     );
   }
 
@@ -188,7 +188,7 @@ export class ProfileComponent implements OnInit {
 
   get otherNotifications() {
     return (this.notificationsList || []).filter(n =>
-      !['new-offer','offer-accepted','offer-rejected','product-sold','price-changed','system','chat-opened'].includes(n.type)
+      ['product-sold','price-changed','chat-opened'].includes(n.type)
     );
   }
 

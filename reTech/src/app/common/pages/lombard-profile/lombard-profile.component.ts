@@ -20,6 +20,7 @@ import { SlotService } from '../../../shared/services/slot.service';
 import { switchMap,Observable,tap,filter,of,forkJoin,map, take } from 'rxjs';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppNotification } from '../../../shared/interfaces/notification.interface';
 
 @Component({
   selector: 'app-lombard-profile',
@@ -55,6 +56,7 @@ export class LombardProfileComponent implements OnInit{
   profile$!: Observable<PawnshopProfile>;
   slotsWithProducts$!: Observable<{ slot: Slot; product: Product }[]>;
   products$!: Observable<Product[]>;
+  notifications$!: Observable<AppNotification[]>;
 
   viewMode:boolean = true;
 
@@ -104,6 +106,11 @@ export class LombardProfileComponent implements OnInit{
       }),
       tap(data => console.log('Loaded slots with products:', data))
     );
+
+    // this.notifications$ = this.authService.currentUser$.pipe(
+    //   filter((user): user is User => !!user?._id),
+    // )
+
   }
 
   editableDescription = '';
