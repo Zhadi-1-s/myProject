@@ -71,13 +71,22 @@
                         <i class="fa-regular fa-file-lines text-blue-600"></i>
                         О нас
                     </h3>
-
-                    <button *ngIf="profile?.terms"
-                            (click)="openTermsModal()"
-                            class="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
-                        <i class="fa-solid fa-scale-balanced"></i>
-                        Условия сделки
-                    </button>
+                    <div class="flex gap-3">
+                        <button *ngIf="profile?.terms"
+                                (click)="openTermsModal()"
+                                class="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                            Условия сделки
+                        </button>
+        
+                        <button (click)="openEvaluationModal()"
+                                class="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 
+                                        hover:from-green-600 hover:to-emerald-700 text-white rounded-full font-semibold 
+                                        transition-all duration-300 shadow-md hover:shadow-lg">
+                            <i class="fa-solid fa-camera"></i>
+                            Онлайн оценка
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Terms expandable section with modern card styling -->

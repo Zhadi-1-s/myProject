@@ -21,6 +21,7 @@ import { switchMap,Observable,tap,filter,of,forkJoin,map, take } from 'rxjs';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppNotification } from '../../../shared/interfaces/notification.interface';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-lombard-profile',
@@ -54,7 +55,9 @@ export class LombardProfileComponent implements OnInit{
   @ViewChild('itemsTable') itemsTable!: ElementRef;
 
   profile$!: Observable<PawnshopProfile>;
-  slotsWithProducts$!: Observable<{ slot: Slot; product: Product }[]>;
+ 
+  private slotsSubject = new BehaviorSubject<{ slot: Slot; product: Product }[]>([]);
+  slotsWithProducts$ = this.slotsSubject.asObservable();
   products$!: Observable<Product[]>;
   notifications$!: Observable<AppNotification[]>;
 
@@ -76,41 +79,36 @@ export class LombardProfileComponent implements OnInit{
     this.profile$ = this.authService.currentUser$.pipe(
       filter((user): user is User => !!user?._id),
       switchMap(user => this.lombardService.getLombardByUserId(user._id)),
-      tap(profile => console.log('Loaded profile:', profile))
+      // tap(profile => console.log('Loaded profile:', profile))
     );
 
     this.products$ = this.profile$.pipe(
       switchMap(profile => this.productService.getProductsByOwner(profile._id)),
-      tap(products => console.log('Loaded products:', products))
+      // tap(products => console.log('Loaded products:', products))
     );
 
-    this.slotsWithProducts$ = this.authService.currentUser$.pipe(
-      filter((user): user is User => !!user?._id),
-      switchMap(user => this.lombardService.getLombardByUserId(user._id)),
-      switchMap(pawnshop => {
-        this.profile = pawnshop;
-        return this.slotService.getSlotsByPawnshopId(pawnshop._id);
-      }),
-      tap(slots => console.log('Loaded slots:', slots)),
-      map(slots => slots.filter(slot => slot.status === 'active')),
-      switchMap(activeSlots => {
-        if (activeSlots.length === 0) return of([]);
-
-        const productRequests = activeSlots.map(slot =>
-          this.productService.getProductById(slot.product).pipe(
-            map(product => ({ slot, product }))
-          )
-        );
-
-        return forkJoin(productRequests);
-      }),
-      tap(data => console.log('Loaded slots with products:', data))
-    );
+    this.loadSlots();
 
     // this.notifications$ = this.authService.currentUser$.pipe(
     //   filter((user): user is User => !!user?._id),
     // )
 
+  }
+
+  loadSlots() {
+    this.authService.currentUser$.pipe(
+      filter((user): user is User => !!user?._id),
+      switchMap(user => this.lombardService.getLombardByUserId(user._id)),
+      switchMap(pawnshop => this.slotService.getSlotsByPawnshopId(pawnshop._id)),
+      map(slots => slots.filter(slot => slot.status === 'active')),
+      switchMap(activeSlots => {
+        if (activeSlots.length === 0) return of([]);
+        const requests = activeSlots.map(slot =>
+          this.productService.getProductById(slot.product).pipe(map(product => ({ slot, product })))
+        );
+        return forkJoin(requests);
+      })
+    ).subscribe(data => this.slotsSubject.next(data));
   }
 
   editableDescription = '';
@@ -202,14 +200,13 @@ export class LombardProfileComponent implements OnInit{
 
   extendSlot(item:Slot){}
   
-  deleteSlot(slotId:string){
+  deleteSlot(slotId: string) {
     this.slotService.deleteSlot(slotId).subscribe({
-      next: (res) => {
-        console.log('Slot deleted:', res);
+      next: () => {
+        const updated = this.slotsSubject.value.filter(item => item.slot._id !== slotId);
+        this.slotsSubject.next(updated);
       },
-      error: (err) => {
-        console.error('Error deleting slot:', err);
-      }
+      error: err => console.error(err)
     });
   }
 
@@ -261,6 +258,10 @@ export class LombardProfileComponent implements OnInit{
     })
 
 
+  }
+
+  openTermsModal(){
+    
   }
 
   openSlotDetails(item: Slot) {}

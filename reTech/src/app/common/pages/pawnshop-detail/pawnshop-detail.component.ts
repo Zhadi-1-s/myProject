@@ -18,6 +18,7 @@ import { Review } from '../../../shared/interfaces/reviews.interface';
 import { FormsModule } from '@angular/forms';
 import { TermModalComponent } from '../../components/modals/term-modal/term-modal.component';
 import { LoginRequiredComponent } from '../../components/modals/login-required/login-required.component';
+import { EvalutaionComponent } from '../../components/modals/evalutaion/evalutaion.component';
 
 @Component({
   selector: 'app-pawnshop-detail',
@@ -228,6 +229,19 @@ export class PawnshopDetailComponent implements OnInit{
         this.router.navigate(['/auth/login']);
       }
     }, () => {});
+  }
+
+  openEvaluationModal(){
+    const modalRef = this.modalService.open(EvalutaionComponent, {
+      centered: true,
+      size: 'md'
+    });
+
+    modalRef.componentInstance.pawnshopId = this.pawnShop._id;
+
+    modalRef.closed.subscribe(() => {
+      // Handle modal close if needed
+    });
   }
 
 }

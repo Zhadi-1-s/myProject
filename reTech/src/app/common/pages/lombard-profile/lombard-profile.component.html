@@ -20,7 +20,7 @@
               </div>
 
               <!-- Improved info layout with better spacing -->
-              <div class="flex-grow text-center sm:text-left mb-4 sm:mb-0" *ngIf="profile">
+              <div class="flex-grow text-center sm:text-left  sm:mb-0" *ngIf="profile">
                 <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                   {{ profile?.name || 'Pawnshop name' }}
                 </h1>
@@ -44,12 +44,19 @@
                     <i class="fa-regular fa-clock text-blue-600"></i>
                     <span>{{ currentTime | date:'shortTime' }}</span>
                   </div>
+                  <!-- <button *ngIf="profile?.terms"
+                            (click)="openTermsModal()"
+                            class="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        Условия сделки
+                  </button> -->
                 </div>
               </div>
             </div>
 
             <!-- Action buttons with modern styling -->
             <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+           
               <button class="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg 
                            hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 
                            shadow-md hover:shadow-lg font-medium flex items-center justify-center gap-2"
@@ -57,13 +64,19 @@
                 <i class="fa-solid fa-building"></i>
                 <span>{{ 'Edit details of shop' | translate }}</span>
               </button>
-              <button class="px-4 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg 
+              <button *ngIf="profile?.terms"
+                            (click)="openTermsModal()"
+                            class="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                        Условия сделки
+                  </button>
+              <!-- <button class="px-4 py-2.5 border-2 border-blue-600 text-blue-600 rounded-lg 
                            hover:bg-blue-50 transition-all duration-200 font-medium 
                            flex items-center justify-center gap-2"
                       (click)="openEditModal()">
                 <i class="fa-regular fa-pen-to-square"></i>
                 <span>{{ 'Edit profile' | translate }}</span>
-              </button>
+              </button> -->
             </div>
           </div>
         </div>
@@ -368,7 +381,7 @@
 
       <!-- Active Slots Section with modern card design -->
       <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 p-6" 
-           *ngIf="slotsWithProducts$ | async; else noActiveSlots">
+           >
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 
@@ -387,10 +400,10 @@
           </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" *ngIf="slotsWithProducts$ | async as slots; else noActiveSlots">
           <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border-2 border-green-200 
                     hover:border-green-300 hover:shadow-lg transition-all duration-300 p-5" 
-               *ngFor="let item of slotsWithProducts$ | async">
+               *ngFor="let item of slots">
             
             <div class="flex justify-between items-start mb-4">
               <div class="flex items-center gap-3">
@@ -440,7 +453,7 @@
             <div class="space-y-2 mb-4">
               <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-600 font-medium">{{ 'Loan amount' | translate }}:</span>
-                <span class="font-bold text-green-700">${{ item.slot.loanAmount }}</span>
+                <span class="font-bold text-green-700">{{ item.slot.loanAmount }} тг</span>
               </div>
               <div class="flex justify-between items-center text-sm">
                 <span class="text-gray-600 font-medium">{{ 'Interest rate' | translate }}:</span>

@@ -8,3 +8,22 @@ export interface Offer{
     status: 'pending' | 'accepted' | 'rejected';
     createdAt?: Date;
 }
+export interface Evaluation{
+        _id?: string;
+
+  // кто отправил
+    userId: string;
+    userTelephoneNumber:string;
+    pawnshopId: string;
+
+    title: string;
+    description?: string;
+    condition: 'new' | 'good' | 'used' | 'broken';
+    photos: string[];
+ 
+    expectedPrice?: number;
+  // статус обработки
+    status: 'pending' | 'viewed' | 'responded';
+
+    createdAt?: Date;
+}

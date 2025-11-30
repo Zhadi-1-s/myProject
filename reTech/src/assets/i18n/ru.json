@@ -157,5 +157,16 @@
     "Complete deal":"Завершите сделку",
     "Create a listing in minutes with photos and description":"Создайте объявление за несколько минут с фото и описанием",
     "Get competitive offers from verified pawnshops":"Получайте выгодные предложения от проверенных ломбардов",
-    "Choose best offer and finalize transaction safely":"Выбирайте лучшее предложение и безопасно завершайте сделку"
+    "Choose best offer and finalize transaction safely":"Выбирайте лучшее предложение и безопасно завершайте сделку",
+    "Client product":"Товар клиента",
+    "Product title":"Название товара",
+    "Product description":"Описание товара",
+    "Add short product description":"Добавьте краткое описание товара",
+    "Loan terms":"Условия займа",
+    "Enter loan amount":"Введите сумму займа",
+    "Interest rate per day":"Процентная ставка в день",
+    "Start date":"Дата начала",
+    "End date":"Дата окончания",
+    "Create slot for":"Создать слот для",
+    "Creating...":"Создание..."
 }

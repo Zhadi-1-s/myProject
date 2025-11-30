@@ -1,0 +1,112 @@
+<!-- Modal overlay -->
+<div class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+  
+  <!-- Modal container -->
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 md:p-7 animate-fade-in">
+    
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <i class="fa-solid fa-scale-balanced text-blue-600"></i>
+        Онлайн оценка товара
+      </h2>
+
+      <button (click)="closed.emit()" class="text-gray-500 hover:text-gray-700">
+        <i class="fa-solid fa-xmark text-2xl"></i>
+      </button>
+    </div>
+
+    <!-- FORM -->
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-5">
+
+      <!-- Title -->
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700">Название товара</label>
+        <input
+          type="text"
+          formControlName="title"
+          class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Например: iPhone 12"
+        />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700">Описание</label>
+        <textarea
+          formControlName="description"
+          rows="3"
+          class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Краткое описание состояния"
+        ></textarea>
+      </div>
+
+      <!-- Condition -->
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700">Состояние</label>
+        <select
+          formControlName="condition"
+          class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        >
+          <option value="new">Новый</option>
+          <option value="good">Хорошее</option>
+          <option value="used">Б/У</option>
+          <option value="broken">Сломан</option>
+        </select>
+      </div>
+
+      <!-- Photos -->
+      <div>
+        <label class="block text-sm font-semibold mb-2 text-gray-700">Фото товара</label>
+
+        <!-- <div class="space-y-2">
+          <input
+            type="file"
+            multiple
+            (change)="onPhotosSelected($event)"
+            class="w-full text-sm text-gray-600"
+          />
+
+          <div *ngIf="previewPhotos.length > 0" class="flex gap-3 flex-wrap">
+            <img
+              *ngFor="let img of previewPhotos"
+              [src]="img"
+              class="w-20 h-20 object-cover rounded-lg border"
+            />
+          </div>
+        </div> -->
+      </div> 
+
+      <!-- Expected price -->
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700">Желаемая сумма</label>
+        <input
+          type="number"
+          formControlName="expectedPrice"
+          class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="Например: 80000"
+        />
+      </div>
+
+      <!-- Phone -->
+      <div>
+        <label class="block text-sm font-semibold mb-1 text-gray-700">Ваш номер телефона</label>
+        <input
+          type="tel"
+          formControlName="userTelephoneNumber"
+          class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          placeholder="+7 777 777 77 77"
+        />
+      </div>
+
+      <!-- Submit button -->
+      <button
+        type="submit"
+        class="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold text-lg shadow-md hover:shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all"
+      >
+        Отправить на оценку
+      </button>
+    </form>
+
+  </div>
+</div>
