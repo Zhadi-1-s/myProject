@@ -70,8 +70,6 @@
 
 ## 🗂️ Технологии
 
-(добавь свои)
-
 * Frontend: Angular / Tailwind / RxJS
 * Backend: Node.js / NestJS
 * БД: MongoDB / PostgreSQL 
