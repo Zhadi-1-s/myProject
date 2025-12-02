@@ -12,6 +12,7 @@ import { ProductModule } from './core/common/product/product.module';
 import { SlotModule } from './core/common/slot/slot.module';
 import { NotificationModule } from './core/common/notification/notification.module';
 import { OfferModule } from './core/common/offer/offer.module';
+import { EvaluationModule } from './core/common/evaluation/evalutaion.module';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { OfferModule } from './core/common/offer/offer.module';
     ProductModule,
     SlotModule,
     NotificationModule,
-    OfferModule
+    OfferModule,
+    EvaluationModule
   ],
   controllers: [AppController],
   providers: [AppService],

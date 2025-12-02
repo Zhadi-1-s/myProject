@@ -16,7 +16,6 @@ export class OfferService {
     return this.http.post<Offer>(this.apiUrl, body);
   }
 
-
   getOffersByProduct(productId: string): Observable<Offer[]> {
     return this.http.get<Offer[]>(`${this.apiUrl}/product/${productId}`);
   }
@@ -25,12 +24,10 @@ export class OfferService {
     return this.http.get<Offer[]>(`${this.apiUrl}/pawnshop/${pawnshopId}`);
   }
 
-  /** Получить один оффер */
   getOfferById(id: string): Observable<Offer> {
     return this.http.get<Offer>(`${this.apiUrl}/${id}`);
   }
 
-  /** Обновить статус оффера: pending/accepted/rejected */
   updateStatus(id: string, status: 'pending' | 'accepted' | 'rejected'): Observable<Offer> {
     return this.http.patch<Offer>(`${this.apiUrl}/${id}/status`, { status });
   }

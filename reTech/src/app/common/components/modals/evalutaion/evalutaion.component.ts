@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { OfferService } from '../../../../shared/services/offer.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Evaluation } from '../../../../shared/interfaces/offer.interface';
+import { EvaluationService } from '../../../../shared/services/evaluation.service';
 @Component({
   selector: 'app-evalutaion',
   standalone: true,
@@ -13,14 +15,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class EvalutaionComponent {
 
   @Input() pawnshopId:string;
+  @Input() userId:string;
   @Output() closed = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private service: OfferService) {}
+
+  constructor(private fb: FormBuilder, private service: EvaluationService) {}
 
   form = this.fb.group({
     title: ['', Validators.required],
     description: [''],
-    condition: ['good', Validators.required],
+    condition: this.fb.control<'new' | 'good' | 'used' | 'broken'>('good'),
     photos: [[]],
     expectedPrice: [null],
     userTelephoneNumber: ['', Validators.required]
@@ -32,12 +36,12 @@ export class EvalutaionComponent {
     const payload = {
       ...this.form.value,
       pawnshopId: this.pawnshopId,
-      userId: 'CURRENT_USER_ID' // подставишь сам из auth
+      userId: this.userId
     };
 
-    // this.service.create(payload).subscribe(() => {
-    //   this.closed.emit();
-    // });
+    this.service.createEvaluation(payload).subscribe(() => {
+      this.closed.emit();
+    });
   }
 
 

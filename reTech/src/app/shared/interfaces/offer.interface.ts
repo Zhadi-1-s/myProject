@@ -9,7 +9,7 @@ export interface Offer{
     createdAt?: Date;
 }
 export interface Evaluation{
-        _id?: string;
+   _id?: string;
 
   // кто отправил
     userId: string;

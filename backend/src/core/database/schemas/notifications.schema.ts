@@ -17,7 +17,7 @@ export type NotificationType =
 export class Notification {
 
   @Prop({ required: true })
-  userId: string; // кому принадлежит уведомление
+  userId: string; 
 
   @Prop({
     required: true,
