@@ -168,5 +168,8 @@
     "End date":"End date",
     "Create slot for":"Create slot for",
     "Creating...":"Creating...",
-    "New evaluation request":"New evaluation request"
+    "New evaluation request":"New evaluation request",
+    "pending":"Pending",
+    "accepted":"Accepted",
+    "rejected":"Rejected"
 }

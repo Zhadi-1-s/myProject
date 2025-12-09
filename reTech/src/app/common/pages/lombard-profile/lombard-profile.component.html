@@ -207,7 +207,7 @@
               </div>
 
               <div *ngFor="let n of offerNotifications" 
-                   (click)="openEvaluationDetail(n.refId)"
+                   (click)="openNotificationDetail(n)"
                    [class.notification-unread]="!n.isRead"
                    class="notification-card bg-gray-50 dark:bg-gray-800/30 border border-gray-200 dark:border-gray-700 rounded-xl p-4 mb-3 cursor-pointer transition-all hover:bg-gray-100 dark:hover:bg-gray-800 hover:shadow-md hover:-translate-y-0.5">
                 
@@ -242,15 +242,24 @@
                         
                         <!-- Product Name -->
                           <div *ngIf="prodcuctsFromNotifications[n.refId] as p" class="flex items-center gap-1.5 text-xs font-semibold text-blue-600 dark:text-blue-400 mt-2">
-                          <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <rect x="1" y="3" width="15" height="13"></rect>
-                            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-                            <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                            <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                          </svg>
-                          <span>{{ p.title }}</span>
+                            <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                              <rect x="1" y="3" width="15" height="13"></rect>
+                              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                            </svg>
+                            <span>{{ p.title }}</span>
+                          </div>
                         </div>
-                      </div>
+                        <div *ngIf="n.data?.status"
+                            class="inline-block px-2 py-0.5 text-xs rounded-lg font-semibold mt-2"
+                            [ngClass]="{
+                              'bg-yellow-100 text-yellow-700': n.data.status === 'pending',
+                              'bg-green-100 text-green-700': n.data.status === 'accepted',
+                              'bg-red-100 text-red-700': n.data.status === 'rejected'
+                            }">
+                          {{ n.data.status  |translate }}
+                        </div>
                       
                       <!-- Unread Indicator -->
                       <div *ngIf="!n.isRead" class="w-2.5 h-2.5 rounded-full bg-blue-600 dark:bg-blue-500 flex-shrink-0 mt-1 shadow-lg shadow-blue-500/50"></div>

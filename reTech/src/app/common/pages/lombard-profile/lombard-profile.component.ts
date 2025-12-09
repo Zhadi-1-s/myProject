@@ -54,8 +54,9 @@ export class LombardProfileComponent implements OnInit{
   user:User | null;
   currentTime: Date = new Date();
   productslist : Product[] | null;
-  notificationsList:any;
-  prodcuctsFromNotifications:Product[];
+  notificationsList:any[] = [];
+  prodcuctsFromNotifications: Record<string, Product | null> = {};
+
   productofSlot:Product | null;
 
   activeSlots:Slot[] | null;
@@ -101,7 +102,7 @@ export class LombardProfileComponent implements OnInit{
     this.profile$ = this.authService.currentUser$.pipe(
       filter((user): user is User => !!user?._id),
       switchMap(user => this.lombardService.getLombardByUserId(user._id)),
-      tap(profile => {console.log('Loaded profile:', profile), this.profile = profile})
+      tap(profile =>  this.profile = profile)
     );
 
     this.products$ = this.profile$.pipe(
@@ -111,10 +112,10 @@ export class LombardProfileComponent implements OnInit{
 
     this.notifications$ = this.profile$.pipe(
       switchMap(profile => this.notificationService.getUserNotifications(profile._id)),
-      tap(notifications => {this.notificationsList = notifications,console.log(notifications,'loaded notifications for lombard')}),
+      tap(notifications => this.notificationsList = [...(this.notificationsList || []),...notifications]),
       switchMap(notifications => {
         const refIds = notifications.map(r => r.refId).filter(id => !!id)
-
+        console.log(this.notificationsList)
         if(!refIds.length) return of([]);
 
         return forkJoin(
@@ -141,14 +142,62 @@ export class LombardProfileComponent implements OnInit{
 
       }),
       tap(items => {
-        this.prodcuctsFromNotifications = Object.fromEntries(items.map(item => [item.id,item]));
-        console.log(this.prodcuctsFromNotifications, 'items from notifications');
+        this.prodcuctsFromNotifications =  {
+          ...this.prodcuctsFromNotifications,
+          ...Object.fromEntries(items.map(item => [item.id, item.data]))
+        };
       })
 
     );
     this.loadOffers();
     this.loadSlots();
   }
+
+  loadOffers() {
+     this.authService.currentUser$.pipe(
+       filter((user): user is User => !!user?._id),
+       switchMap(user => this.lombardService.getLombardByUserId(user._id)),
+       switchMap(pawnshop => this.offerService.getOffersByPawnshop(pawnshop._id))
+     ).subscribe(offers => {
+       // Добавляем в notificationsList как "тип оффер"
+       const normalized = offers.map(o => ({
+         _id: o._id,
+         type: 'sent-offer' as const,
+         title: `Offer for product`,
+         message: `Price: ${o.price} ₸` + (o.message ? ` — ${o.message}` : ''),
+         refId: o.productId,     
+         isRead: true,          
+         createdAt: o.createdAt || new Date(),
+         data: o                    
+       }));
+       console.log('Normalized offers',normalized)
+       this.notificationsList = [
+         ...this.notificationsList,
+         ...normalized
+       ];
+
+       const refIds = normalized.map(n => n.refId);
+
+       forkJoin(
+         refIds.map(id => 
+          this.productService.getProductById(id).pipe(
+            map(product => ({id,data:product,type:'product'})),
+            catchError(() => of({id,data:null,type:'unknown'}))
+          )
+         )
+       ).subscribe(items => 
+        {
+          this.prodcuctsFromNotifications = { 
+            ...(this.prodcuctsFromNotifications || {}),
+            ...Object.fromEntries(items.map( i=> [i.id, i.data]))
+          },
+          console.log('ProductsfromNotificaation after offerProduct added',this.prodcuctsFromNotifications)
+        }
+       )
+       
+       console.log(this.notificationsList,"here is the notificaiton list after offers added")
+     });
+   }
 
   loadSlots() {
     this.authService.currentUser$.pipe(
@@ -166,30 +215,6 @@ export class LombardProfileComponent implements OnInit{
     ).subscribe(data => this.slotsSubject.next(data));
   }
 
- loadOffers() {
-    this.authService.currentUser$.pipe(
-      filter((user): user is User => !!user?._id),
-      switchMap(user => this.lombardService.getLombardByUserId(user._id)),
-      switchMap(pawnshop => this.offerService.getOffersByPawnshop(pawnshop._id))
-    ).subscribe(offers => {
-      // Добавляем в notificationsList как "тип оффер"
-      const normalized = offers.map(o => ({
-        _id: o._id,
-        type: 'sent-offer' as const,
-        title: `Offer for product`,
-        message: `Price: ${o.price} ₸` + (o.message ? ` — ${o.message}` : ''),
-        refId: o.productId,      // используем productId для связи с продуктом
-        isRead: true,             // свои офферы считаем уже прочитанными
-        createdAt: o.createdAt || new Date(),
-        data: o                    // полный объект оффера для деталей
-      }));
-
-      this.notificationsList = [
-        ...this.notificationsList,
-        ...normalized
-      ];
-    });
-  }
 
 
   editableDescription = '';
@@ -380,6 +405,10 @@ export class LombardProfileComponent implements OnInit{
     modalRef.componentInstance.items = this.productslist;
   }
 
+  // modalCondition(){
+  //   if()
+  // }
+
   openProductDetail(item: Product) {
 
     const modalRef = this.modalService.open(ProductDetailComponent, { size: 'lg',centered:true });
@@ -401,6 +430,20 @@ export class LombardProfileComponent implements OnInit{
     })
 
 
+  }
+
+  openNotificationDetail(n: any) {
+    if (n.type === 'sent-offer') {
+      // если есть продукт в n.data
+      if (n.data?.productId) {
+        const product = this.prodcuctsFromNotifications[n.refId];
+        if (product) {
+          this.openProductDetail(product);
+        }
+      }
+    } else if (n.type === 'new-offer') {
+      this.openEvaluationDetail(n.refId);
+    }
   }
 
   openEvaluationDetail(evaluationId: string) {

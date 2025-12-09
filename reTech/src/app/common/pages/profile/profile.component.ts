@@ -160,7 +160,7 @@ export class ProfileComponent implements OnInit {
 
     modalRef.componentInstance.product = item;
     modalRef.componentInstance.user = user;
-    modalRef.componentInstance.pawnshop = null;
+   
   }
 
   openPawnshopDetail(id:string){

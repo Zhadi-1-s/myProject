@@ -169,5 +169,8 @@
     "End date":"Дата окончания",
     "Create slot for":"Создать слот для",
     "Creating...":"Создание...",
-    "New evaluation request":"Новое предложение оценки"
+    "New evaluation request":"Новое предложение оценки",
+    "pending":"В ожидании",
+    "accepted":"Принят",
+    "rejected":"Отказано"
 }
