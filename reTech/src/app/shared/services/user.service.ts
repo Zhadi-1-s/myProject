@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable,forkJoin } from "rxjs";
+import { User } from "../interfaces/user.interface";
 
 @Injectable({
     providedIn:'root'
@@ -12,6 +13,10 @@ export class UserService{
     constructor(
         private http:HttpClient
     ){}
+
+    getuserByid(userId:string):Observable<User>{
+        return this.http.get<User>(`${this.apiUrl}/${userId}`);
+    }
 
     addFavorite(userId: string, pawnshopId: string): Observable<any> {
         return this.http.patch(`${this.apiUrl}/${userId}/favorites/${pawnshopId}`, {});

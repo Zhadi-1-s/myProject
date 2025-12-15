@@ -16,6 +16,17 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {}
 
+  @Get(':userId')
+  @ApiOperation({summary:'Поиск пользователя по айди'})
+  @ApiParam({name:'userId',description:'id пользователя'})
+  async getUserById(
+    @Param('userId') userId:string
+  ){
+    const user = await this.userService.findOneById(userId);
+    if(!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
   @Patch(':userId/favorites/:pawnshopId')
   @ApiOperation({ summary: 'Добавить магазин в избранное пользователя' })
   @ApiParam({ name: 'userId', description: 'ID пользователя', type: String })

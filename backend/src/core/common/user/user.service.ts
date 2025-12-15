@@ -21,6 +21,10 @@ export class UserService {
     return newUser.save();
   }
 
+  async findOneById(userId:string):Promise<UserDocument | null>{
+    return this.userModel.findById(userId);
+  }
+
   async findOneAndUpdate(query: any, payload: any): Promise<UserDocument | null> {
     this.logger.log('Updating User.');
     return this.userModel.findOneAndUpdate(query, payload, {

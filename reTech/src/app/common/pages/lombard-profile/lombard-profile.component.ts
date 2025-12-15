@@ -30,6 +30,7 @@ import { EvaluationService } from '../../../shared/services/evaluation.service';
 import { error } from 'console';
 import { EvaluationDetailComponent } from '../../components/modals/evaluation-detail/evaluation-detail.component';
 import { OfferService } from '../../../shared/services/offer.service';
+import { UserService } from '../../../shared/services/user.service';
 
 
 @Component({
@@ -93,7 +94,8 @@ export class LombardProfileComponent implements OnInit{
     private slotService:SlotService,
     private notificationService:NotificationService,
     private evaluationService:EvaluationService,
-    private offerService:OfferService
+    private offerService:OfferService,
+    private userService:UserService
     
   ){}
 
@@ -115,6 +117,8 @@ export class LombardProfileComponent implements OnInit{
       tap(notifications => this.notificationsList = [...(this.notificationsList || []),...notifications]),
       switchMap(notifications => {
         const refIds = notifications.map(r => r.refId).filter(id => !!id)
+        const senderIds = notifications.map(s => s.senderId).filter(id=> !!id);
+
         console.log(this.notificationsList)
         if(!refIds.length) return of([]);
 
@@ -456,7 +460,6 @@ export class LombardProfileComponent implements OnInit{
       this.markAsRead(notification);
     }
 
-    console.log(evaluationId, 'this is the evalId from click')
     const modalRef = this.modalService.open(EvaluationDetailComponent, {
       size: 'lg',
       centered: true

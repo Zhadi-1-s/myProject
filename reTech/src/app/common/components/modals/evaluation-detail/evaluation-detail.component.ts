@@ -4,11 +4,12 @@ import { Evaluation } from '../../../../shared/interfaces/offer.interface';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-evaluation-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,TranslateModule],
   templateUrl: './evaluation-detail.component.html',
   styleUrl: './evaluation-detail.component.scss'
 })
